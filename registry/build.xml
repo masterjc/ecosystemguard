@@ -10,6 +10,8 @@
 	
 	<path id="classpath">
         <path refid="servlet.path" />
+		<path refid="jpa.path" />
+		<path refid="ecosystemguard-domain.path" />
     </path>
 	
 	<target name="all" depends="clean, compile, war"/>
@@ -28,6 +30,7 @@
 		<mkdir dir="${lib.dir}"/>
 		<war destfile="${lib.dir}/${ant.project.name}.war" webxml="${resources.dir}/web.xml">
 			<classes dir="${classes.dir}"/>
+			<classes dir="${resources.dir}/classes"/>
 			<lib file="${ecosystemguard-domain.lib}"/>
 		</war>
 	</target>
