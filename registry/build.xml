@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<project name="ecosystemguard-registry" default="all">
+	<property name="src.dir"     value="src/java"/>
+	<property name="resources.dir"     value="src/resources"/>
+    <property name="build.dir"   value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="lib.dir"     value="lib"/>
+	
+	<include file="../project-libs.xml"/>
+	
+	<path id="classpath">
+        <path refid="servlet.path" />
+    </path>
+	
+	<target name="all" depends="clean, compile, war"/>
+	
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+		<delete dir="${lib.dir}"/>
+	</target>
+	
+	<target name="compile">
+	    <mkdir dir="${classes.dir}"/>
+	    <javac srcdir="src" destdir="${classes.dir}" includeantruntime="false" classpathref="classpath"/>
+	</target>
+	
+	<target name="war">
+		<mkdir dir="${lib.dir}"/>
+		<war destfile="${lib.dir}/${ant.project.name}.war" webxml="${resources.dir}/web.xml">
+			<classes dir="${classes.dir}"/>
+			<lib file="${ecosystemguard-domain.lib}"/>
+		</war>
+	</target>
+
+</project>
