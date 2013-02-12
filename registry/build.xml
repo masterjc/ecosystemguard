@@ -31,5 +31,10 @@
 			<lib file="${ecosystemguard-domain.lib}"/>
 		</war>
 	</target>
-
+	
+	<target name="deploy-jboss" depends="all">
+		<copy todir="${env.JBOSS_DEPLOYMENT_DIR}">
+			 <fileset file="${lib.dir}/${ant.project.name}.war"/>
+		</copy>
+	</target>
 </project>
