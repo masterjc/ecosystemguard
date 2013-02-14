@@ -3,7 +3,7 @@
 
     <persistence-unit name="EcosystemGuard" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <jta-data-source>java:jboss/datasources/MySqlDS</jta-data-source>  <!-- See <datasource jndi-name="..."> . -->
+        <jta-data-source>java:/MySQLDS</jta-data-source>  <!-- See <datasource jndi-name="..."> . -->
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
 
         <properties>

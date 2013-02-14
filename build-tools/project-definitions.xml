@@ -16,6 +16,12 @@
 		<pathelement location="${ecosystemguard-domain.lib}" />
 	</path>
 	
+	<property name="ecosystemguard-engine.dir" value="${env.PROJECT_DIR}/engine"/>
+	<property name="ecosystemguard-engine.lib" value="${ecosystemguard-engine.dir}/lib/ecosystemguard-engine.jar"/>
+	<path id="ecosystemguard-engine.path">
+		<pathelement location="${ecosystemguard-engine.lib}" />
+	</path>
+	
 	<property name="ecosystemguard-registry.dir" value="${env.PROJECT_DIR}/registry"/>
 	<property name="ecosystemguard-registry.lib" value="${ecosystemguard-registry.dir}/lib/ecosystemguard-registry.war"/>
 	

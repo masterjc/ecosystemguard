@@ -1,17 +1,12 @@
 package com.ecosystem.guard.registry;
 
-import java.io.IOException;
+import java.io.Writer;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import com.ecosystem.guard.domain.dao.AccountInfo;
+import com.ecosystem.guard.engine.servlet.TransactionalService;
 
 /**
  * 
@@ -20,31 +15,19 @@ import com.ecosystem.guard.domain.dao.AccountInfo;
  */
 @SuppressWarnings("serial")
 @WebServlet(value = "/service", name = "registry-servlet")
-public class RegistryService extends HttpServlet {
-	
-	@PersistenceUnit(name="EcosystemGuard")
-	private EntityManagerFactory entityManagerFactory;
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		entityManager.getTransaction().begin();
-		try {
-			AccountInfo accInfo = new AccountInfo();
-			accInfo.setUsername("jc@gmail.com");
-			accInfo.setPassword("AAAAAAAAAAAA=");
-			accInfo.setTelephoneNumber("987676663");
-			accInfo.setRecoverMail("otro@gmail.com");
-			entityManager.persist(accInfo);
-			entityManager.getTransaction().commit();
-			response.getWriter().write("CORRECTO");
-		} catch( Exception e ) {
-			entityManager.getTransaction().rollback();
-			e.printStackTrace(response.getWriter());
-		}
-		response.getWriter().flush();
-	}
+public class RegistryService extends TransactionalService {
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-			IOException {
+	/* (non-Javadoc)
+	 * @see com.ecosystem.guard.engine.servlet.TransactionalService#execute(javax.persistence.EntityManager, java.io.Writer)
+	 */
+	@Override
+	protected void execute(EntityManager entityManager, Writer responseWriter) throws Exception {
+		AccountInfo accInfo = new AccountInfo();
+		accInfo.setUsername("jc@gmail.com");
+		accInfo.setPassword("AAAAAAAAAAAA=");
+		accInfo.setTelephoneNumber("987676663");
+		accInfo.setRecoverMail("otro@gmail.com");
+		entityManager.persist(accInfo);
+		responseWriter.write("Insertado correctamente");
 	}
 }

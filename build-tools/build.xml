@@ -12,6 +12,7 @@
 	
 	<target name="compile">
 		<ant dir="${ecosystemguard-domain.dir}" target="all" />
+		<ant dir="${ecosystemguard-engine.dir}" target="all" />
 		<ant dir="${ecosystemguard-registry.dir}" target="all" />
 	</target>
 	
