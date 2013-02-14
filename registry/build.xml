@@ -1,12 +1,8 @@
 <?xml version="1.0"?>
 <project name="ecosystemguard-registry" default="all">
-	<property name="src.dir"     value="src/java"/>
-	<property name="resources.dir"     value="src/resources"/>
-    <property name="build.dir"   value="build"/>
-    <property name="classes.dir" value="${build.dir}/classes"/>
-    <property name="lib.dir"     value="lib"/>
-	
-	<include file="../project-libs.xml"/>
+	<property environment="env" />
+
+	<include file="${env.PROJECT_DIR}/build-tools/project-definitions.xml"/>
 	
 	<path id="classpath">
         <path refid="servlet.path" />

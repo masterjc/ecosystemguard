@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<project name="ecosystemguard" default="all">
+	<property environment="env" />
+	
+	<include file="${env.PROJECT_DIR}/build-tools/project-definitions.xml"/>
+	
+	<target name="all" depends="clean, compile, mpi"/>
+	
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+	</target>
+	
+	<target name="compile">
+		<ant dir="${ecosystemguard-domain.dir}" target="all" />
+		<ant dir="${ecosystemguard-registry.dir}" target="all" />
+	</target>
+	
+	<target name="mpi">
+		<copy todir="${build.dir}">
+			 <fileset file="${ecosystemguard-registry.lib}"/>
+		</copy>
+	</target>
+</project>

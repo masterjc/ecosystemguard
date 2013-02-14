@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ecosystemguard-libs" basedir=".">
+	<property environment="env" />
+	
+	<!-- Common properties -->
+	<property name="src.dir"     value="src/java"/>
+	<property name="resources.dir"     value="src/resources"/>
+    <property name="build.dir"   value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="lib.dir"     value="lib"/>
+
+	<!-- Ecosystem Guard libraries -->
+	<property name="ecosystemguard-domain.dir" value="${env.PROJECT_DIR}/domain"/>
+	<property name="ecosystemguard-domain.lib" value="${ecosystemguard-domain.dir}/lib/ecosystemguard-domain.jar"/>
+	<path id="ecosystemguard-domain.path">
+		<pathelement location="${ecosystemguard-domain.lib}" />
+	</path>
+	
+	<property name="ecosystemguard-registry.dir" value="${env.PROJECT_DIR}/registry"/>
+	<property name="ecosystemguard-registry.lib" value="${ecosystemguard-registry.dir}/lib/ecosystemguard-registry.war"/>
+	
+	<!-- Thirdparty libraries -->
+	<property name="jpa.dir" value="${env.PROJECT_DIR}/thirdparty/jboss/jboss/modules/javax/persistence/api/main"/>
+	<property name="jpa.lib" value="${jpa.dir}/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
+	<path id="jpa.path">
+		<pathelement location="${jpa.lib}" />
+	</path>
+	
+	<property name="servlet.dir" value="${env.PROJECT_DIR}/thirdparty/jboss/jboss/modules/javax/servlet/api/main"/>
+	<property name="servlet.lib" value="${servlet.dir}/jboss-servlet-api_3.0_spec-1.0.0.Final.jar"/>
+	<path id="servlet.path">
+		<pathelement location="${servlet.lib}" />
+	</path>
+
+</project>

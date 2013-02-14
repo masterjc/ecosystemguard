@@ -1,11 +1,8 @@
 <?xml version="1.0"?>
 <project name="ecosystemguard-domain" default="all">
-	<property name="src.dir"     value="src/java"/>
-    <property name="build.dir"   value="build"/>
-    <property name="classes.dir" value="${build.dir}/classes"/>
-    <property name="lib.dir"     value="lib"/>
+	<property environment="env" />
 	
-	<include file="../project-libs.xml"/>
+	<include file="${env.PROJECT_DIR}/build-tools/project-definitions.xml"/>
 	
 	<path id="classpath">
         <path refid="jpa.path" />
