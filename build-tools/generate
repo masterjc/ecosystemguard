@@ -1,2 +1,2 @@
-set-env
+./set-env
 ant
