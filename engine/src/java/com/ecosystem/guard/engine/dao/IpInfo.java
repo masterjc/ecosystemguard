@@ -1,4 +1,4 @@
-package com.ecosystem.guard.domain.dao;
+package com.ecosystem.guard.engine.dao;
 
 import java.io.Serializable;
 
