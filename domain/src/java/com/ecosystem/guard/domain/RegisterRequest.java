@@ -6,8 +6,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class RegisterRequest {
 	private Credentials credentials;
-	
-	private EducationLevelType type;
+	private AccountInformation accountInformation;
+
+	public AccountInformation getAccountInformation() {
+		return accountInformation;
+	}
+
+	@XmlElement
+	public void setAccountInformation(AccountInformation accountInformation) {
+		this.accountInformation = accountInformation;
+	}
 
 	public Credentials getCredentials() {
 		return credentials;
@@ -18,12 +26,5 @@ public class RegisterRequest {
 		this.credentials = credentials;
 	}
 	
-	@XmlElement
-	public void setEducationLevelType(EducationLevelType type) {
-		this.type = type;
-	}
 	
-	public EducationLevelType getEducationLevelType() {
-		return this.type;
-	}
 }
