@@ -1,11 +1,9 @@
 package com.ecosystem.guard.registry;
 
-import java.io.Reader;
 import java.io.Writer;
 
 import javax.servlet.annotation.WebServlet;
 
-import com.ecosystem.guard.domain.Deserializer;
 import com.ecosystem.guard.domain.RegisterRequest;
 import com.ecosystem.guard.domain.RegisterResponse;
 import com.ecosystem.guard.domain.Result;
@@ -21,36 +19,42 @@ import com.ecosystem.guard.engine.servlet.TransactionalService;
  */
 @SuppressWarnings("serial")
 @WebServlet(value = "/register", name = "register-service")
-public class RegistryService extends TransactionalService {
+public class RegistryService extends TransactionalService<RegisterRequest> {
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.ecosystem.guard.engine.servlet.TransactionalService#execute(javax
-	 * .persistence.EntityManager, java.io.Writer)
+	 * @see com.ecosystem.guard.engine.servlet.TransactionalService#getRequestJaxbClass()
 	 */
 	@Override
-	protected void execute(PersistenceService jpaService, Reader requestReader,
-			Writer responseWriter) throws Exception {
+	protected Class<RegisterRequest> getRequestJaxbClass() {
+		return RegisterRequest.class;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.ecosystem.guard.engine.servlet.TransactionalService#execute(com.ecosystem.guard.engine.dao.PersistenceService, java.lang.Object, java.io.Writer)
+	 */
+	@Override
+	protected void execute(PersistenceService persistenceService, RegisterRequest request, Writer responseWriter)
+			throws Exception {
 		try {
-			RegisterRequest request = Deserializer.deserialize(RegisterRequest.class, requestReader);
-			jpaService.getAccountInfo(request.getCredentials().getUsernamePassword().getUsername());
+			RegisterRequest regRequest = (RegisterRequest) request;
+			persistenceService.getAccountInfo(regRequest.getCredentials().getUsernamePassword().getUsername());
 			AccountInfo accInfo = new AccountInfo();
 			accInfo.setUsername("a@gmail.com");
 			accInfo.setPassword("AAAAAAAAAAAA=");
 			accInfo.setTelephoneNumber("987676663");
 			accInfo.setRecoverMail("otro@gmail.com");
-			//jpaService.insert(accInfo);
-			responseWriter.write(jpaService.getAccountInfo("a@gmail.com").getTelephoneNumber());
-			
-		} catch (Exception e) {
+			// jpaService.insert(accInfo);
+			responseWriter.write(persistenceService.getAccountInfo("a@gmail.com").getTelephoneNumber());
+		}
+		catch (Exception e) {
 			writeAndThrowException(e, responseWriter);
 		}
+		
 	}
-
-	private void writeAndThrowException(Exception e, Writer writer)
-			throws Exception {
+	
+	private void writeAndThrowException(Exception e, Writer writer) throws Exception {
 		RegisterResponse response = new RegisterResponse();
 		Result result = new Result();
 		result.setStatus(Result.Status.SERVER_ERROR);
@@ -58,9 +62,11 @@ public class RegistryService extends TransactionalService {
 		response.setResult(result);
 		try {
 			Serializer.serialize(response, RegisterResponse.class, writer);
-		} catch (Exception e1) {
+		}
+		catch (Exception e1) {
 			throw e1;
 		}
 		throw e;
 	}
+
 }

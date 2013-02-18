@@ -11,7 +11,6 @@
 package com.ecosystem.guard.engine.servlet;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.io.Writer;
 
 import javax.persistence.EntityManager;
@@ -22,6 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ecosystem.guard.domain.Deserializer;
 import com.ecosystem.guard.engine.dao.PersistenceService;
 
 /**
@@ -30,46 +30,52 @@ import com.ecosystem.guard.engine.dao.PersistenceService;
  * @version $Revision$
  */
 @SuppressWarnings("serial")
-public abstract class TransactionalService extends HttpServlet {
+public abstract class TransactionalService<T> extends HttpServlet {
 
 	@PersistenceUnit(name = "EcosystemGuard")
 	private EntityManagerFactory entityManagerFactory;
 
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		throw new ServletException(
-				"EcosystemGuard services do not support HTTP GET method");
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		throw new ServletException("EcosystemGuard services do not support HTTP GET method");
 	}
 
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		EntityManager entityManager = entityManagerFactory
-				.createEntityManager();
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
 		try {
-			execute(new PersistenceService(entityManager), request.getReader(),
-					response.getWriter());
+			T requestObj = Deserializer.deserialize(getRequestJaxbClass(), request.getReader());
+			PersistenceService persistenceService = new PersistenceService(entityManager);
+			execute(persistenceService, requestObj, response.getWriter());
 			entityManager.getTransaction().commit();
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			entityManager.getTransaction().rollback();
 			throw new ServletException("Error executing service operation", e);
-		} finally {
+		}
+		finally {
 			response.getWriter().flush();
 		}
 	}
 
 	/**
-	 * Método para la ejecución de la operación del servlet. Recibe el
-	 * entityManager contra la base de datos de forma transaccional. Recibe un
-	 * writer donde escribir la respuesta. IMPORTANTE: La respuesta es
-	 * obligación del método execute() pero en caso de error deberá lanzar
-	 * excepción para que ENGINE sepa tirar atrás la transaccion
+	 * Método para la ejecución de la operación del servlet. Recibe el entityManager contra la base
+	 * de datos de forma transaccional. Recibe un writer donde escribir la respuesta. IMPORTANTE: La
+	 * respuesta es obligación del método execute() pero en caso de error deberá lanzar excepción
+	 * para que ENGINE sepa tirar atrás la transaccion
 	 * 
+	 * @param request Objeto que contiene la peticion deserializada de XML a clase Java.
 	 * @param entityManager
 	 * @param responseWriter
 	 * @throws Exception
 	 */
-	protected abstract void execute(PersistenceService persistenceService,
-			Reader requestReader, Writer responseWriter) throws Exception;
+	protected abstract void execute(PersistenceService persistenceService, T request, Writer responseWriter) throws Exception;
+
+	/**
+	 * Devuelve la clase Java que modela el XML de la peticion mediante Jaxb
+	 * 
+	 * @return
+	 */
+	protected abstract Class<T> getRequestJaxbClass();
 
 }
