@@ -11,7 +11,7 @@ import com.ecosystem.guard.persistence.dao.AccountInfo;
  * @author juancarlos.fernandez
  * @version $Revision$
  */
-public class DaoManager {
+public class DaoManager implements TransactionFactory {
 	private EntityManager entityManager;
 
 	public DaoManager(EntityManager entityManager) {
