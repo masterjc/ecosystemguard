@@ -49,10 +49,9 @@ public class JpaTransaction implements Transaction {
 	 * @see com.ecosystem.guard.persistence.Transaction#beginTransaction()
 	 */
 	@Override
-	public void beginTransaction() {
-		if (isActive()) {
-			entityManager.getTransaction().begin();
-		}
+	public DaoManager beginTransaction() {
+		entityManager.getTransaction().begin();
+		return new DaoManager(entityManager);
 	}
 
 	/*

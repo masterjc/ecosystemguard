@@ -13,41 +13,25 @@ package com.ecosystem.guard.domain;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.ecosystem.guard.domain.Result.Status;
-
 /**
  * 
  * @author juancarlos.fernandez
  * @version $Revision$
  */
 @XmlRootElement
-public class Response<T extends ServiceStatus> {
+public class Response {
 
-	private Result<T> result;
-	
+	private Result result;
+
 	public Response() {
 	}
-	
-	public Response(Status status) {
-		Result<T> result = new Result<T>();
-		result.setStatus(status);
-		setResult(result);
-	}
-	
-	public Response(Status status, T appStatus, String message ) {
-		Result<T> result = new Result<T>();
-		result.setStatus(status);
-		result.setAppStatus(appStatus);
-		result.setMessage(message);
-		setResult(result);
-	}
-	
-	public Result<T> getResult() {
+
+	public Result getResult() {
 		return result;
 	}
-	
+
 	@XmlElement
-	public void setResult(Result<T> result) {
+	public void setResult(Result result) {
 		this.result = result;
 	}
 

@@ -30,7 +30,5 @@ public class AuthenticationService {
 		AuthenticationContext authnContext = new AuthenticationContext();
 		authnContext.setAuthenticated(true);
 		return authnContext;
-	}
-	
-	
+	}	
 }

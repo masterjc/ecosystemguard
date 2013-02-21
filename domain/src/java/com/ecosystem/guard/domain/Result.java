@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement
-public class Result<T> {
+public class Result {
 	@XmlType(name = "Status")
 	@XmlEnum
 	public enum Status {
@@ -35,14 +35,32 @@ public class Result<T> {
 	}
 	
 	private Status status;
-	private T appStatus;
+	private String appStatus;
 	private String message;
+	
+	public Result() {
+	}
+	
+	public Result( Status status, String appStatus, String message ) {
+		this.status = status;
+		this.appStatus = appStatus;
+		this.message = message;
+	}
+	
+	public Result( Status status, String message ) {
+		this.status = status;
+		this.message = message;
+	}
+	
+	public Result( Status status ) {
+		this.status = status;
+	}
 	
 	public Status getStatus() {
 		return status;
 	}
 	
-	public T getAppStatus() {
+	public String getAppStatus() {
 		return appStatus;
 	}
 	
@@ -52,7 +70,7 @@ public class Result<T> {
 	}
 	
 	@XmlElement
-	public void setAppStatus(T appStatus) {
+	public void setAppStatus(String appStatus) {
 		this.appStatus = appStatus;
 	}
 	
