@@ -1,7 +1,9 @@
-package com.ecosystem.guard.engine.dao;
+package com.ecosystem.guard.persistence;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+
+import com.ecosystem.guard.persistence.dao.AccountInfo;
 
 public class PersistenceService {
 	private EntityManager entityManager;

@@ -1,4 +1,4 @@
-package com.ecosystem.guard.engine.dao;
+package com.ecosystem.guard.persistence.dao;
 
 import java.io.Serializable;
 
