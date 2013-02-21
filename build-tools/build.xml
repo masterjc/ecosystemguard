@@ -12,12 +12,19 @@
 	
 	<target name="compile">
 		<ant dir="${ecosystemguard-domain.dir}" target="all" />
+		<ant dir="${ecosystemguard-persistence.dir}" target="all" />
 		<ant dir="${ecosystemguard-engine.dir}" target="all" />
 		<ant dir="${ecosystemguard-registry.dir}" target="all" />
 	</target>
 	
 	<target name="mpi">
 		<copy todir="${build.dir}">
+			 <fileset file="${ecosystemguard-registry.lib}"/>
+		</copy>
+	</target>
+	
+	<target name="deploy" depends="all">
+		<copy todir="${env.JBOSS_DEPLOYMENT_DIR}">
 			 <fileset file="${ecosystemguard-registry.lib}"/>
 		</copy>
 	</target>

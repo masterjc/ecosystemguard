@@ -7,5 +7,6 @@
 	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/jboss/jboss/modules/javax/persistence/api/main/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
 	<classpathentry kind="var" path="PROJECT_DIR"/>
 	<classpathentry kind="var" path="PROJECT_DIR/domain/lib/ecosystemguard-domain.jar"/>
+	<classpathentry kind="var" path="PROJECT_DIR/persistence/lib/ecosystemguard-persistence.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

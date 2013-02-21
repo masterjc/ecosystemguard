@@ -8,6 +8,7 @@
         <path refid="servlet.path" />
 		<path refid="jpa.path" />
 		<path refid="ecosystemguard-domain.path" />
+		<path refid="ecosystemguard-persistence.path" />
 		<path refid="ecosystemguard-engine.path" />
     </path>
 	
@@ -28,6 +29,7 @@
 		<war destfile="${lib.dir}/${ant.project.name}.war" webxml="${resources.dir}/web.xml">
 			<classes dir="${classes.dir}"/>
 			<lib file="${ecosystemguard-domain.lib}"/>
+			<lib file="${ecosystemguard-persistence.lib}"/>
 			<lib file="${ecosystemguard-engine.lib}"/>
 		</war>
 	</target>

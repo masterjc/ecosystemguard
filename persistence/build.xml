@@ -6,7 +6,8 @@
 	
 	<path id="classpath">
 		<path refid="jpa.path" />
-    	</path>
+		<path refid="servlet.path" />
+    </path>
 	
 	<target name="all" depends="clean, compile, jar"/>
 	

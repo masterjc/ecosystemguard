@@ -16,6 +16,12 @@
 		<pathelement location="${ecosystemguard-domain.lib}" />
 	</path>
 	
+	<property name="ecosystemguard-persistence.dir" value="${env.PROJECT_DIR}/persistence"/>
+	<property name="ecosystemguard-persistence.lib" value="${ecosystemguard-persistence.dir}/lib/ecosystemguard-persistence.jar"/>
+	<path id="ecosystemguard-persistence.path">
+		<pathelement location="${ecosystemguard-persistence.lib}" />
+	</path>
+	
 	<property name="ecosystemguard-engine.dir" value="${env.PROJECT_DIR}/engine"/>
 	<property name="ecosystemguard-engine.lib" value="${ecosystemguard-engine.dir}/lib/ecosystemguard-engine.jar"/>
 	<path id="ecosystemguard-engine.path">

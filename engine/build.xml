@@ -8,6 +8,7 @@
         <path refid="servlet.path" />
 		<path refid="jpa.path" />
 		<path refid="ecosystemguard-domain.path" />
+		<path refid="ecosystemguard-persistence.path" />
     	</path>
 	
 	<target name="all" depends="clean, compile, jar"/>
