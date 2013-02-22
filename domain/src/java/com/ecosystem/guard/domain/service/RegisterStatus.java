@@ -8,11 +8,13 @@
  * permission of the copyright owner.
  */
 
-package com.ecosystem.guard.domain;
+package com.ecosystem.guard.domain.service;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
+
+import com.ecosystem.guard.domain.ServiceStatus;
 
 /**
  * 
@@ -23,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum RegisterStatus implements ServiceStatus {
 	@XmlEnumValue("ALREADY_REGISTERED")
-	OK( "ALREADY_REGISTERED" );
+	ALREADY_REGISTERED( "ALREADY_REGISTERED" );
 	
 	private String statusCode;
 	

@@ -41,9 +41,9 @@ public class Result {
 	public Result() {
 	}
 	
-	public Result( Status status, String appStatus, String message ) {
+	public Result( Status status, ServiceStatus appStatus, String message ) {
 		this.status = status;
-		this.appStatus = appStatus;
+		this.appStatus = appStatus.getRegisterStatusCode();
 		this.message = message;
 	}
 	

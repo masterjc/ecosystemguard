@@ -4,11 +4,12 @@ import java.io.Writer;
 
 import javax.servlet.annotation.WebServlet;
 
-import com.ecosystem.guard.domain.RegisterRequest;
-import com.ecosystem.guard.domain.RegisterResponse;
 import com.ecosystem.guard.domain.Result;
 import com.ecosystem.guard.domain.Result.Status;
 import com.ecosystem.guard.domain.Serializer;
+import com.ecosystem.guard.domain.service.RegisterRequest;
+import com.ecosystem.guard.domain.service.RegisterResponse;
+import com.ecosystem.guard.domain.service.RegisterStatus;
 import com.ecosystem.guard.engine.servlet.AuthenticatedPersistenceService;
 import com.ecosystem.guard.engine.servlet.ServiceException;
 import com.ecosystem.guard.persistence.DaoManager;
@@ -19,9 +20,13 @@ import com.ecosystem.guard.persistence.dao.AccountInfo;
  * @author juancarlos.fernandez
  * @version $Revision$
  */
-@SuppressWarnings("serial")
 @WebServlet(value = "/register", name = "register-service")
 public class RegistryService extends AuthenticatedPersistenceService<RegisterRequest, RegisterResponse> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1898476863531919901L;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -35,7 +40,7 @@ public class RegistryService extends AuthenticatedPersistenceService<RegisterReq
 
 			String username = regRequest.getCredentials().getUsernamePassword().getUsername();
 			if (daoManager.getAccountInfo(username) != null)
-				throw new ServiceException(new Result(Status.CLIENT_ERROR, "ACCOUNT_EXISTS", "Account exists"));
+				throw new ServiceException(new Result(Status.CLIENT_ERROR, RegisterStatus.ALREADY_REGISTERED, "Account exists"));
 
 			AccountInfo accInfo = new AccountInfo();
 			accInfo.setUsername(username);
@@ -63,5 +68,4 @@ public class RegistryService extends AuthenticatedPersistenceService<RegisterReq
 	protected Class<RegisterResponse> getResponseJaxbClass() {
 		return RegisterResponse.class;
 	}
-
 }

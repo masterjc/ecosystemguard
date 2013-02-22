@@ -12,9 +12,9 @@ import org.junit.Test;
 
 import com.ecosystem.guard.domain.Credentials;
 import com.ecosystem.guard.domain.Deserializer;
-import com.ecosystem.guard.domain.RegisterRequest;
-import com.ecosystem.guard.domain.RegisterResponse;
 import com.ecosystem.guard.domain.Serializer;
+import com.ecosystem.guard.domain.service.RegisterRequest;
+import com.ecosystem.guard.domain.service.RegisterResponse;
 
 public class RegisterServiceTest {
 	@Test
@@ -24,7 +24,7 @@ public class RegisterServiceTest {
 		HttpPost httpPost = new HttpPost("http://localhost:8080/ecosystemguard-registry/register");
 		try {
 			RegisterRequest request = new RegisterRequest();
-			request.setCredentials(new Credentials("e@gmail.com", "password"));
+			request.setCredentials(new Credentials("f@gmail.com", "password"));
 			httpPost.setEntity(new StringEntity(Serializer.serialize(request, RegisterRequest.class)));
 			
 			HttpResponse httpResponse = httpclient.execute(httpPost);
