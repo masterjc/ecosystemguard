@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/java"/>
+	<classpathentry kind="src" path="src/resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="PROJECT_DIR"/>
+	<classpathentry kind="var" path="PROJECT_DIR/domain/lib/ecosystemguard-domain.jar"/>
+	<classpathentry kind="var" path="PROJECT_DIR/engine/lib/ecosystemguard-engine.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
