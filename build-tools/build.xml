@@ -15,6 +15,7 @@
 		<ant dir="${ecosystemguard-persistence.dir}" target="all" />
 		<ant dir="${ecosystemguard-engine.dir}" target="all" />
 		<ant dir="${ecosystemguard-registry.dir}" target="all" />
+		<!--<ant dir="${ecosystemguard-hostmanager.dir}" target="all" />-->
 	</target>
 	
 	<target name="mpi">

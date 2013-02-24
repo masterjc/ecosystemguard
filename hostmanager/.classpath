@@ -5,6 +5,9 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="PROJECT_DIR"/>
 	<classpathentry kind="var" path="PROJECT_DIR/domain/lib/ecosystemguard-domain.jar"/>
-	<classpathentry kind="var" path="PROJECT_DIR/engine/lib/ecosystemguard-engine.jar"/>
+	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/httpclient/httpcomponents-client-4.2.3/lib/commons-codec-1.6.jar"/>
+	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/httpclient/httpcomponents-client-4.2.3/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/httpclient/httpcomponents-client-4.2.3/lib/httpclient-4.2.3.jar"/>
+	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/httpclient/httpcomponents-client-4.2.3/lib/httpcore-4.2.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

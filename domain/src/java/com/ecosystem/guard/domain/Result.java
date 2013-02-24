@@ -47,6 +47,11 @@ public class Result {
 		this.message = message;
 	}
 	
+	public Result( Status status, ServiceStatus appStatus ) {
+		this.status = status;
+		this.appStatus = appStatus.getRegisterStatusCode();
+	}
+	
 	public Result( Status status, String message ) {
 		this.status = status;
 		this.message = message;

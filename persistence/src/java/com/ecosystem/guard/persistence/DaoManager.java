@@ -17,7 +17,7 @@ import com.ecosystem.guard.persistence.dao.AccountInfo;
 public class DaoManager {
 	private EntityManager entityManager;
 
-	DaoManager(EntityManager entityManager) {
+	public DaoManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
 

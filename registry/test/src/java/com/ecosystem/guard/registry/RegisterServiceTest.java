@@ -13,6 +13,7 @@ import org.junit.Test;
 import com.ecosystem.guard.domain.Credentials;
 import com.ecosystem.guard.domain.Deserializer;
 import com.ecosystem.guard.domain.Serializer;
+import com.ecosystem.guard.domain.service.AccountInformation;
 import com.ecosystem.guard.domain.service.RegisterRequest;
 import com.ecosystem.guard.domain.service.RegisterResponse;
 
@@ -25,6 +26,10 @@ public class RegisterServiceTest {
 		try {
 			RegisterRequest request = new RegisterRequest();
 			request.setCredentials(new Credentials("f@gmail.com", "password"));
+			AccountInformation accountInfo = new AccountInformation();
+			accountInfo.setRecoverMail("a@gmail.com");
+			accountInfo.setTelephoneNumber("976566767");
+			request.setAccountInformation(accountInfo);
 			httpPost.setEntity(new StringEntity(Serializer.serialize(request, RegisterRequest.class)));
 			
 			HttpResponse httpResponse = httpclient.execute(httpPost);

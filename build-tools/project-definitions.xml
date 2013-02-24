@@ -31,6 +31,9 @@
 	<property name="ecosystemguard-registry.dir" value="${env.PROJECT_DIR}/registry"/>
 	<property name="ecosystemguard-registry.lib" value="${ecosystemguard-registry.dir}/lib/ecosystemguard-registry.war"/>
 	
+	<property name="ecosystemguard-hostmanager.dir" value="${env.PROJECT_DIR}/hostmanager"/>
+	<property name="ecosystemguard-hostmanager.lib" value="${ecosystemguard-hostmanager.dir}/lib/ecosystemguard-hostmanager.war"/>
+	
 	<!-- Thirdparty libraries -->
 	<property name="jpa.dir" value="${env.PROJECT_DIR}/thirdparty/jboss/jboss/modules/javax/persistence/api/main"/>
 	<property name="jpa.lib" value="${jpa.dir}/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>

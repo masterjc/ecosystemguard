@@ -19,7 +19,7 @@ package com.ecosystem.guard.persistence;
 public interface Transaction {
 	public String getId();
 	public boolean isActive();
-	public DaoManager beginTransaction();
+	public void beginTransaction();
 	public void commitTransaction();
 	public void rollbackTransaction();
 }

@@ -24,6 +24,9 @@ import com.ecosystem.guard.domain.ServiceStatus;
 @XmlType(name = "AppStatus")
 @XmlEnum
 public enum RegisterStatus implements ServiceStatus {
+	@XmlEnumValue("MISSING_ACCOUNTINFO")
+	MISSING_ACCOUNTINFO( "MISSING_ACCOUNTINFO" ),
+	
 	@XmlEnumValue("ALREADY_REGISTERED")
 	ALREADY_REGISTERED( "ALREADY_REGISTERED" );
 	
