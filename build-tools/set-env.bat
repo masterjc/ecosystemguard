@@ -1,3 +1,5 @@
 @echo on
 set PROJECT_DIR=F:\
-set JBOSS_DEPLOYMENT_DIR=C:\Data\software\jboss-7.1.1\standalone\deployments
+set JBOSS_DEPLOYMENT_DIR=C:\Software\jboss-as-7.1.1.Final\standalone\deployments
+set HOST_DEPLOYMENT_DIR=C:\Software\ecosystemguard
+set JAVA_SEPARATOR=;

@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
-<project name="ecosystemguard-domain" default="all">
+<project name="ecosystemguard-common" default="all">
 	<property environment="env" />
-	
+
 	<include file="${env.PROJECT_DIR}/build-tools/project-definitions.xml"/>
 	
 	<path id="classpath">
-        <path refid="jpa.path" />
     </path>
 	
 	<target name="all" depends="clean, compile, jar"/>
@@ -25,5 +24,5 @@
 		<mkdir dir="${lib.dir}"/>
 		<jar destfile="${lib.dir}/${ant.project.name}.jar" basedir="${classes.dir}"/>
 	</target>
-
+	
 </project>

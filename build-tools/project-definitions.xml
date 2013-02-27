@@ -2,48 +2,98 @@
 <project name="ecosystemguard-libs" basedir=".">
 	<property environment="env" />
 	
+	<!--*******************-->
 	<!-- Common properties -->
+	<!--*******************-->
 	<property name="src.dir"     value="src/java"/>
 	<property name="resources.dir"     value="src/resources"/>
     <property name="build.dir"   value="build"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
     <property name="lib.dir"     value="lib"/>
+	<property name="bin.dir"     value="bin"/>
 
+	<!--***************************-->
 	<!-- Ecosystem Guard libraries -->
+	<!--***************************-->
+	
+	<!-- Common utilities (no internal dependencies) -->
+	<property name="ecosystemguard-common.dir" value="${env.PROJECT_DIR}/common"/>
+	<property name="ecosystemguard-common.name" value="ecosystemguard-common.jar"/>
+	<property name="ecosystemguard-common.lib" value="${ecosystemguard-common.dir}/${lib.dir}/${ecosystemguard-common.name}"/>
+	<path id="ecosystemguard-common.path">
+		<pathelement location="${ecosystemguard-common.lib}" />
+	</path>
+	
+	<!-- Domain -->
 	<property name="ecosystemguard-domain.dir" value="${env.PROJECT_DIR}/domain"/>
-	<property name="ecosystemguard-domain.lib" value="${ecosystemguard-domain.dir}/lib/ecosystemguard-domain.jar"/>
+	<property name="ecosystemguard-domain.name" value="ecosystemguard-domain.jar"/>
+	<property name="ecosystemguard-domain.lib" value="${ecosystemguard-domain.dir}/${lib.dir}/${ecosystemguard-domain.name}"/>
 	<path id="ecosystemguard-domain.path">
 		<pathelement location="${ecosystemguard-domain.lib}" />
 	</path>
 	
+	<!-- Persistence -->
 	<property name="ecosystemguard-persistence.dir" value="${env.PROJECT_DIR}/persistence"/>
-	<property name="ecosystemguard-persistence.lib" value="${ecosystemguard-persistence.dir}/lib/ecosystemguard-persistence.jar"/>
+	<property name="ecosystemguard-persistence.name" value="ecosystemguard-persistence.jar"/>
+	<property name="ecosystemguard-persistence.lib" value="${ecosystemguard-persistence.dir}/${lib.dir}/${ecosystemguard-persistence.name}"/>
 	<path id="ecosystemguard-persistence.path">
 		<pathelement location="${ecosystemguard-persistence.lib}" />
 	</path>
 	
+	<!-- Engine -->
 	<property name="ecosystemguard-engine.dir" value="${env.PROJECT_DIR}/engine"/>
-	<property name="ecosystemguard-engine.lib" value="${ecosystemguard-engine.dir}/lib/ecosystemguard-engine.jar"/>
+	<property name="ecosystemguard-engine.name" value="ecosystemguard-engine.jar"/>
+	<property name="ecosystemguard-engine.lib" value="${ecosystemguard-engine.dir}/${lib.dir}/${ecosystemguard-engine.name}"/>
 	<path id="ecosystemguard-engine.path">
 		<pathelement location="${ecosystemguard-engine.lib}" />
 	</path>
 	
+	<!-- Registry Service -->
 	<property name="ecosystemguard-registry.dir" value="${env.PROJECT_DIR}/registry"/>
-	<property name="ecosystemguard-registry.lib" value="${ecosystemguard-registry.dir}/lib/ecosystemguard-registry.war"/>
+	<property name="ecosystemguard-registry.name" value="ecosystemguard-registry.war"/>
+	<property name="ecosystemguard-registry.lib" value="${ecosystemguard-registry.dir}/${lib.dir}/${ecosystemguard-registry.name}"/>
 	
+	<!-- Host Manager -->
 	<property name="ecosystemguard-hostmanager.dir" value="${env.PROJECT_DIR}/hostmanager"/>
-	<property name="ecosystemguard-hostmanager.lib" value="${ecosystemguard-hostmanager.dir}/lib/ecosystemguard-hostmanager.war"/>
+	<property name="ecosystemguard-hostmanager.name" value="ecosystemguard-hostmanager.jar"/>
+	<property name="ecosystemguard-hostmanager.zipname" value="ecosystemguard-hostmanager.zip"/>
+	<property name="ecosystemguard-hostmanager.lib" value="${ecosystemguard-hostmanager.dir}/${lib.dir}/${lib.dir}/${ecosystemguard-hostmanager.name}"/>
+	<property name="ecosystemguard-hostmanager.zip" value="${ecosystemguard-hostmanager.dir}/${lib.dir}/${ecosystemguard-hostmanager.zipname}"/>
 	
+	<!--**********************-->
 	<!-- Thirdparty libraries -->
+	<!--**********************-->
+	
+	<!-- Java Persistence API -->
 	<property name="jpa.dir" value="${env.PROJECT_DIR}/thirdparty/jboss/jboss/modules/javax/persistence/api/main"/>
-	<property name="jpa.lib" value="${jpa.dir}/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
+	<property name="jpa.name" value="hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
+	<property name="jpa.lib" value="${jpa.dir}/${jpa.name}"/>
 	<path id="jpa.path">
 		<pathelement location="${jpa.lib}" />
 	</path>
 	
+	<!-- JavaEE Servlet API -->
 	<property name="servlet.dir" value="${env.PROJECT_DIR}/thirdparty/jboss/jboss/modules/javax/servlet/api/main"/>
-	<property name="servlet.lib" value="${servlet.dir}/jboss-servlet-api_3.0_spec-1.0.0.Final.jar"/>
+	<property name="servlet.name" value="jboss-servlet-api_3.0_spec-1.0.0.Final.jar"/>
+	<property name="servlet.lib" value="${servlet.dir}/${servlet.name}"/>
 	<path id="servlet.path">
 		<pathelement location="${servlet.lib}" />
+	</path>
+	
+	<!-- HttpComponents API -->
+	<property name="httpcomponents.dir" value="${env.PROJECT_DIR}/thirdparty/httpclient/httpcomponents-client-4.2.3/lib"/>
+	<property name="httpcomponents_dep_codec.name" value="commons-codec-1.6.jar"/>
+	<property name="httpcomponents_dep_logging.name" value="commons-logging-1.1.1.jar"/>
+	<property name="httpcomponents_core.name" value="httpcore-4.2.2.jar"/>
+	<property name="httpcomponents_client.name" value="httpclient-4.2.3.jar"/>
+	<property name="httpcomponents_dep_codec.lib" value="${httpcomponents.dir}/${httpcomponents_dep_codec.name}"/>
+	<property name="httpcomponents_dep_logging.lib" value="${httpcomponents.dir}/${httpcomponents_dep_logging.name}"/>
+	<property name="httpcomponents_core.lib" value="${httpcomponents.dir}/${httpcomponents_core.name}"/>
+	<property name="httpcomponents_client.lib" value="${httpcomponents.dir}/${httpcomponents_client.name}"/>
+	<path id="httpcomponents.path">
+		<pathelement location="${httpcomponents_dep_codec.lib}" />
+		<pathelement location="${httpcomponents_dep_logging.lib}" />
+		<pathelement location="${httpcomponents_core.lib}" />
+		<pathelement location="${httpcomponents_client.lib}" />
 	</path>
 </project>
