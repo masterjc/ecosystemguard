@@ -16,6 +16,7 @@
 	<target name="clean">
 		<delete dir="${build.dir}"/>
 		<delete dir="${lib.dir}"/>
+		<delete dir="${bin.dir}"/>
 	</target>
 	
 	<target name="compile">
@@ -25,9 +26,7 @@
 	
 	<target name="jar">
 		<mkdir dir="${lib.dir}"/>
-		<jar destfile="${lib.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
-			<fileset dir="${resources.dir}"/>
-		</jar>
+		<jar destfile="${lib.dir}/${ant.project.name}.jar" basedir="${classes.dir}"/>
 	</target>
 	
 </project>

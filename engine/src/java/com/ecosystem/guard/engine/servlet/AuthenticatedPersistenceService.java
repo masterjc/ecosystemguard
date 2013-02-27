@@ -34,61 +34,54 @@ import com.ecosystem.guard.persistence.Transaction;
 import com.ecosystem.guard.persistence.TransactionFactory;
 
 /**
- * Clase base para Servlets con acceso a la base de datos de EcosystemGuard. Las
- * operaciones sobre la base de datos son transaccionales. El tipo genérico
- * indica la clase JAXB que modela la petición XML.
+ * Clase base para Servlets con acceso a la base de datos de EcosystemGuard. Las operaciones sobre
+ * la base de datos son transaccionales. El tipo genérico indica la clase JAXB que modela la
+ * petición XML.
  * 
  * @author juancarlos.fernandez
  * @version $Revision$
  */
 @SuppressWarnings("serial")
-public abstract class AuthenticatedPersistenceService<T extends Request, R extends Response>
-		extends PersistenceHttpServlet {
+public abstract class AuthenticatedPersistenceService<T extends Request, R extends Response> extends
+		PersistenceHttpServlet {
 	private TransactionFactory transactionFactory = new JpaTransactionFactory();
 
 	@Override
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		throw new ServletException(
-				"EcosystemGuard services do not support HTTP GET method");
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		throw new ServletException("EcosystemGuard services do not support HTTP GET method");
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException {
 		Transaction transaction = null;
 		try {
-			T requestObj = Deserializer.deserialize(getRequestJaxbClass(),
-					request.getReader());
+			T requestObj = Deserializer.deserialize(getRequestJaxbClass(), request.getReader());
 			EntityManager entityManager = createEntityManager();
 			transaction = transactionFactory.createTransaction(entityManager);
-			DaoManager daoManager = transaction.beginTransaction();
-			if (requestObj.getCredentials() == null
-					|| !requestObj.getCredentials().defined())
-				throw new ServiceException(new Result(Status.AUTHN_ERROR,
-						"Missing credentials"));
-			AuthenticationService authenticationService = new AuthenticationService(
-					daoManager);
-			AuthenticationContext authContext = authenticationService
-					.authenticate(requestObj.getCredentials());
+			transaction.beginTransaction();
+			if (requestObj.getCredentials() == null || !requestObj.getCredentials().defined())
+				throw new ServiceException(new Result(Status.AUTHN_ERROR, "Missing credentials"));
+			DaoManager daoManager = new DaoManager(entityManager);
+			AuthenticationService authenticationService = new AuthenticationService(daoManager);
+			AuthenticationContext authContext = authenticationService.authenticate(requestObj.getCredentials());
 			if (!authContext.isAuthenticated())
-				throw new ServiceException(new Result(Status.AUTHN_ERROR,
-						"Not authenticated"));
+				throw new ServiceException(new Result(Status.AUTHN_ERROR, "Not authenticated"));
 			execute(daoManager, requestObj, response.getWriter());
 			transaction.commitTransaction();
-		} catch (DeserializerException dEx) {
+		}
+		catch (DeserializerException dEx) {
 			rollback(transaction);
-			writeErrorResponse(
-					new Result(Status.CLIENT_ERROR, dEx.getMessage()),
-					response.getWriter());
-		} catch (ServiceException sEx) {
+			writeErrorResponse(new Result(Status.CLIENT_ERROR, dEx.getMessage()), response.getWriter());
+		}
+		catch (ServiceException sEx) {
 			rollback(transaction);
 			writeErrorResponse(sEx.getResult(), response.getWriter());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			rollback(transaction);
-			writeErrorResponse(new Result(Status.SERVER_ERROR, e.getMessage()),
-					response.getWriter());
+			writeErrorResponse(new Result(Status.SERVER_ERROR, e.getMessage()), response.getWriter());
 		}
 	}
 
@@ -98,35 +91,29 @@ public abstract class AuthenticatedPersistenceService<T extends Request, R exten
 		}
 	}
 
-	private void writeErrorResponse(Result result, Writer writer)
-			throws IOException {
+	private void writeErrorResponse(Result result, Writer writer) throws IOException {
 		try {
 			R clientResponse = getResponseJaxbClass().newInstance();
 			clientResponse.setResult(result);
-			Serializer
-					.serialize(clientResponse, getResponseJaxbClass(), writer);
-		} catch (Exception e) {
-			throw new IOException(
-					"AuthenticatedPersistenceService::writeErrorResponse() error");
+			Serializer.serialize(clientResponse, getResponseJaxbClass(), writer);
+		}
+		catch (Exception e) {
+			throw new IOException("AuthenticatedPersistenceService::writeErrorResponse() error");
 		}
 	}
 
 	/**
-	 * Método para la ejecución de la operación del servlet. Recibe el @see
-	 * DaoManager contra la base de datos de forma transaccional. Recibe un
-	 * writer donde escribir la respuesta. IMPORTANTE: La respuesta es
-	 * obligación del método execute() pero en caso de error deberá lanzar
-	 * excepción para que ENGINE sepa tirar atrás la transaccion
+	 * Método para la ejecución de la operación del servlet. Recibe el @see DaoManager contra la
+	 * base de datos de forma transaccional. Recibe un writer donde escribir la respuesta.
+	 * IMPORTANTE: La respuesta es obligación del método execute() pero en caso de error deberá
+	 * lanzar excepción para que ENGINE sepa tirar atrás la transaccion
 	 * 
-	 * @param request
-	 *            Objeto que contiene la peticion deserializada de XML a clase
-	 *            Java.
+	 * @param request Objeto que contiene la peticion deserializada de XML a clase Java.
 	 * @param entityManager
 	 * @param responseWriter
 	 * @throws Exception
 	 */
-	protected abstract void execute(DaoManager persistenceService, T request,
-			Writer responseWriter) throws Exception;
+	protected abstract void execute(DaoManager persistenceService, T request, Writer responseWriter) throws Exception;
 
 	/**
 	 * Devuelve la clase Java que modela el XML de la peticion mediante Jaxb

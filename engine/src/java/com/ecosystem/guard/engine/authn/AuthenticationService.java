@@ -19,15 +19,15 @@ import com.ecosystem.guard.persistence.DaoManager;
  * @version $Revision$
  */
 public class AuthenticationService {
-    private DaoManager daoManager;
+    //private DaoManager daoManager;
 
     public AuthenticationService(DaoManager daoManager) {
-	this.daoManager = daoManager;
+    	//this.daoManager = daoManager;
     }
 
     public AuthenticationContext authenticate(Credentials credentials) throws Exception {
-	AuthenticationContext authnContext = new AuthenticationContext();
-	authnContext.setAuthenticated(true);
-	return authnContext;
+		AuthenticationContext authnContext = new AuthenticationContext();
+		authnContext.setAuthenticated(true);
+		return authnContext;
     }
 }

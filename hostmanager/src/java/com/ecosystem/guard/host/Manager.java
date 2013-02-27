@@ -5,11 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.StringReader;
-import java.math.BigInteger;
-import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 import org.apache.http.HttpResponse;
@@ -19,6 +15,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
+import com.ecosystem.guard.common.RandomGenerator;
 import com.ecosystem.guard.domain.Credentials;
 import com.ecosystem.guard.domain.Deserializer;
 import com.ecosystem.guard.domain.Result;
@@ -39,7 +36,8 @@ public class Manager {
 		public Config(String[] args) throws Exception {
 			if (args.length == 0) {
 				configDirectory = new String();
-			} else {
+			}
+			else {
 				configDirectory = args[0];
 			}
 		}
@@ -54,44 +52,8 @@ public class Manager {
 		ACCOUNT_SETTINGS, REGISTER, UNREGISTER, EXIT;
 	}
 
-	private class MainOptionSelection {
-		private int optionNumber;
-		private MainOptionFunction function;
-
-		public MainOptionSelection(int optionNumber, MainOptionFunction function) {
-			this.optionNumber = optionNumber;
-			this.function = function;
-		}
-
-		public int getOptionNumber() {
-			return optionNumber;
-		}
-
-		public MainOptionFunction getFunction() {
-			return function;
-		}
-	}
-
 	private enum RegistryOptionFunction {
 		CREATE_ACCOUNT, DELETE_ACCOUNT;
-	}
-
-	private class RegistryOptionSelection {
-		private int optionNumber;
-		private RegistryOptionFunction function;
-
-		public RegistryOptionSelection(int optionNumber, RegistryOptionFunction function) {
-			this.optionNumber = optionNumber;
-			this.function = function;
-		}
-
-		public int getOptionNumber() {
-			return optionNumber;
-		}
-
-		public RegistryOptionFunction getFunction() {
-			return function;
-		}
 	}
 
 	private Config managerConfig;
@@ -118,8 +80,11 @@ public class Manager {
 		while (!exit) {
 			try {
 				exit = processMainOptions();
-			} catch (Exception e) {
-				e.printStackTrace();
+			}
+			catch (Exception e) {
+				System.out.println("=================================");
+				System.out.println("ERROR: " + e.getMessage());
+				System.out.println("=================================");
 			}
 		}
 	}
@@ -127,13 +92,13 @@ public class Manager {
 	private boolean processMainOptions() throws Exception {
 		System.out.println("**********************************");
 		printRegistrationInfo();
-		List<MainOptionSelection> mainOptions = printMainOptions();
+		OptionSelections<MainOptionFunction> mainOptions = showMainOptions();
 		System.out.print("Select an option: ");
 		int selection = scanner.nextInt();
-		MainOptionSelection optionSelected = getSelectedMainOption(selection, mainOptions);
+		MainOptionFunction optionSelected = mainOptions.getSelection(selection);
 		if (optionSelected == null)
 			throw new Exception("Incorrect option selected - " + selection);
-		switch (optionSelected.getFunction()) {
+		switch (optionSelected) {
 		case ACCOUNT_SETTINGS:
 			accountSettings();
 			break;
@@ -151,13 +116,13 @@ public class Manager {
 
 	private void accountSettings() throws Exception {
 		System.out.println("**********************************");
-		List<RegistryOptionSelection> registryOptions = printRegistryOptions();
+		OptionSelections<RegistryOptionFunction> registryOptions = showRegistryOptions();
 		System.out.print("Select an option: ");
 		int selection = scanner.nextInt();
-		RegistryOptionSelection optionSelected = getSelectedRegistryOption(selection, registryOptions);
+		RegistryOptionFunction optionSelected = registryOptions.getSelection(selection);
 		if (optionSelected == null)
 			throw new Exception("Incorrect option selected - " + selection);
-		switch (optionSelected.getFunction()) {
+		switch (optionSelected) {
 		case CREATE_ACCOUNT:
 			createAccount();
 			break;
@@ -167,60 +132,41 @@ public class Manager {
 		}
 	}
 
-	private MainOptionSelection getSelectedMainOption(int option, List<MainOptionSelection> options) {
-		for (MainOptionSelection selection : options) {
-			if (option == selection.getOptionNumber())
-				return selection;
-		}
-		return null;
-	}
-
-	private RegistryOptionSelection getSelectedRegistryOption(int option, List<RegistryOptionSelection> options) {
-		for (RegistryOptionSelection selection : options) {
-			if (option == selection.getOptionNumber())
-				return selection;
-		}
-		return null;
-	}
-
 	private void printRegistrationInfo() {
 		if (hostConfig.getCredentials() != null) {
 			System.out.println("Host registration status: REGISTERED");
-		} else {
+		}
+		else {
 			System.out.println("Host registration status: NOT REGISTERED");
 		}
 	}
 
-	private List<MainOptionSelection> printMainOptions() {
-		List<MainOptionSelection> selection = new ArrayList<MainOptionSelection>();
+	private OptionSelections<MainOptionFunction> showMainOptions() {
+		OptionSelections<MainOptionFunction> selection = new OptionSelections<MainOptionFunction>();
 		int option = 1;
 		System.out.println(option + ". Account settings");
-		selection.add(new MainOptionSelection(option++, MainOptionFunction.ACCOUNT_SETTINGS));
+		selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.ACCOUNT_SETTINGS));
 		if (hostConfig.getCredentials() == null) {
 			System.out.println(option + ". Register EcosystemGuard host");
-			selection.add(new MainOptionSelection(option++, MainOptionFunction.REGISTER));
-		} else {
+			selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.REGISTER));
+		}
+		else {
 			System.out.println(option + ". Unregister EcosystemGuard host");
-			selection.add(new MainOptionSelection(option++, MainOptionFunction.UNREGISTER));
+			selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.UNREGISTER));
 		}
 		System.out.println(option + ". Exit");
-		selection.add(new MainOptionSelection(option++, MainOptionFunction.EXIT));
+		selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.EXIT));
 		return selection;
 	}
 
-	private List<RegistryOptionSelection> printRegistryOptions() {
-		List<RegistryOptionSelection> selection = new ArrayList<RegistryOptionSelection>();
+	private OptionSelections<RegistryOptionFunction> showRegistryOptions() {
+		OptionSelections<RegistryOptionFunction> selection = new OptionSelections<RegistryOptionFunction>();
 		int option = 1;
 		System.out.println(option + ". Create Account");
-		selection.add(new RegistryOptionSelection(option++, RegistryOptionFunction.CREATE_ACCOUNT));
+		selection.add(new OptionSelection<RegistryOptionFunction>(option++, RegistryOptionFunction.CREATE_ACCOUNT));
 		System.out.println(option + ". Delete Account");
-		selection.add(new RegistryOptionSelection(option++, RegistryOptionFunction.DELETE_ACCOUNT));
+		selection.add(new OptionSelection<RegistryOptionFunction>(option++, RegistryOptionFunction.DELETE_ACCOUNT));
 		return selection;
-	}
-
-	private String createRandom() {
-		SecureRandom secureRandom = new SecureRandom();
-		return (new BigInteger(NUM_BITS, secureRandom)).toString(RADIX);
 	}
 
 	private boolean loadHostConfig() throws Exception {
@@ -228,7 +174,8 @@ public class Manager {
 		FileReader reader = null;
 		try {
 			reader = new FileReader(configFile);
-		} catch (FileNotFoundException e) {
+		}
+		catch (FileNotFoundException e) {
 			return false;
 		}
 		hostConfig = Deserializer.deserialize(HostConfig.class, reader);
@@ -238,7 +185,7 @@ public class Manager {
 	private void createInitialHostConfig() throws Exception {
 		System.out.println("Initializing EcosystemGuard host...");
 		hostConfig = new HostConfig();
-		hostConfig.setId("HostId" + createRandom());
+		hostConfig.setId("HostId" + RandomGenerator.generateRandom(NUM_BITS, RADIX));
 		System.out.println("Host id generated: " + hostConfig.getId());
 
 		System.out.print("Type your EcosystemGuard host purposes? ");
@@ -247,11 +194,12 @@ public class Manager {
 		FileWriter writer = new FileWriter(new File(managerConfig.getConfigDirectory() + "/" + HOST_CONFIG_FILENAME));
 		try {
 			Serializer.serialize(hostConfig, HostConfig.class, writer);
-		} finally {
+		}
+		finally {
 			writer.close();
 		}
 	}
-	
+
 	private RegisterResponse registerAccount(RegisterRequest request) throws Exception {
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost("http://localhost:8080/ecosystemguard-registry/register");
@@ -294,7 +242,7 @@ public class Manager {
 		request.setAccountInformation(info);
 		RegisterResponse response = registerAccount(request);
 		System.out.println("Account registration status: " + response.getResult().getStatus());
-		if( response.getResult().getStatus() != Result.Status.OK) {
+		if (response.getResult().getStatus() != Result.Status.OK) {
 			System.out.println("Error: " + response.getResult().getAppStatus());
 		}
 	}
@@ -302,7 +250,8 @@ public class Manager {
 	private char[] readPassword() {
 		if (System.console() != null) {
 			return System.console().readPassword();
-		} else {
+		}
+		else {
 			return scanner.next().toCharArray();
 		}
 	}
