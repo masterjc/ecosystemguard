@@ -10,6 +10,7 @@ import com.ecosystem.guard.domain.Serializer;
 import com.ecosystem.guard.domain.service.RegisterRequest;
 import com.ecosystem.guard.domain.service.RegisterResponse;
 import com.ecosystem.guard.domain.service.RegisterStatus;
+import com.ecosystem.guard.engine.PasswordCipher;
 import com.ecosystem.guard.engine.servlet.AnonymousService;
 import com.ecosystem.guard.engine.servlet.ServiceException;
 import com.ecosystem.guard.persistence.DaoManager;
@@ -22,7 +23,7 @@ import com.ecosystem.guard.persistence.dao.AccountInfo;
  * @version $Revision$
  */
 @WebServlet(value = "/register", name = "register-service")
-public class RegistryService extends AnonymousService<RegisterRequest, RegisterResponse> {
+public class RegisterService extends AnonymousService<RegisterRequest, RegisterResponse> {
 	/**
 	 * 
 	 */
@@ -46,7 +47,8 @@ public class RegistryService extends AnonymousService<RegisterRequest, RegisterR
 
 		AccountInfo accInfo = new AccountInfo();
 		accInfo.setUsername(username);
-		accInfo.setPassword(request.getCredentials().getUsernamePassword().getPassword());
+		byte[] password = request.getCredentials().getUsernamePassword().getPassword().getBytes();
+		accInfo.setPassword(PasswordCipher.getInstance().cipherPassword(password));
 		accInfo.setTelephoneNumber(request.getAccountInformation().getTelephoneNumber());
 		accInfo.setRecoverMail(request.getAccountInformation().getRecoverMail());
 		daoManager.insert(accInfo);
