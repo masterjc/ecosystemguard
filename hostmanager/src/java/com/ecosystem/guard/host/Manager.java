@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.StringReader;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -27,8 +28,7 @@ import com.ecosystem.guard.domain.service.RegisterResponse;
 
 public class Manager {
 	private static String HOST_CONFIG_FILENAME = "host.xml";
-	private static final int RADIX = 64;
-	private static final int NUM_BITS = 64;
+	private static final int NUM_BITS = 16;
 
 	private class Config {
 		private String configDirectory;
@@ -185,7 +185,8 @@ public class Manager {
 	private void createInitialHostConfig() throws Exception {
 		System.out.println("Initializing EcosystemGuard host...");
 		hostConfig = new HostConfig();
-		hostConfig.setId("HostId" + RandomGenerator.generateRandom(NUM_BITS, RADIX));
+		byte[] randomBits = RandomGenerator.generateRandom(NUM_BITS);
+		hostConfig.setId("HostId" + String.format("%x", new BigInteger(1, randomBits)));
 		System.out.println("Host id generated: " + hostConfig.getId());
 
 		System.out.print("Type your EcosystemGuard host purposes? ");

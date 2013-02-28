@@ -32,6 +32,8 @@
 			<lib file="${ecosystemguard-domain.lib}"/>
 			<lib file="${ecosystemguard-persistence.lib}"/>
 			<lib file="${ecosystemguard-engine.lib}"/>
+			<lib file="${ecosystemguard-common.lib}"/>
+			<lib file="${commons-codec.lib}"/>
 		</war>
 	</target>
 	

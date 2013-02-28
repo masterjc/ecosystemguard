@@ -80,6 +80,14 @@
 		<pathelement location="${servlet.lib}" />
 	</path>
 	
+	<!-- Apache Commons Codec -->
+	<property name="commons-codec.dir" value="${env.PROJECT_DIR}/thirdparty/commons-codec/commons-codec-1.7"/>
+	<property name="commons-codec.name" value="commons-codec-1.7.jar"/>
+	<property name="commons-codec.lib" value="${commons-codec.dir}/${commons-codec.name}"/>
+	<path id="commons-codec.path">
+		<pathelement location="${commons-codec.lib}" />
+	</path>
+	
 	<!-- HttpComponents API -->
 	<property name="httpcomponents.dir" value="${env.PROJECT_DIR}/thirdparty/httpclient/httpcomponents-client-4.2.3/lib"/>
 	<property name="httpcomponents_dep_codec.name" value="commons-codec-1.6.jar"/>
