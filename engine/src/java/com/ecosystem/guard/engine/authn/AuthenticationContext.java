@@ -17,9 +17,9 @@ package com.ecosystem.guard.engine.authn;
  */
 public class AuthenticationContext {
 	private boolean authenticated = false;
+	private String username;
 	
 	AuthenticationContext() {
-		
 	}
 	
 	void setAuthenticated(boolean authenticated) {
@@ -29,4 +29,14 @@ public class AuthenticationContext {
 	public boolean isAuthenticated() {
 		return authenticated;
 	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+	
 }

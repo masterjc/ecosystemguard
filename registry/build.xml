@@ -34,6 +34,9 @@
 			<lib file="${ecosystemguard-engine.lib}"/>
 			<lib file="${ecosystemguard-common.lib}"/>
 			<lib file="${commons-codec.lib}"/>
+			<lib file="${httpcomponents_dep_logging.lib}"/>
+			<lib file="${httpcomponents_core.lib}"/>
+			<lib file="${httpcomponents_client.lib}"/>
 		</war>
 	</target>
 	

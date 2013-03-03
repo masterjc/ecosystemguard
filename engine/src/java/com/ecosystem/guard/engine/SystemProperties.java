@@ -20,10 +20,12 @@ import java.io.File;
  */
 public final class SystemProperties {
 	public static final String CONFIG_DIR_PROPERTY = "com.ecosystem.guard.config.directory";
-	
+	public static final String AUTHN_SERVICE_URL = "com.ecosystem.guard.config.authn.url";
+
 	/**
-	 * Devuelve el directory donde se encuentra la configuraci贸n del sistema EcosystemGuard. Si no
-	 * existe el directory lanza una excepci贸n. No retorna NULL nunca
+	 * Devuelve el directory donde se encuentra la configuraci贸n del sistema
+	 * EcosystemGuard. Si no existe el directory lanza una excepci贸n. No
+	 * retorna NULL nunca
 	 * 
 	 * @return
 	 * @throws Exception
@@ -32,12 +34,27 @@ public final class SystemProperties {
 		String directory = System.getProperty(CONFIG_DIR_PROPERTY);
 		if (directory == null)
 			throw new Exception("EcosystemGuard " + CONFIG_DIR_PROPERTY + " property is not configured");
-		
+
 		File dir = new File(directory);
-		if( !dir.exists() || !dir.isDirectory())
+		if (!dir.exists() || !dir.isDirectory())
 			throw new Exception("EcosystemGuard configuration directory does not exist");
-		
+
 		return directory;
+	}
+
+	/**
+	 * Devuelve la URL del servicio de autenticaci髇 de usuarios. Si no existe
+	 * lanza excepci髇.
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public static String getAuthNServiceUrl() throws Exception {
+		String url = System.getProperty(AUTHN_SERVICE_URL);
+		if (url == null)
+			throw new Exception("EcosystemGuard AuthN Service URL property is not configured");
+		return url;
+
 	}
 
 }

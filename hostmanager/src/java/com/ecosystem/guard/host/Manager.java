@@ -25,6 +25,8 @@ import com.ecosystem.guard.domain.config.HostConfig;
 import com.ecosystem.guard.domain.service.AccountInformation;
 import com.ecosystem.guard.domain.service.RegisterRequest;
 import com.ecosystem.guard.domain.service.RegisterResponse;
+import com.ecosystem.guard.domain.service.UnregisterRequest;
+import com.ecosystem.guard.domain.service.UnregisterResponse;
 
 public class Manager {
 	private static String HOST_CONFIG_FILENAME = "host.xml";
@@ -36,8 +38,7 @@ public class Manager {
 		public Config(String[] args) throws Exception {
 			if (args.length == 0) {
 				configDirectory = new String();
-			}
-			else {
+			} else {
 				configDirectory = args[0];
 			}
 		}
@@ -80,8 +81,7 @@ public class Manager {
 		while (!exit) {
 			try {
 				exit = processMainOptions();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				System.out.println("=================================");
 				System.out.println("ERROR: " + e.getMessage());
 				System.out.println("=================================");
@@ -135,8 +135,7 @@ public class Manager {
 	private void printRegistrationInfo() {
 		if (hostConfig.getCredentials() != null) {
 			System.out.println("Host registration status: REGISTERED");
-		}
-		else {
+		} else {
 			System.out.println("Host registration status: NOT REGISTERED");
 		}
 	}
@@ -149,8 +148,7 @@ public class Manager {
 		if (hostConfig.getCredentials() == null) {
 			System.out.println(option + ". Register EcosystemGuard host");
 			selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.REGISTER));
-		}
-		else {
+		} else {
 			System.out.println(option + ". Unregister EcosystemGuard host");
 			selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.UNREGISTER));
 		}
@@ -174,8 +172,7 @@ public class Manager {
 		FileReader reader = null;
 		try {
 			reader = new FileReader(configFile);
-		}
-		catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			return false;
 		}
 		hostConfig = Deserializer.deserialize(HostConfig.class, reader);
@@ -195,19 +192,23 @@ public class Manager {
 		FileWriter writer = new FileWriter(new File(managerConfig.getConfigDirectory() + "/" + HOST_CONFIG_FILENAME));
 		try {
 			Serializer.serialize(hostConfig, HostConfig.class, writer);
-		}
-		finally {
+		} finally {
 			writer.close();
 		}
 	}
 
-	private RegisterResponse registerAccount(RegisterRequest request) throws Exception {
+	private static <T, R> R sendRequest(T request, Class<T> requestClass, Class<R> responseClass, String url)
+			throws Exception {
 		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost("http://localhost:8080/ecosystemguard-registry/register");
-		httpPost.setEntity(new StringEntity(Serializer.serialize(request, RegisterRequest.class)));
-		HttpResponse httpResponse = httpclient.execute(httpPost);
-		String response = EntityUtils.toString(httpResponse.getEntity());
-		return Deserializer.deserialize(RegisterResponse.class, new StringReader(response));
+		try {
+			HttpPost httpPost = new HttpPost(url);
+			httpPost.setEntity(new StringEntity(Serializer.serialize(request, requestClass)));
+			HttpResponse httpResponse = httpclient.execute(httpPost);
+			String response = EntityUtils.toString(httpResponse.getEntity());
+			return Deserializer.deserialize(responseClass, new StringReader(response));
+		} finally {
+			httpclient.getConnectionManager().shutdown();
+		}
 	}
 
 	/*
@@ -241,23 +242,38 @@ public class Manager {
 		RegisterRequest request = new RegisterRequest();
 		request.setCredentials(credentials);
 		request.setAccountInformation(info);
-		RegisterResponse response = registerAccount(request);
-		System.out.println("Account registration status: " + response.getResult().getStatus());
-		if (response.getResult().getStatus() != Result.Status.OK) {
-			System.out.println("Error: " + response.getResult().getAppStatus());
+		RegisterResponse response = sendRequest(request, RegisterRequest.class, RegisterResponse.class,
+				"http://localhost:8080/ecosystemguard-registry/register");
+		printOperationStatus("Account registration status: ", response.getResult());
+	}
+
+	private void deleteAccount() throws Exception {
+		System.out.print("Enter e-mail account (main username): ");
+		String username = scanner.next();
+		System.out.print("Enter password: ");
+		char[] password = readPassword();
+		Credentials credentials = new Credentials(username, new String(password));
+		UnregisterRequest request = new UnregisterRequest();
+		request.setCredentials(credentials);
+		UnregisterResponse response = sendRequest(request, UnregisterRequest.class, UnregisterResponse.class,
+				"http://localhost:8080/ecosystemguard-registry/unregister");
+		printOperationStatus("Account unregistration status: ", response.getResult());
+	}
+
+	private void printOperationStatus(String operationMessage, Result result) {
+		System.out.println(operationMessage + result.getStatus());
+		if (result.getStatus() != Result.Status.OK) {
+			if (result.getAppStatus() != null) {
+				System.out.println("Error: " + result.getAppStatus());
+			}
 		}
 	}
 
 	private char[] readPassword() {
 		if (System.console() != null) {
 			return System.console().readPassword();
-		}
-		else {
+		} else {
 			return scanner.next().toCharArray();
 		}
-	}
-
-	private void deleteAccount() {
-		System.out.println("deleteAccount");
 	}
 }

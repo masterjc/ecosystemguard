@@ -8,6 +8,7 @@
         <path refid="servlet.path" />
 		<path refid="jpa.path" />
 		<path refid="commons-codec.path" />
+		<path refid="httpcomponents.path" />
 		<path refid="ecosystemguard-common.path" />
 		<path refid="ecosystemguard-domain.path" />
 		<path refid="ecosystemguard-persistence.path" />

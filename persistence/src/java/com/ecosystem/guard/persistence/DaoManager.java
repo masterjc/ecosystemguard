@@ -44,11 +44,27 @@ public class DaoManager {
 	public AccountInfo getAccountInfo(String username) throws Exception {
 		try {
 			TypedQuery<AccountInfo> query = entityManager.createQuery(
-					"SELECT a FROM AccountInfo a WHERE a.username = '" + username
-							+ "'", AccountInfo.class);
+					"SELECT a FROM AccountInfo a WHERE a.username = '" + username + "'", AccountInfo.class);
 			return query.getSingleResult();
-		} catch( NoResultException e ) {
+		} catch (NoResultException e) {
 			return null;
 		}
+	}
+
+	/**
+	 * Borra la cuenta de un usuario. Retorna null si no existe el usuario a
+	 * borrar. Retorna la información del usuario eliminado si se consigue
+	 * eliminar correctamente
+	 * 
+	 * @param username
+	 * @return
+	 * @throws Exception
+	 */
+	public AccountInfo deleteAccount(String username) throws Exception {
+		AccountInfo info = getAccountInfo(username);
+		if(info==null)
+			return null;
+		entityManager.remove(info);
+		return info;
 	}
 }

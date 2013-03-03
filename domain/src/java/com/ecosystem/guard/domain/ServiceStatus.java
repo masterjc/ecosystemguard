@@ -16,5 +16,5 @@ package com.ecosystem.guard.domain;
  * @version $Revision$
  */
 public interface ServiceStatus {
-	public String getRegisterStatusCode();
+	public String getStatusCode();
 }

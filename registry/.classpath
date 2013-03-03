@@ -7,11 +7,7 @@
 	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/jboss/jboss/modules/javax/servlet/api/main/jboss-servlet-api_3.0_spec-1.0.0.Final.jar"/>
 	<classpathentry kind="var" path="PROJECT_DIR/domain/lib/ecosystemguard-domain.jar"/>
 	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/jboss/jboss/modules/javax/persistence/api/main/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
-	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/httpclient/httpcomponents-client-4.2.3/lib/httpclient-4.2.3.jar"/>
-	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/httpclient/httpcomponents-client-4.2.3/lib/httpcore-4.2.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/httpclient/httpcomponents-client-4.2.3/lib/commons-codec-1.6.jar"/>
-	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/httpclient/httpcomponents-client-4.2.3/lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="var" path="PROJECT_DIR/persistence/lib/ecosystemguard-persistence.jar"/>
 	<classpathentry kind="var" path="PROJECT_DIR/engine/lib/ecosystemguard-engine.jar"/>
 	<classpathentry kind="var" path="PROJECT_DIR/common/lib/ecosystemguard-common.jar"/>

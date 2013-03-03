@@ -47,7 +47,7 @@
 	</target>
 	
 	<target name="executable">
-		<echo file="${lib.dir}/${executable.name}"><![CDATA[java -classpath ${lib.dir}/${ecosystemguard-hostmanager.name}${env.JAVA_SEPARATOR}${lib.dir}/${ecosystemguard-common.name}${env.JAVA_SEPARATOR}${lib.dir}/${ecosystemguard-domain.name}${env.JAVA_SEPARATOR}${lib.dir}/${httpcomponents_dep_codec.name}${env.JAVA_SEPARATOR}${lib.dir}/${httpcomponents_dep_logging.name}${env.JAVA_SEPARATOR}${lib.dir}/${httpcomponents_core.name}${env.JAVA_SEPARATOR}${lib.dir}/${httpcomponents_client.name} ${executable.class} .]]></echo>
+		<echo file="${lib.dir}/${executable.name}"><![CDATA[java -classpath ${lib.dir}/${ecosystemguard-hostmanager.name}${env.JAVA_SEPARATOR}${lib.dir}/${ecosystemguard-common.name}${env.JAVA_SEPARATOR}${lib.dir}/${ecosystemguard-domain.name}${env.JAVA_SEPARATOR}${lib.dir}/${httpcomponents_dep_codec.name}${env.JAVA_SEPARATOR}${lib.dir}/${httpcomponents_dep_logging.name}${env.JAVA_SEPARATOR}${lib.dir}/${httpcomponents_core.name}${env.JAVA_SEPARATOR}${lib.dir}/${httpcomponents_client.name} ${executable.class} ./config]]></echo>
 		<zip basedir="${lib.dir}" destfile="${lib.dir}/${ant.project.name}.zip"></zip>
 	</target>
 </project>

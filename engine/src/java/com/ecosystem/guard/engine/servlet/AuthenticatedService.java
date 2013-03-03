@@ -62,11 +62,10 @@ public abstract class AuthenticatedService<T extends Request, R extends Response
 			transaction.beginTransaction();
 			if (requestObj.getCredentials() == null || !requestObj.getCredentials().defined())
 				throw new ServiceException(new Result(Status.AUTHN_ERROR, "Missing credentials"));
-			DaoManager daoManager = new DaoManager(entityManager);
-			AuthenticationService authenticationService = new AuthenticationService(daoManager);
-			AuthenticationContext authContext = authenticationService.authenticate(requestObj.getCredentials());
+			AuthenticationContext authContext = AuthenticationService.authenticate(requestObj.getCredentials());
 			if (!authContext.isAuthenticated())
 				throw new ServiceException(new Result(Status.AUTHN_ERROR, "Not authenticated"));
+			DaoManager daoManager = new DaoManager(entityManager);
 			execute(authContext, transaction, daoManager, requestObj, response.getWriter());
 			transaction.commitTransaction();
 		} catch (DeserializerException dEx) {

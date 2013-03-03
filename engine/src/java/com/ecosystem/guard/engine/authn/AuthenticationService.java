@@ -10,24 +10,58 @@
 
 package com.ecosystem.guard.engine.authn;
 
+import java.io.StringReader;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+
 import com.ecosystem.guard.domain.Credentials;
-import com.ecosystem.guard.persistence.DaoManager;
+import com.ecosystem.guard.domain.Deserializer;
+import com.ecosystem.guard.domain.Result;
+import com.ecosystem.guard.domain.Serializer;
+import com.ecosystem.guard.domain.service.AuthNRequest;
+import com.ecosystem.guard.domain.service.AuthNResponse;
+import com.ecosystem.guard.engine.SystemProperties;
 
 /**
+ * Servicio de autenticación de EcosystemGuard. Es un cliente HTTP del servicio
+ * AuthNRequest.
  * 
  * @author juancarlos.fernandez
  * @version $Revision$
  */
 public class AuthenticationService {
-    //private DaoManager daoManager;
 
-    public AuthenticationService(DaoManager daoManager) {
-    	//this.daoManager = daoManager;
-    }
-
-    public AuthenticationContext authenticate(Credentials credentials) throws Exception {
+	/**
+	 * Autentica un usuario contra el servicio AuthNRequest de EcosystemGuard.
+	 * La URL es una propiedad del sistema
+	 * 
+	 * @param credentials
+	 * @return
+	 * @throws Exception
+	 */
+	public static AuthenticationContext authenticate(Credentials credentials) throws Exception {
 		AuthenticationContext authnContext = new AuthenticationContext();
-		authnContext.setAuthenticated(true);
+		authnContext.setAuthenticated(false);
+		authnContext.setUsername(credentials.getUsernamePassword().getUsername());
+
+		AuthNRequest request = new AuthNRequest();
+		request.setCredentials(credentials);
+		String authNUrl = SystemProperties.getAuthNServiceUrl();
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpPost httpPost = new HttpPost(authNUrl);
+		httpPost.setEntity(new StringEntity(Serializer.serialize(request, AuthNRequest.class)));
+		HttpResponse httpResponse = httpclient.execute(httpPost);
+		String response = EntityUtils.toString(httpResponse.getEntity());
+		AuthNResponse authNResponse = Deserializer.deserialize(AuthNResponse.class, new StringReader(response));
+
+		if (authNResponse.getResult().getStatus() == Result.Status.OK) {
+			authnContext.setAuthenticated(true);
+		}
 		return authnContext;
-    }
+	}
 }

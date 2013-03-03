@@ -36,7 +36,7 @@ public enum RegisterStatus implements ServiceStatus {
 		this.statusCode = status;
 	}
 	
-	public String getRegisterStatusCode() {
+	public String getStatusCode() {
 		return statusCode;
 	}
 }

@@ -43,13 +43,13 @@ public class Result {
 	
 	public Result( Status status, ServiceStatus appStatus, String message ) {
 		this.status = status;
-		this.appStatus = appStatus.getRegisterStatusCode();
+		this.appStatus = appStatus.getStatusCode();
 		this.message = message;
 	}
 	
 	public Result( Status status, ServiceStatus appStatus ) {
 		this.status = status;
-		this.appStatus = appStatus.getRegisterStatusCode();
+		this.appStatus = appStatus.getStatusCode();
 	}
 	
 	public Result( Status status, String message ) {
