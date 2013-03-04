@@ -10,6 +10,7 @@ import com.ecosystem.guard.domain.Credentials;
 public class HostConfig {
 	private String id;
 	private String description;
+	private String summary;
 	private Credentials credentials;
 
 	public String getId() {
@@ -37,6 +38,14 @@ public class HostConfig {
 	@XmlElement
 	public void setCredentials(Credentials credentials) {
 		this.credentials = credentials;
+	}
+
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
 	}
 
 }

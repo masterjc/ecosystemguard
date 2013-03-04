@@ -27,24 +27,47 @@ import com.ecosystem.guard.domain.service.RegisterRequest;
 import com.ecosystem.guard.domain.service.RegisterResponse;
 import com.ecosystem.guard.domain.service.UnregisterRequest;
 import com.ecosystem.guard.domain.service.UnregisterResponse;
+import com.ecosystem.guard.domain.service.UpdateCredentialsRequest;
+import com.ecosystem.guard.domain.service.UpdateCredentialsResponse;
 
 public class Manager {
+	private static String ECOSYSTEM_BASE_URL = "http://localhost:8080/ecosystemguard-registry/";
+
+	private static String REGISTER_SERVICE = "register";
+	private static String UNREGISTER_SERVICE = "unregister";
+	private static String UPDATE_CREDENTIALS_SERVICE = "updatecredentials";
+
 	private static String HOST_CONFIG_FILENAME = "host.xml";
 	private static final int NUM_BITS = 16;
+	private static final int MIN_PASSWORD_LENGTH = 8;
 
 	private class Config {
 		private String configDirectory;
+		private boolean debug = false;
 
 		public Config(String[] args) throws Exception {
-			if (args.length == 0) {
+			switch (args.length) {
+			case 0:
 				configDirectory = new String();
-			} else {
+				break;
+			case 1:
 				configDirectory = args[0];
+				break;
+			case 2:
+				configDirectory = args[0];
+				debug = args[1].toUpperCase().equals("DEBUG");
+				break;
+			default:
+				throw new Exception("Manager: Incorrect number of arguments");
 			}
 		}
 
 		public String getConfigDirectory() {
 			return configDirectory;
+		}
+
+		public boolean isDebug() {
+			return debug;
 		}
 
 	}
@@ -54,7 +77,7 @@ public class Manager {
 	}
 
 	private enum RegistryOptionFunction {
-		CREATE_ACCOUNT, DELETE_ACCOUNT;
+		CREATE_ACCOUNT, DELETE_ACCOUNT, CHANGE_PASSWORD;
 	}
 
 	private Config managerConfig;
@@ -81,20 +104,28 @@ public class Manager {
 		while (!exit) {
 			try {
 				exit = processMainOptions();
-			} catch (Exception e) {
-				System.out.println("=================================");
-				System.out.println("ERROR: " + e.getMessage());
-				System.out.println("=================================");
+			}
+			catch (Exception e) {
+				if (managerConfig.isDebug()) {
+					e.printStackTrace();
+				}
+				printSeparatorLine();
+				if (!e.getClass().getCanonicalName().equals(Exception.class.getCanonicalName())) {
+					System.out.println("ERROR: " + e.getClass().getCanonicalName() + ": " + e.getMessage());
+				}
+				else {
+					System.out.println("ERROR: " + ": " + e.getMessage());
+				}
+				printSeparatorLine();
 			}
 		}
 	}
 
 	private boolean processMainOptions() throws Exception {
-		System.out.println("**********************************");
 		printRegistrationInfo();
 		OptionSelections<MainOptionFunction> mainOptions = showMainOptions();
 		System.out.print("Select an option: ");
-		int selection = scanner.nextInt();
+		int selection = Integer.parseInt(scanner.nextLine());
 		MainOptionFunction optionSelected = mainOptions.getSelection(selection);
 		if (optionSelected == null)
 			throw new Exception("Incorrect option selected - " + selection);
@@ -115,10 +146,10 @@ public class Manager {
 	}
 
 	private void accountSettings() throws Exception {
-		System.out.println("**********************************");
+		System.out.println("**********************************************");
 		OptionSelections<RegistryOptionFunction> registryOptions = showRegistryOptions();
 		System.out.print("Select an option: ");
-		int selection = scanner.nextInt();
+		int selection = Integer.parseInt(scanner.nextLine());
 		RegistryOptionFunction optionSelected = registryOptions.getSelection(selection);
 		if (optionSelected == null)
 			throw new Exception("Incorrect option selected - " + selection);
@@ -129,13 +160,16 @@ public class Manager {
 		case DELETE_ACCOUNT:
 			deleteAccount();
 			break;
+		case CHANGE_PASSWORD:
+			changePassword();
 		}
 	}
 
 	private void printRegistrationInfo() {
 		if (hostConfig.getCredentials() != null) {
 			System.out.println("Host registration status: REGISTERED");
-		} else {
+		}
+		else {
 			System.out.println("Host registration status: NOT REGISTERED");
 		}
 	}
@@ -148,7 +182,8 @@ public class Manager {
 		if (hostConfig.getCredentials() == null) {
 			System.out.println(option + ". Register EcosystemGuard host");
 			selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.REGISTER));
-		} else {
+		}
+		else {
 			System.out.println(option + ". Unregister EcosystemGuard host");
 			selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.UNREGISTER));
 		}
@@ -162,6 +197,8 @@ public class Manager {
 		int option = 1;
 		System.out.println(option + ". Create Account");
 		selection.add(new OptionSelection<RegistryOptionFunction>(option++, RegistryOptionFunction.CREATE_ACCOUNT));
+		System.out.println(option + ". Change Account Password");
+		selection.add(new OptionSelection<RegistryOptionFunction>(option++, RegistryOptionFunction.CHANGE_PASSWORD));
 		System.out.println(option + ". Delete Account");
 		selection.add(new OptionSelection<RegistryOptionFunction>(option++, RegistryOptionFunction.DELETE_ACCOUNT));
 		return selection;
@@ -172,7 +209,8 @@ public class Manager {
 		FileReader reader = null;
 		try {
 			reader = new FileReader(configFile);
-		} catch (FileNotFoundException e) {
+		}
+		catch (FileNotFoundException e) {
 			return false;
 		}
 		hostConfig = Deserializer.deserialize(HostConfig.class, reader);
@@ -186,27 +224,44 @@ public class Manager {
 		hostConfig.setId("HostId" + String.format("%x", new BigInteger(1, randomBits)));
 		System.out.println("Host id generated: " + hostConfig.getId());
 
-		System.out.print("Type your EcosystemGuard host purposes? ");
-		hostConfig.setDescription(scanner.next());
+		System.out.print("Type your EcosystemGuard host purposes summary? ");
+		hostConfig.setSummary(scanner.nextLine());
+
+		System.out.print("Type your EcosystemGuard host purposes description? ");
+		hostConfig.setDescription(scanner.nextLine());
 
 		FileWriter writer = new FileWriter(new File(managerConfig.getConfigDirectory() + "/" + HOST_CONFIG_FILENAME));
 		try {
 			Serializer.serialize(hostConfig, HostConfig.class, writer);
-		} finally {
+		}
+		finally {
 			writer.close();
 		}
 	}
 
-	private static <T, R> R sendRequest(T request, Class<T> requestClass, Class<R> responseClass, String url)
-			throws Exception {
+	private static <T, R> R sendRequest(T request, Class<T> requestClass, Class<R> responseClass, String url,
+			boolean debug) throws Exception {
 		HttpClient httpclient = new DefaultHttpClient();
 		try {
 			HttpPost httpPost = new HttpPost(url);
-			httpPost.setEntity(new StringEntity(Serializer.serialize(request, requestClass)));
+			String xmlRequest = Serializer.serialize(request, requestClass);
+			if (debug) {
+				System.out.println("SOAP REQUEST");
+				System.out.println("************");
+				System.out.println(xmlRequest);
+			}
+			httpPost.setEntity(new StringEntity(xmlRequest));
 			HttpResponse httpResponse = httpclient.execute(httpPost);
 			String response = EntityUtils.toString(httpResponse.getEntity());
+			if (debug) {
+				System.out.println("SOAP RESPONSE");
+				System.out.println("************");
+				System.out.println(response);
+				System.out.println("------------------");
+			}
 			return Deserializer.deserialize(responseClass, new StringReader(response));
-		} finally {
+		}
+		finally {
 			httpclient.getConnectionManager().shutdown();
 		}
 	}
@@ -216,6 +271,7 @@ public class Manager {
 	 */
 
 	private void registerHost() throws Exception {
+		System.out.println("registerHost");
 	}
 
 	private void unregisterHost() {
@@ -224,7 +280,7 @@ public class Manager {
 
 	private void createAccount() throws Exception {
 		System.out.print("Enter e-mail account (main username): ");
-		String username = scanner.next();
+		String username = scanner.nextLine();
 		System.out.print("Enter new password: ");
 		char[] password = readPassword();
 		System.out.print("Confirm password: ");
@@ -232,9 +288,9 @@ public class Manager {
 		if (!Arrays.equals(password, confirmPassword))
 			throw new Exception("ERROR: Passwords do not match.");
 		System.out.print("Telephone number: ");
-		String telephone = scanner.next();
+		String telephone = scanner.nextLine();
 		System.out.print("Recover e-mail account: ");
-		String recoverMail = scanner.next();
+		String recoverMail = scanner.nextLine();
 		AccountInformation info = new AccountInformation();
 		info.setTelephoneNumber(telephone);
 		info.setRecoverMail(recoverMail);
@@ -243,37 +299,73 @@ public class Manager {
 		request.setCredentials(credentials);
 		request.setAccountInformation(info);
 		RegisterResponse response = sendRequest(request, RegisterRequest.class, RegisterResponse.class,
-				"http://localhost:8080/ecosystemguard-registry/register");
+				ECOSYSTEM_BASE_URL + REGISTER_SERVICE, managerConfig.isDebug());
 		printOperationStatus("Account registration status: ", response.getResult());
 	}
 
 	private void deleteAccount() throws Exception {
 		System.out.print("Enter e-mail account (main username): ");
-		String username = scanner.next();
+		String username = scanner.nextLine();
 		System.out.print("Enter password: ");
 		char[] password = readPassword();
+		System.out.print("Are you sure you want to delete user '" + username + "'? [Y|N]: ");
+		String sure = scanner.nextLine();
+		if (!sure.toUpperCase().equals("Y"))
+			throw new Exception("Delete account operation cancelled");
 		Credentials credentials = new Credentials(username, new String(password));
 		UnregisterRequest request = new UnregisterRequest();
 		request.setCredentials(credentials);
 		UnregisterResponse response = sendRequest(request, UnregisterRequest.class, UnregisterResponse.class,
-				"http://localhost:8080/ecosystemguard-registry/unregister");
+				ECOSYSTEM_BASE_URL + UNREGISTER_SERVICE, managerConfig.isDebug());
 		printOperationStatus("Account unregistration status: ", response.getResult());
 	}
 
+	private void changePassword() throws Exception {
+		System.out.print("Enter e-mail account (main username): ");
+		String username = scanner.nextLine();
+		System.out.print("Enter password: ");
+		char[] password = readPassword();
+		System.out.print("Type new password: ");
+		char[] newPassword1 = readPassword();
+		System.out.print("Confirm new password: ");
+		char[] newPassword2 = readPassword();
+		if (!Arrays.equals(newPassword1, newPassword2))
+			throw new Exception("ERROR: New passwords do not match.");
+		Credentials credentials = new Credentials(username, new String(password));
+		UpdateCredentialsRequest request = new UpdateCredentialsRequest();
+		request.setCredentials(credentials);
+		request.setNewPassword(new String(newPassword1));
+		UpdateCredentialsResponse response = sendRequest(request, UpdateCredentialsRequest.class,
+				UpdateCredentialsResponse.class, ECOSYSTEM_BASE_URL + UPDATE_CREDENTIALS_SERVICE,
+				managerConfig.isDebug());
+		printOperationStatus("Update credentials status: ", response.getResult());
+	}
+
 	private void printOperationStatus(String operationMessage, Result result) {
+		printSeparatorLine();
 		System.out.println(operationMessage + result.getStatus());
 		if (result.getStatus() != Result.Status.OK) {
 			if (result.getAppStatus() != null) {
 				System.out.println("Error: " + result.getAppStatus());
 			}
 		}
+		printSeparatorLine();
 	}
 
-	private char[] readPassword() {
+	private char[] readPassword() throws Exception {
+		char[] pass = null;
 		if (System.console() != null) {
-			return System.console().readPassword();
-		} else {
-			return scanner.next().toCharArray();
+			pass = System.console().readPassword();
 		}
+		else {
+			pass = scanner.nextLine().toCharArray();
+		}
+		if (pass.length < MIN_PASSWORD_LENGTH)
+			throw new Exception("Password must be 8 characters at least");
+		return pass;
+	}
+
+	private void printSeparatorLine() {
+		System.out.println("==============================================");
 	}
 }

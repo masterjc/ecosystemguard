@@ -10,6 +10,7 @@
 
 package com.ecosystem.guard.engine.authn;
 
+
 /**
  * 
  * @author juancarlos.fernandez
@@ -18,6 +19,7 @@ package com.ecosystem.guard.engine.authn;
 public class AuthenticationContext {
 	private boolean authenticated = false;
 	private String username;
+	private String remoteIpAddress;
 	
 	AuthenticationContext() {
 	}
@@ -37,6 +39,13 @@ public class AuthenticationContext {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
+
+	public String getRemoteIpAddress() {
+		return remoteIpAddress;
+	}
+
+	public void setRemoteIpAddress(String remoteIpAddress) {
+		this.remoteIpAddress = remoteIpAddress;
+	}
 	
 }

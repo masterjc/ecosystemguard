@@ -12,6 +12,8 @@ package com.ecosystem.guard.engine.authn;
 
 import java.io.StringReader;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -28,8 +30,7 @@ import com.ecosystem.guard.domain.service.AuthNResponse;
 import com.ecosystem.guard.engine.SystemProperties;
 
 /**
- * Servicio de autenticación de EcosystemGuard. Es un cliente HTTP del servicio
- * AuthNRequest.
+ * Servicio de autenticaciï¿½n de EcosystemGuard. Es un cliente HTTP del servicio AuthNRequest.
  * 
  * @author juancarlos.fernandez
  * @version $Revision$
@@ -37,14 +38,15 @@ import com.ecosystem.guard.engine.SystemProperties;
 public class AuthenticationService {
 
 	/**
-	 * Autentica un usuario contra el servicio AuthNRequest de EcosystemGuard.
-	 * La URL es una propiedad del sistema
+	 * Autentica un usuario contra el servicio AuthNRequest de EcosystemGuard. La URL es una
+	 * propiedad del sistema
 	 * 
 	 * @param credentials
 	 * @return
 	 * @throws Exception
 	 */
-	public static AuthenticationContext authenticate(Credentials credentials) throws Exception {
+	public static AuthenticationContext authenticate(HttpServletRequest servletRequest, Credentials credentials)
+			throws Exception {
 		AuthenticationContext authnContext = new AuthenticationContext();
 		authnContext.setAuthenticated(false);
 		authnContext.setUsername(credentials.getUsernamePassword().getUsername());
@@ -58,10 +60,15 @@ public class AuthenticationService {
 		HttpResponse httpResponse = httpclient.execute(httpPost);
 		String response = EntityUtils.toString(httpResponse.getEntity());
 		AuthNResponse authNResponse = Deserializer.deserialize(AuthNResponse.class, new StringReader(response));
-
+		setCommonServiceAuthnContext(authnContext, servletRequest);
 		if (authNResponse.getResult().getStatus() == Result.Status.OK) {
 			authnContext.setAuthenticated(true);
 		}
 		return authnContext;
+	}
+
+	private static void setCommonServiceAuthnContext(AuthenticationContext authContext, HttpServletRequest request)
+			throws Exception {
+		authContext.setRemoteIpAddress(request.getRemoteAddr());
 	}
 }

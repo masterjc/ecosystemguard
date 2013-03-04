@@ -10,31 +10,26 @@
 
 package com.ecosystem.guard.domain.service;
 
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-import com.ecosystem.guard.domain.ServiceStatus;
+import com.ecosystem.guard.domain.Request;
 
 /**
  * 
  * @author juancarlos.fernandez
  * @version $Revision$
  */
-@XmlType(name = "AppStatus")
-@XmlEnum
-public enum RegisterStatus implements ServiceStatus {
+@XmlRootElement
+public class RegisterHostRequest extends Request {
+	private HostInformation hostInformation;
 
-	@XmlEnumValue("ALREADY_REGISTERED")
-	ALREADY_REGISTERED( "ALREADY_REGISTERED" );
-	
-	private String statusCode;
-	
-	private RegisterStatus( String status ) {
-		this.statusCode = status;
+	public HostInformation getHostInformation() {
+		return hostInformation;
 	}
-	
-	public String getStatusCode() {
-		return statusCode;
+
+	@XmlElement
+	public void setHostInformation(HostInformation hostInformation) {
+		this.hostInformation = hostInformation;
 	}
 }

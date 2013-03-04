@@ -23,17 +23,16 @@ import com.ecosystem.guard.domain.ServiceStatus;
  */
 @XmlType(name = "AppStatus")
 @XmlEnum
-public enum RegisterStatus implements ServiceStatus {
-
+public enum RegisterHostStatus implements ServiceStatus {
 	@XmlEnumValue("ALREADY_REGISTERED")
-	ALREADY_REGISTERED( "ALREADY_REGISTERED" );
-	
+	ALREADY_REGISTERED("ALREADY_REGISTERED");
+
 	private String statusCode;
-	
-	private RegisterStatus( String status ) {
+
+	private RegisterHostStatus(String status) {
 		this.statusCode = status;
 	}
-	
+
 	public String getStatusCode() {
 		return statusCode;
 	}

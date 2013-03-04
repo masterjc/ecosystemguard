@@ -10,10 +10,6 @@
 
 package com.ecosystem.guard.domain.service;
 
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
-import javax.xml.bind.annotation.XmlType;
-
 import com.ecosystem.guard.domain.ServiceStatus;
 
 /**
@@ -21,20 +17,19 @@ import com.ecosystem.guard.domain.ServiceStatus;
  * @author juancarlos.fernandez
  * @version $Revision$
  */
-@XmlType(name = "AppStatus")
-@XmlEnum
-public enum RegisterStatus implements ServiceStatus {
-
-	@XmlEnumValue("ALREADY_REGISTERED")
-	ALREADY_REGISTERED( "ALREADY_REGISTERED" );
+public enum CommonServiceStatus implements ServiceStatus {
+	;
 	
 	private String statusCode;
-	
-	private RegisterStatus( String status ) {
-		this.statusCode = status;
-	}
-	
+
+	/* (non-Javadoc)
+	 * @see com.ecosystem.guard.domain.ServiceStatus#getStatusCode()
+	 */
+	@Override
 	public String getStatusCode() {
 		return statusCode;
 	}
+
+	
+
 }

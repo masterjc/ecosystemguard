@@ -19,13 +19,13 @@ import java.io.File;
  * @version $Revision$
  */
 public final class SystemProperties {
+	private static final String ECOSYSTEM_GUARD_VERSION = "0.1";
 	public static final String CONFIG_DIR_PROPERTY = "com.ecosystem.guard.config.directory";
 	public static final String AUTHN_SERVICE_URL = "com.ecosystem.guard.config.authn.url";
 
 	/**
-	 * Devuelve el directory donde se encuentra la configuraci贸n del sistema
-	 * EcosystemGuard. Si no existe el directory lanza una excepci贸n. No
-	 * retorna NULL nunca
+	 * Devuelve el directory donde se encuentra la configuraci贸n del sistema EcosystemGuard. Si no
+	 * existe el directory lanza una excepci贸n. No retorna NULL nunca
 	 * 
 	 * @return
 	 * @throws Exception
@@ -43,8 +43,7 @@ public final class SystemProperties {
 	}
 
 	/**
-	 * Devuelve la URL del servicio de autenticaci髇 de usuarios. Si no existe
-	 * lanza excepci髇.
+	 * Devuelve la URL del servicio de autenticaci锟絥 de usuarios. Si no existe lanza excepci锟絥.
 	 * 
 	 * @return
 	 * @throws Exception
@@ -55,6 +54,15 @@ public final class SystemProperties {
 			throw new Exception("EcosystemGuard AuthN Service URL property is not configured");
 		return url;
 
+	}
+
+	/**
+	 * Devuelve la versi贸n software de Ecosystem Guard
+	 * 
+	 * @return la versi贸n
+	 */
+	public static String getVersion() {
+		return ECOSYSTEM_GUARD_VERSION;
 	}
 
 }

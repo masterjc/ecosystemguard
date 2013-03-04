@@ -12,6 +12,9 @@
 	<target name="clean">
 		<delete dir="${build.dir}"/>
 		<delete dir="${lib.dir}"/>
+	</target>
+	
+	<target name="clean-all" depends="clean">
 		<delete dir="${bin.dir}"/>
 	</target>
 	

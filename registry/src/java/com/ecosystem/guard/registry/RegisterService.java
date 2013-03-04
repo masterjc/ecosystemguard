@@ -39,12 +39,11 @@ public class RegisterService extends AnonymousService<RegisterRequest, RegisterR
 	@Override
 	protected void execute(Transaction transaction, DaoManager daoManager, RegisterRequest request,
 			Writer responseWriter) throws Exception {
+		if (request.getAccountInformation() == null)
+			throw new ServiceException(new Result(Status.CLIENT_ERROR, "Missing account info"));
 		String username = request.getCredentials().getUsernamePassword().getUsername();
 		if (daoManager.getAccountInfo(username) != null)
 			throw new ServiceException(new Result(Status.CLIENT_ERROR, RegisterStatus.ALREADY_REGISTERED));
-		if (request.getAccountInformation() == null)
-			throw new ServiceException(new Result(Status.CLIENT_ERROR, RegisterStatus.MISSING_ACCOUNTINFO));
-
 		AccountInfo accInfo = new AccountInfo();
 		accInfo.setUsername(username);
 		byte[] password = request.getCredentials().getUsernamePassword().getPassword().getBytes();

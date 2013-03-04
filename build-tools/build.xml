@@ -11,12 +11,12 @@
 	</target>
 	
 	<target name="clean-all">
-		<ant dir="${ecosystemguard-common.dir}" target="clean" />
-		<ant dir="${ecosystemguard-domain.dir}" target="clean" />
-		<ant dir="${ecosystemguard-persistence.dir}" target="clean" />
-		<ant dir="${ecosystemguard-engine.dir}" target="clean" />
-		<ant dir="${ecosystemguard-registry.dir}" target="clean" />
-		<ant dir="${ecosystemguard-hostmanager.dir}" target="clean" />
+		<ant dir="${ecosystemguard-common.dir}" target="clean-all" />
+		<ant dir="${ecosystemguard-domain.dir}" target="clean-all" />
+		<ant dir="${ecosystemguard-persistence.dir}" target="clean-all" />
+		<ant dir="${ecosystemguard-engine.dir}" target="clean-all" />
+		<ant dir="${ecosystemguard-registry.dir}" target="clean-all" />
+		<ant dir="${ecosystemguard-hostmanager.dir}" target="clean-all" />
 	</target>
 	
 	<target name="compile">
