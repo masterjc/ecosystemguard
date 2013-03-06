@@ -23,6 +23,9 @@ import com.ecosystem.guard.domain.Result;
 import com.ecosystem.guard.domain.Serializer;
 import com.ecosystem.guard.domain.config.HostConfig;
 import com.ecosystem.guard.domain.service.AccountInformation;
+import com.ecosystem.guard.domain.service.HostInformation;
+import com.ecosystem.guard.domain.service.RegisterHostRequest;
+import com.ecosystem.guard.domain.service.RegisterHostResponse;
 import com.ecosystem.guard.domain.service.RegisterRequest;
 import com.ecosystem.guard.domain.service.RegisterResponse;
 import com.ecosystem.guard.domain.service.UnregisterRequest;
@@ -31,11 +34,14 @@ import com.ecosystem.guard.domain.service.UpdateCredentialsRequest;
 import com.ecosystem.guard.domain.service.UpdateCredentialsResponse;
 
 public class Manager {
-	private static String ECOSYSTEM_BASE_URL = "http://localhost:8080/ecosystemguard-registry/";
+	//private static String ECOSYSTEM_SERVER = "localhost:8080";
+	private static String ECOSYSTEM_SERVER = "registry-ecosystemguard.rhcloud.com";
+	private static String ECOSYSTEM_BASE_URL = "http://" + ECOSYSTEM_SERVER + "/ecosystemguard-registry/";
 
 	private static String REGISTER_SERVICE = "register";
 	private static String UNREGISTER_SERVICE = "unregister";
 	private static String UPDATE_CREDENTIALS_SERVICE = "updatecredentials";
+	private static String REGISTER_HOST_SERVICE = "registerhost";
 
 	private static String HOST_CONFIG_FILENAME = "host.xml";
 	private static final int NUM_BITS = 16;
@@ -271,7 +277,24 @@ public class Manager {
 	 */
 
 	private void registerHost() throws Exception {
-		System.out.println("registerHost");
+		System.out.print("Enter e-mail account (main username): ");
+		String username = scanner.nextLine();
+		System.out.print("Enter password: ");
+		char[] password = readPassword();
+		System.out.print("Are you sure you want to register '" + hostConfig.getSummary() + "' with user '" + username + "'? [Y|N]: ");
+		String sure = scanner.nextLine();
+		if (!sure.toUpperCase().equals("Y"))
+			throw new Exception("Registe host operation cancelled");
+		RegisterHostRequest request = new RegisterHostRequest();
+		Credentials credentials = new Credentials(username, new String(password));
+		request.setCredentials(credentials);
+		HostInformation info = new HostInformation();
+		info.setId(hostConfig.getId());
+		info.setDescription(hostConfig.getDescription());
+		info.setSummary(hostConfig.getSummary());
+		RegisterHostResponse response = sendRequest(request, RegisterHostRequest.class, RegisterHostResponse.class,
+				ECOSYSTEM_BASE_URL + REGISTER_HOST_SERVICE, managerConfig.isDebug());
+		printOperationStatus("Account registration status: ", response.getResult());
 	}
 
 	private void unregisterHost() {
