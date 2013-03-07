@@ -29,6 +29,9 @@ public class Manager {
 		hostRegistryManager = new HostRegistryManager(hostConfigurator);
 	}
 
+	/**
+	 * Main loop
+	 */
 	public void execute() {
 		boolean exit = false;
 		while (!exit) {
