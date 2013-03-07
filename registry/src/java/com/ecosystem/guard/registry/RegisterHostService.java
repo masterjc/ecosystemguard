@@ -55,7 +55,7 @@ public class RegisterHostService extends AuthenticatedService<RegisterHostReques
 			RegisterHostRequest request, Writer writer) throws Exception {
 		if (request.getHostInformation() == null || request.getHostInformation().getId() == null)
 			throw new ServiceException(new Result(Result.Status.CLIENT_ERROR, "Missing host information"));
-		if (daoManager.getHostInfo(authnContext.getUsername(), request.getHostInformation().getId()) == null)
+		if (daoManager.getHostInfo(authnContext.getUsername(), request.getHostInformation().getId()) != null)
 			throw new ServiceException(new Result(Status.CLIENT_ERROR, RegisterStatus.ALREADY_REGISTERED));
 		HostInfo daoInfo = new HostInfo();
 		daoInfo.setHostId(request.getHostInformation().getId());

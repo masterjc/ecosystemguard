@@ -1,6 +1,7 @@
 package com.ecosystem.guard.registry;
 
 import java.io.Writer;
+import java.util.List;
 
 import javax.servlet.annotation.WebServlet;
 
@@ -12,6 +13,7 @@ import com.ecosystem.guard.engine.authn.AuthenticationContext;
 import com.ecosystem.guard.engine.servlet.AuthenticatedService;
 import com.ecosystem.guard.persistence.DaoManager;
 import com.ecosystem.guard.persistence.Transaction;
+import com.ecosystem.guard.persistence.dao.HostInfo;
 
 /**
  * 
@@ -29,6 +31,12 @@ public class UnregisterService extends AuthenticatedService<UnregisterRequest, U
 	protected void execute(AuthenticationContext authnContext, Transaction transaction, DaoManager daoManager,
 			UnregisterRequest request, Writer writer) throws Exception {
 		daoManager.deleteAccount(authnContext.getUsername());
+		List<HostInfo> hosts = daoManager.getHostsInfo(authnContext.getUsername());
+		if( hosts != null ) {
+			for( HostInfo host : hosts ) {
+				daoManager.delete(host);
+			}
+		}
 		UnregisterResponse response = new UnregisterResponse();
 		response.setResult(new Result(Result.Status.OK));
 		Serializer.serialize(response, UnregisterResponse.class, writer);

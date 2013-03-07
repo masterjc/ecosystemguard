@@ -1,5 +1,7 @@
 package com.ecosystem.guard.persistence;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -41,6 +43,16 @@ public class DaoManager {
 	public void update(Object object) throws Exception {
 		this.entityManager.merge(object);
 	}
+	
+	/**
+	 * Elimina un objeto modelado en la base de datos EcosystemGuard
+	 * 
+	 * @param object Objeto a actualizar en la base de datos
+	 * @throws Exception
+	 */
+	public void delete(Object object) throws Exception {
+		this.entityManager.remove(object);
+	}
 
 	/**
 	 * Busca la información de cuenta de un usuario
@@ -73,6 +85,24 @@ public class DaoManager {
 			TypedQuery<HostInfo> query = entityManager.createQuery("SELECT a FROM HostInfo a WHERE a.username = '"
 					+ username + "' AND a.hostId='" + hostId + "'", HostInfo.class);
 			return query.getSingleResult();
+		}
+		catch (NoResultException e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Busca los hosts registrados de un usuario
+	 * 
+	 * @param username El identificador de usuario
+	 * @return La información del host. Null si no existe el host para el usuario.
+	 * @throws Exception
+	 */
+	public List<HostInfo> getHostsInfo(String username) throws Exception {
+		try {
+			TypedQuery<HostInfo> query = entityManager.createQuery("SELECT a FROM HostInfo a WHERE a.username = '"
+					+ username + "'", HostInfo.class);
+			return query.getResultList();
 		}
 		catch (NoResultException e) {
 			return null;

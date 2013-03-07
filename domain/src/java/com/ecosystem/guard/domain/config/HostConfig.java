@@ -9,8 +9,6 @@ import com.ecosystem.guard.domain.Credentials;
 @XmlRootElement(name = "host")
 public class HostConfig {
 	private String id;
-	private String description;
-	private String summary;
 	private Credentials credentials;
 
 	public String getId() {
@@ -22,15 +20,6 @@ public class HostConfig {
 		this.id = id;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	@XmlElement
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	public Credentials getCredentials() {
 		return credentials;
 	}
@@ -39,13 +28,4 @@ public class HostConfig {
 	public void setCredentials(Credentials credentials) {
 		this.credentials = credentials;
 	}
-
-	public String getSummary() {
-		return summary;
-	}
-
-	public void setSummary(String summary) {
-		this.summary = summary;
-	}
-
 }
