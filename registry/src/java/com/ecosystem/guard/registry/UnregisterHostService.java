@@ -15,12 +15,11 @@ import java.io.Writer;
 import javax.servlet.annotation.WebServlet;
 
 import com.ecosystem.guard.domain.Result;
-import com.ecosystem.guard.domain.Serializer;
 import com.ecosystem.guard.domain.Result.Status;
-import com.ecosystem.guard.domain.service.RegisterHostRequest;
-import com.ecosystem.guard.domain.service.RegisterHostResponse;
-import com.ecosystem.guard.domain.service.RegisterStatus;
-import com.ecosystem.guard.engine.SystemProperties;
+import com.ecosystem.guard.domain.Serializer;
+import com.ecosystem.guard.domain.service.UnregisterHostRequest;
+import com.ecosystem.guard.domain.service.UnregisterHostResponse;
+import com.ecosystem.guard.domain.service.UnregisterHostStatus;
 import com.ecosystem.guard.engine.authn.AuthenticationContext;
 import com.ecosystem.guard.engine.servlet.AuthenticatedService;
 import com.ecosystem.guard.engine.servlet.ServiceException;
@@ -34,7 +33,7 @@ import com.ecosystem.guard.persistence.dao.HostInfo;
  * @version $Revision$
  */
 @WebServlet(value = "/unregisterhost", name = "registerhost-service")
-public class UnregisterHostService extends AuthenticatedService<RegisterHostRequest, RegisterHostResponse> {
+public class UnregisterHostService extends AuthenticatedService<UnregisterHostRequest, UnregisterHostResponse> {
 
 	/**
 	 * 
@@ -52,21 +51,16 @@ public class UnregisterHostService extends AuthenticatedService<RegisterHostRequ
 	 */
 	@Override
 	protected void execute(AuthenticationContext authnContext, Transaction transaction, DaoManager daoManager,
-			RegisterHostRequest request, Writer writer) throws Exception {
+			UnregisterHostRequest request, Writer writer) throws Exception {
 		if (request.getHostInformation() == null || request.getHostInformation().getId() == null)
 			throw new ServiceException(new Result(Result.Status.CLIENT_ERROR, "Missing host information"));
-		if (daoManager.getHostInfo(authnContext.getUsername(), request.getHostInformation().getId()) != null)
-			throw new ServiceException(new Result(Status.CLIENT_ERROR, RegisterStatus.ALREADY_REGISTERED));
-		HostInfo daoInfo = new HostInfo();
-		daoInfo.setHostId(request.getHostInformation().getId());
-		daoInfo.setSummary(request.getHostInformation().getSummary());
-		daoInfo.setDescription(request.getHostInformation().getDescription());
-		daoInfo.setUsername(authnContext.getUsername());
-		daoInfo.setVersion(SystemProperties.getVersion());
-		daoManager.insert(daoInfo);
-		RegisterHostResponse response = new RegisterHostResponse();
+		HostInfo hostInfo = daoManager.getHostInfo(authnContext.getUsername(), request.getHostInformation().getId());
+		if (hostInfo == null)
+			throw new ServiceException(new Result(Status.CLIENT_ERROR, UnregisterHostStatus.NOT_ASSOCIATED_HOST));
+		daoManager.delete(hostInfo);
+		UnregisterHostResponse response = new UnregisterHostResponse();
 		response.setResult(new Result(Status.OK));
-		Serializer.serialize(response, RegisterHostResponse.class, writer);
+		Serializer.serialize(response, UnregisterHostResponse.class, writer);
 	}
 
 	/*
@@ -75,8 +69,8 @@ public class UnregisterHostService extends AuthenticatedService<RegisterHostRequ
 	 * @see com.ecosystem.guard.engine.servlet.AuthenticatedService#getRequestJaxbClass()
 	 */
 	@Override
-	protected Class<RegisterHostRequest> getRequestJaxbClass() {
-		return RegisterHostRequest.class;
+	protected Class<UnregisterHostRequest> getRequestJaxbClass() {
+		return UnregisterHostRequest.class;
 	}
 
 	/*
@@ -85,8 +79,8 @@ public class UnregisterHostService extends AuthenticatedService<RegisterHostRequ
 	 * @see com.ecosystem.guard.engine.servlet.AuthenticatedService#getResponseJaxbClass()
 	 */
 	@Override
-	protected Class<RegisterHostResponse> getResponseJaxbClass() {
-		return RegisterHostResponse.class;
+	protected Class<UnregisterHostResponse> getResponseJaxbClass() {
+		return UnregisterHostResponse.class;
 	}
 
 }
