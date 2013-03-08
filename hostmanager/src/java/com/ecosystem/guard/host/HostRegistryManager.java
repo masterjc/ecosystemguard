@@ -17,6 +17,8 @@ import com.ecosystem.guard.domain.Result.Status;
 import com.ecosystem.guard.domain.service.HostInformation;
 import com.ecosystem.guard.domain.service.RegisterHostRequest;
 import com.ecosystem.guard.domain.service.RegisterHostResponse;
+import com.ecosystem.guard.domain.service.UnregisterHostRequest;
+import com.ecosystem.guard.domain.service.UnregisterHostResponse;
 
 /**
  * 
@@ -55,17 +57,34 @@ public class HostRegistryManager {
 		info.setDescription(description);
 		info.setSummary(summary);
 		request.setHostInformation(info);
-		RegisterHostResponse response = CmdUtils.sendRequest(request, RegisterHostRequest.class, RegisterHostResponse.class,
-				ManagerConstants.REGISTER_HOST_SERVICE);
+		RegisterHostResponse response = CmdUtils.sendRequest(request, RegisterHostRequest.class,
+				RegisterHostResponse.class, ManagerConstants.REGISTER_HOST_SERVICE);
 		if (response.getResult().getStatus() == Status.OK) {
 			hostConfigurator.setCredentials(credentials.getUsernamePassword());
 			hostConfigurator.save();
 		}
-		ManagerOutput.printOperationStatus("Account registration status: ", response.getResult());
+		ManagerOutput.printOperationStatus("Host registration status: ", response.getResult());
 	}
 
-	public void unregisterHost() {
-		System.out.println("unregisterHost");
+	public void unregisterHost() throws Exception {
+		System.out.print("Are you sure you want to unregister this EcosystemGuard host from your account '"
+				+ hostConfigurator.getUsernamePassword().getUsername() + "'? [Y|N]: ");
+		String sure = scanner.nextLine();
+		if (!sure.toUpperCase().equals("Y"))
+			throw new Exception("Unregister host operation cancelled");
+		UnregisterHostRequest request = new UnregisterHostRequest();
+		Credentials credentials = new Credentials();
+		credentials.setUsernamePassword(hostConfigurator.getUsernamePassword());
+		request.setCredentials(credentials);
+		HostInformation info = new HostInformation();
+		info.setId(hostConfigurator.getHostId());
+		request.setHostInformation(info);
+		UnregisterHostResponse response = CmdUtils.sendRequest(request, UnregisterHostRequest.class,
+				UnregisterHostResponse.class, ManagerConstants.UNREGISTER_HOST_SERVICE);
+		if (response.getResult().getStatus() == Status.OK) {
+			hostConfigurator.reset();
+		}
+		ManagerOutput.printOperationStatus("Host unregistration status: ", response.getResult());
 	}
 
 }

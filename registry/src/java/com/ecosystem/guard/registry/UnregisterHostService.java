@@ -32,7 +32,7 @@ import com.ecosystem.guard.persistence.dao.HostInfo;
  * @author juancarlos.fernandez
  * @version $Revision$
  */
-@WebServlet(value = "/unregisterhost", name = "registerhost-service")
+@WebServlet(value = "/unregisterhost", name = "unregisterhost-service")
 public class UnregisterHostService extends AuthenticatedService<UnregisterHostRequest, UnregisterHostResponse> {
 
 	/**

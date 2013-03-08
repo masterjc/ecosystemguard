@@ -24,4 +24,5 @@ public class ManagerConstants {
 	public static String UNREGISTER_SERVICE = ECOSYSTEM_BASE_URL + "unregister";
 	public static String UPDATE_CREDENTIALS_SERVICE = ECOSYSTEM_BASE_URL + "updatecredentials";
 	public static String REGISTER_HOST_SERVICE = ECOSYSTEM_BASE_URL + "registerhost";
+	public static String UNREGISTER_HOST_SERVICE = ECOSYSTEM_BASE_URL + "unregisterhost";
 }
