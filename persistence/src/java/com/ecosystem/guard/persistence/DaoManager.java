@@ -8,6 +8,7 @@ import javax.persistence.TypedQuery;
 
 import com.ecosystem.guard.persistence.dao.AccountInfo;
 import com.ecosystem.guard.persistence.dao.HostInfo;
+import com.ecosystem.guard.persistence.dao.IpInfo;
 
 /**
  * Gestiona el acceso a los objetos de base de datos. Solo tiene efecto sobre la base de datos si la
@@ -43,7 +44,7 @@ public class DaoManager {
 	public void update(Object object) throws Exception {
 		this.entityManager.merge(object);
 	}
-	
+
 	/**
 	 * Elimina un objeto modelado en la base de datos EcosystemGuard
 	 * 
@@ -90,7 +91,25 @@ public class DaoManager {
 			return null;
 		}
 	}
-	
+
+	/**
+	 * Busca la información de la IP registrada para un host
+	 * 
+	 * @param hostId El identificador de host
+	 * @return La información de ip registrada para el host. Null si no existe el host.
+	 * @throws Exception
+	 */
+	public IpInfo getIpInfo(String hostId) throws Exception {
+		try {
+			TypedQuery<IpInfo> query = entityManager.createQuery("SELECT a FROM IpInfo a WHERE a.hostId = '" + hostId
+					+ "'", IpInfo.class);
+			return query.getSingleResult();
+		}
+		catch (NoResultException e) {
+			return null;
+		}
+	}
+
 	/**
 	 * Busca los hosts registrados de un usuario
 	 * 

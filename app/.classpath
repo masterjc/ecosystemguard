@@ -8,6 +8,5 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="var" path="PROJECT_DIR/engine/lib/ecosystemguard-engine.jar"/>
 	<classpathentry kind="var" path="PROJECT_DIR/common/lib/ecosystemguard-common.jar"/>
-	<classpathentry kind="var" path="PROJECT_DIR/persistence/lib/ecosystemguard-persistence.jar" sourcepath="/PROJECT_DIR/persistence/src/java"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
