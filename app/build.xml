@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<project name="ecosystemguard-app" default="all">
+	<property environment="env" />
+
+	<include file="${env.PROJECT_DIR}/build-tools/project-definitions.xml"/>
+	
+	<path id="classpath">
+        <path refid="servlet.path" />
+		<path refid="ecosystemguard-domain.path" />
+		<path refid="ecosystemguard-engine.path" />
+    </path>
+	
+	<target name="all" depends="clean, compile, war"/>
+	
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+		<delete dir="${lib.dir}"/>
+	</target>
+	
+	<target name="clean-all" depends="clean">
+		<delete dir="${bin.dir}"/>
+	</target>
+	
+	<target name="compile">
+	    <mkdir dir="${classes.dir}"/>
+	    <javac srcdir="src" destdir="${classes.dir}" debug="true" includeantruntime="false" classpathref="classpath"/>
+	</target>
+	
+	<target name="war">
+		<mkdir dir="${lib.dir}"/>
+		<war destfile="${lib.dir}/${ant.project.name}.war" webxml="${resources.dir}/web.xml">
+			<classes dir="${classes.dir}"/>
+			<lib file="${ecosystemguard-domain.lib}"/>
+			<lib file="${ecosystemguard-engine.lib}"/>
+			<lib file="${ecosystemguard-common.lib}"/>
+			<lib file="${commons-codec.lib}"/>
+			<lib file="${httpcomponents_dep_logging.lib}"/>
+			<lib file="${httpcomponents_core.lib}"/>
+			<lib file="${httpcomponents_client.lib}"/>
+		</war>
+	</target>
+	
+	<target name="deploy-jboss" depends="all">
+		<copy todir="${env.JBOSS_DEPLOYMENT_DIR}">
+			 <fileset file="${lib.dir}/${ant.project.name}.war"/>
+		</copy>
+	</target>
+</project>

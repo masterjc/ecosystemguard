@@ -53,12 +53,22 @@
 	<property name="ecosystemguard-registry.name" value="ecosystemguard-registry.war"/>
 	<property name="ecosystemguard-registry.lib" value="${ecosystemguard-registry.dir}/${lib.dir}/${ecosystemguard-registry.name}"/>
 	
+	<!-- Host Application Service -->
+	<property name="ecosystemguard-app.dir" value="${env.PROJECT_DIR}/app"/>
+	<property name="ecosystemguard-app.name" value="ecosystemguard-app.war"/>
+	<property name="ecosystemguard-app.lib" value="${ecosystemguard-app.dir}/${lib.dir}/${ecosystemguard-app.name}"/>
+	
 	<!-- Host Manager -->
 	<property name="ecosystemguard-hostmanager.dir" value="${env.PROJECT_DIR}/hostmanager"/>
 	<property name="ecosystemguard-hostmanager.name" value="ecosystemguard-hostmanager.jar"/>
 	<property name="ecosystemguard-hostmanager.zipname" value="ecosystemguard-hostmanager.zip"/>
 	<property name="ecosystemguard-hostmanager.lib" value="${ecosystemguard-hostmanager.dir}/${lib.dir}/${lib.dir}/${ecosystemguard-hostmanager.name}"/>
 	<property name="ecosystemguard-hostmanager.zip" value="${ecosystemguard-hostmanager.dir}/${lib.dir}/${ecosystemguard-hostmanager.zipname}"/>
+	
+	<!-- PKI files -->
+	<property name="ecosystemguard-pki.dir" value="${env.PROJECT_DIR}/config/pki"/>
+	<property name="ecosystemguard-keystore.name" value="ecosystemguard.keystore"/>
+	<property name="ecosystemguard-truststore.name" value="ecosystemguard.keystore"/>
 	
 	<!--**********************-->
 	<!-- Thirdparty libraries -->

@@ -17,6 +17,7 @@
 		<ant dir="${ecosystemguard-engine.dir}" target="clean-all" />
 		<ant dir="${ecosystemguard-registry.dir}" target="clean-all" />
 		<ant dir="${ecosystemguard-hostmanager.dir}" target="clean-all" />
+		<ant dir="${ecosystemguard-app.dir}" target="clean-all" />
 	</target>
 	
 	<target name="compile">
@@ -26,12 +27,14 @@
 		<ant dir="${ecosystemguard-engine.dir}" target="all" />
 		<ant dir="${ecosystemguard-registry.dir}" target="all" />
 		<ant dir="${ecosystemguard-hostmanager.dir}" target="all" />
+		<ant dir="${ecosystemguard-app.dir}" target="all" />
 	</target>
 	
 	<target name="mpi">
 		<mkdir dir="${build.dir}"/>
 		<copy todir="${build.dir}">
 			 <fileset file="${ecosystemguard-registry.lib}"/>
+			 <fileset file="${ecosystemguard-app.lib}"/>
 			 <fileset file="${ecosystemguard-hostmanager.zip}"/>
 		</copy>
 	</target>
@@ -40,6 +43,13 @@
 		<copy todir="${env.JBOSS_DEPLOYMENT_DIR}">
 			 <fileset file="${ecosystemguard-registry.lib}"/>
 		</copy>
+		<copy todir="${env.TOMCAT_DEPLOYMENT_DIR}">
+			 <fileset file="${ecosystemguard-app.lib}"/>
+		</copy>
 		<unzip src="${ecosystemguard-hostmanager.zip}" dest="${env.HOST_DEPLOYMENT_DIR}"/>
+		<mkdir dir="${env.HOST_DEPLOYMENT_DIR}/config"/>
+		<copy todir="${env.HOST_DEPLOYMENT_DIR}/config">
+			 <fileset file="${ecosystemguard-pki.dir}/${ecosystemguard-keystore.name}"/>
+		</copy>
 	</target>
 </project>
