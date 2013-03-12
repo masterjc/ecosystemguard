@@ -28,6 +28,8 @@ public class PersistenceHttpServlet extends HttpServlet {
 	private EntityManagerFactory entityManagerFactory;
 
 	public EntityManager createEntityManager() {
+		if (entityManagerFactory == null)
+			return null;
 		return entityManagerFactory.createEntityManager();
 	}
 
