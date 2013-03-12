@@ -1,0 +1,6 @@
+openssl genrsa -out root.key 4096
+openssl req -new -x509 -days 1460 -key root.key -out root.crt
+openssl genrsa -out host.key 2048
+openssl req -new -key host.key -out host.csr
+openssl x509 -req -days 730 -in host.csr -CA root.crt -CAkey root.key -CAcreateserial -out host.crt
+keytool -import -alias ecosystemguard -keystore ecosystemguard.truststore -trustcacerts -file ecosystemguard_host_root.crt
