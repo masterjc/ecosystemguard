@@ -5,6 +5,8 @@
 	<include file="${env.PROJECT_DIR}/build-tools/project-definitions.xml"/>
 	
 	<path id="classpath">
+		<path refid="ecosystemguard-domain.path" />
+		<path refid="commons-codec.path" />
    	</path>
 	
 	<target name="all" depends="clean, compile, jar"/>

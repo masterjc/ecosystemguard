@@ -32,6 +32,14 @@
 		<pathelement location="${ecosystemguard-domain.lib}" />
 	</path>
 	
+	<!-- Domain -->
+	<property name="ecosystemguard-logging.dir" value="${env.PROJECT_DIR}/logging"/>
+	<property name="ecosystemguard-logging.name" value="ecosystemguard-logging.jar"/>
+	<property name="ecosystemguard-logging.lib" value="${ecosystemguard-logging.dir}/${lib.dir}/${ecosystemguard-logging.name}"/>
+	<path id="ecosystemguard-logging.path">
+		<pathelement location="${ecosystemguard-logging.lib}" />
+	</path>
+	
 	<!-- Persistence -->
 	<property name="ecosystemguard-persistence.dir" value="${env.PROJECT_DIR}/persistence"/>
 	<property name="ecosystemguard-persistence.name" value="ecosystemguard-persistence.jar"/>
