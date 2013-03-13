@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/commons-codec/commons-codec-1.7/commons-codec-1.7.jar"/>
+	<classpathentry kind="var" path="PROJECT_DIR/domain/lib/ecosystemguard-domain.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
