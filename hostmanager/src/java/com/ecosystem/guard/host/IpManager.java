@@ -10,6 +10,7 @@
 
 package com.ecosystem.guard.host;
 
+import com.ecosystem.guard.common.XmlServiceRequestor;
 import com.ecosystem.guard.domain.Credentials;
 import com.ecosystem.guard.domain.Result.Status;
 import com.ecosystem.guard.domain.service.GetIpRequest;
@@ -33,7 +34,7 @@ public class IpManager {
 		request.setCredentials(new Credentials(hostConfigurator.getUsernamePassword().getUsername(), hostConfigurator
 				.getUsernamePassword().getPassword()));
 		request.setHostId(hostConfigurator.getHostId());
-		GetIpResponse response = CmdUtils.sendRequest(request, GetIpRequest.class, GetIpResponse.class,
+		GetIpResponse response = XmlServiceRequestor.sendRequest(request, GetIpRequest.class, GetIpResponse.class,
 				ManagerConstants.GET_IP_SERVICE);
 		printIpInformation(response);
 	}

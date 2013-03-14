@@ -13,6 +13,7 @@ package com.ecosystem.guard.host;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import com.ecosystem.guard.common.XmlServiceRequestor;
 import com.ecosystem.guard.domain.Credentials;
 import com.ecosystem.guard.domain.Result.Status;
 import com.ecosystem.guard.domain.service.AccountInformation;
@@ -56,7 +57,7 @@ public class AccountManager {
 		RegisterRequest request = new RegisterRequest();
 		request.setCredentials(credentials);
 		request.setAccountInformation(info);
-		RegisterResponse response = CmdUtils.sendRequest(request, RegisterRequest.class, RegisterResponse.class,
+		RegisterResponse response = XmlServiceRequestor.sendRequest(request, RegisterRequest.class, RegisterResponse.class,
 				ManagerConstants.REGISTER_SERVICE);
 		ManagerOutput.printOperationStatus("Account registration status: ", response.getResult());
 	}
@@ -79,7 +80,7 @@ public class AccountManager {
 		Credentials credentials = new Credentials(username, new String(password));
 		UnregisterRequest request = new UnregisterRequest();
 		request.setCredentials(credentials);
-		UnregisterResponse response = CmdUtils.sendRequest(request, UnregisterRequest.class, UnregisterResponse.class,
+		UnregisterResponse response = XmlServiceRequestor.sendRequest(request, UnregisterRequest.class, UnregisterResponse.class,
 				ManagerConstants.UNREGISTER_SERVICE);
 		if (response.getResult().getStatus() == Status.OK && hostConfigurator.hasCredentials() && username.equals(hostConfigurator.getUsernamePassword().getUsername())) {
 			hostConfigurator.reset();
@@ -102,7 +103,7 @@ public class AccountManager {
 		UpdateCredentialsRequest request = new UpdateCredentialsRequest();
 		request.setCredentials(credentials);
 		request.setNewPassword(new String(newPassword1));
-		UpdateCredentialsResponse response = CmdUtils.sendRequest(request, UpdateCredentialsRequest.class,
+		UpdateCredentialsResponse response = XmlServiceRequestor.sendRequest(request, UpdateCredentialsRequest.class,
 				UpdateCredentialsResponse.class, ManagerConstants.UPDATE_CREDENTIALS_SERVICE);
 		ManagerOutput.printOperationStatus("Update credentials status: ", response.getResult());
 	}

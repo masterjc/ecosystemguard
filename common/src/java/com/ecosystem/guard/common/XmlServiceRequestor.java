@@ -8,10 +8,9 @@
  * permission of the copyright owner.
  */
 
-package com.ecosystem.guard.host;
+package com.ecosystem.guard.common;
 
 import java.io.StringReader;
-import java.util.Scanner;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -28,22 +27,22 @@ import com.ecosystem.guard.domain.Serializer;
  * @author juancarlos.fernandez
  * @version $Revision$
  */
-public class CmdUtils {
-	private static final int MIN_PASSWORD_LENGTH = 8;
+public class XmlServiceRequestor {
 
-	private static Scanner scanner = new Scanner(System.in);
-
-	public static char[] readPassword() throws Exception {
-		char[] pass = null;
-		if (System.console() != null) {
-			pass = System.console().readPassword();
+	public static <T, R> R sendRequest(T request, Class<T> requestClass, Class<R> responseClass, String url)
+			throws Exception {
+		HttpClient httpclient = new DefaultHttpClient();
+		try {
+			HttpPost httpPost = new HttpPost(url);
+			String xmlRequest = Serializer.serialize(request, requestClass);
+			httpPost.setEntity(new StringEntity(xmlRequest));
+			HttpResponse httpResponse = httpclient.execute(httpPost);
+			String response = EntityUtils.toString(httpResponse.getEntity());
+			return Deserializer.deserialize(responseClass, new StringReader(response));
 		}
-		else {
-			pass = scanner.nextLine().toCharArray();
+		finally {
+			httpclient.getConnectionManager().shutdown();
 		}
-		if (pass.length < MIN_PASSWORD_LENGTH)
-			throw new Exception("Password must be 8 characters at least");
-		return pass;
 	}
 
 }

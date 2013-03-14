@@ -12,6 +12,7 @@ package com.ecosystem.guard.host;
 
 import java.util.Scanner;
 
+import com.ecosystem.guard.common.XmlServiceRequestor;
 import com.ecosystem.guard.domain.Credentials;
 import com.ecosystem.guard.domain.Result.Status;
 import com.ecosystem.guard.domain.service.HostInformation;
@@ -59,7 +60,7 @@ public class HostRegistryManager {
 		info.setDescription(description);
 		info.setSummary(summary);
 		request.setHostInformation(info);
-		RegisterHostResponse response = CmdUtils.sendRequest(request, RegisterHostRequest.class,
+		RegisterHostResponse response = XmlServiceRequestor.sendRequest(request, RegisterHostRequest.class,
 				RegisterHostResponse.class, ManagerConstants.REGISTER_HOST_SERVICE);
 		if (response.getResult().getStatus() == Status.OK) {
 			hostConfigurator.setCredentials(credentials.getUsernamePassword());
@@ -72,7 +73,7 @@ public class HostRegistryManager {
 		ipRequest.setCredentials(new Credentials(hostConfigurator.getUsernamePassword().getUsername(), hostConfigurator
 				.getUsernamePassword().getPassword()));
 		ipRequest.setHostId(hostConfigurator.getHostId());
-		UpdateIpResponse ipResponse = CmdUtils.sendRequest(ipRequest, UpdateIpRequest.class, UpdateIpResponse.class,
+		UpdateIpResponse ipResponse = XmlServiceRequestor.sendRequest(ipRequest, UpdateIpRequest.class, UpdateIpResponse.class,
 				ManagerConstants.UPDATE_IP_SERVICE);
 		if (ipResponse.getResult().getStatus() != Status.OK) {
 			ManagerOutput.printOperationStatus("Ip registration status: ", ipResponse.getResult());
@@ -94,7 +95,7 @@ public class HostRegistryManager {
 		HostInformation info = new HostInformation();
 		info.setId(hostConfigurator.getHostId());
 		request.setHostInformation(info);
-		UnregisterHostResponse response = CmdUtils.sendRequest(request, UnregisterHostRequest.class,
+		UnregisterHostResponse response = XmlServiceRequestor.sendRequest(request, UnregisterHostRequest.class,
 				UnregisterHostResponse.class, ManagerConstants.UNREGISTER_HOST_SERVICE);
 		if (response.getResult().getStatus() == Status.OK) {
 			hostConfigurator.reset();

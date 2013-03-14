@@ -1,15 +1,21 @@
 <?xml version="1.0"?>
-<project name="ecosystemguard-common" default="all">
+<project name="ecosystemguard-test" default="all">
 	<property environment="env" />
 
 	<include file="${env.PROJECT_DIR}/build-tools/project-definitions.xml"/>
 	
 	<path id="classpath">
+        <path refid="servlet.path" />
+		<path refid="jpa.path" />
+		<path refid="commons-codec.path" />
 		<path refid="httpcomponents.path" />
+		<path refid="ecosystemguard-common.path" />
+		<path refid="ecosystemguard-logging.path" />
 		<path refid="ecosystemguard-domain.path" />
-    </path>
+		<path refid="ecosystemguard-persistence.path" />
+    	</path>
 	
-	<target name="all" depends="clean, compile, jar"/>
+	<target name="all" depends="clean, compile"/>
 	
 	<target name="clean">
 		<delete dir="${build.dir}"/>
@@ -24,10 +30,4 @@
 	    <mkdir dir="${classes.dir}"/>
 	    <javac srcdir="src" destdir="${classes.dir}" debug="true" includeantruntime="false" classpathref="classpath"/>
 	</target>
-	
-	<target name="jar">
-		<mkdir dir="${lib.dir}"/>
-		<jar destfile="${lib.dir}/${ant.project.name}.jar" basedir="${classes.dir}"/>
-	</target>
-	
 </project>
