@@ -62,6 +62,7 @@ public class JpaTransaction implements Transaction {
 	public void commitTransaction() {
 		if (isActive()) {
 			entityManager.getTransaction().commit();
+			entityManager.close();
 		}
 	}
 
@@ -74,6 +75,7 @@ public class JpaTransaction implements Transaction {
 	public void rollbackTransaction() {
 		if (isActive()) {
 			entityManager.getTransaction().rollback();
+			entityManager.close();
 		}
 	}
 
