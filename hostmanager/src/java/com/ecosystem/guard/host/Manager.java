@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Manager {
 	private enum MainOptionFunction {
-		ACCOUNT_SETTINGS, REGISTER, UNREGISTER, EXIT;
+		ACCOUNT_SETTINGS, REGISTER, UNREGISTER, GETIP, EXIT;
 	}
 
 	private enum RegistryOptionFunction {
@@ -15,6 +15,7 @@ public class Manager {
 	private HostConfigurator hostConfigurator;
 	private AccountManager accountManager;
 	private HostRegistryManager hostRegistryManager;
+	private IpManager ipManager;
 	private Scanner scanner = new Scanner(System.in);
 
 	public static void main(String[] args) throws Exception {
@@ -27,6 +28,7 @@ public class Manager {
 		hostConfigurator = new HostConfigurator(managerConfig);
 		accountManager = new AccountManager(hostConfigurator);
 		hostRegistryManager = new HostRegistryManager(hostConfigurator);
+		ipManager = new IpManager(hostConfigurator);
 	}
 
 	/**
@@ -76,6 +78,9 @@ public class Manager {
 		case UNREGISTER:
 			hostRegistryManager.unregisterHost();
 			break;
+		case GETIP:
+			ipManager.showPublicIpInformation();
+			break;
 		case EXIT:
 			return true;
 		}
@@ -119,6 +124,8 @@ public class Manager {
 		else {
 			System.out.println(option + ". Disassociate host with current account");
 			selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.UNREGISTER));
+			System.out.println(option + ". Show public IP Address information");
+			selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.GETIP));
 		}
 		System.out.println(option + ". Exit");
 		selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.EXIT));

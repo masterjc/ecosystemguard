@@ -14,6 +14,7 @@ import com.ecosystem.guard.engine.servlet.AuthenticatedService;
 import com.ecosystem.guard.persistence.DaoManager;
 import com.ecosystem.guard.persistence.Transaction;
 import com.ecosystem.guard.persistence.dao.HostInfo;
+import com.ecosystem.guard.persistence.dao.IpInfo;
 
 /**
  * 
@@ -32,8 +33,12 @@ public class UnregisterService extends AuthenticatedService<UnregisterRequest, U
 			UnregisterRequest request, Writer writer) throws Exception {
 		daoManager.deleteAccount(authnContext.getUsername());
 		List<HostInfo> hosts = daoManager.getHostsInfo(authnContext.getUsername());
-		if( hosts != null ) {
-			for( HostInfo host : hosts ) {
+		if (hosts != null) {
+			for (HostInfo host : hosts) {
+				IpInfo ipInfo = daoManager.getIpInfo(host.getHostId());
+				if (ipInfo != null) {
+					daoManager.delete(ipInfo);
+				}
 				daoManager.delete(host);
 			}
 		}
@@ -45,9 +50,7 @@ public class UnregisterService extends AuthenticatedService<UnregisterRequest, U
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.ecosystem.guard.engine.servlet.TransactionalService#getRequestJaxbClass
-	 * ()
+	 * @see com.ecosystem.guard.engine.servlet.TransactionalService#getRequestJaxbClass ()
 	 */
 	@Override
 	protected Class<UnregisterRequest> getRequestJaxbClass() {

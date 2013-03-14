@@ -26,6 +26,7 @@ import com.ecosystem.guard.domain.exceptions.ServiceException;
 import com.ecosystem.guard.persistence.DaoManager;
 import com.ecosystem.guard.persistence.Transaction;
 import com.ecosystem.guard.persistence.dao.HostInfo;
+import com.ecosystem.guard.persistence.dao.IpInfo;
 
 /**
  * 
@@ -55,8 +56,12 @@ public class UnregisterHostService extends AuthenticatedService<UnregisterHostRe
 		if (request.getHostInformation() == null || request.getHostInformation().getId() == null)
 			throw new ServiceException(new Result(Result.Status.CLIENT_ERROR, "Missing host information"));
 		HostInfo hostInfo = daoManager.getHostInfo(authnContext.getUsername(), request.getHostInformation().getId());
+		IpInfo ipInfo = daoManager.getIpInfo(request.getHostInformation().getId());
 		if (hostInfo == null)
 			throw new ServiceException(new Result(Status.CLIENT_ERROR, UnregisterHostStatus.NOT_ASSOCIATED_HOST));
+		if (ipInfo != null) {
+			daoManager.delete(ipInfo);
+		}
 		daoManager.delete(hostInfo);
 		UnregisterHostResponse response = new UnregisterHostResponse();
 		response.setResult(new Result(Status.OK));

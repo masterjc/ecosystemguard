@@ -19,6 +19,8 @@ import com.ecosystem.guard.domain.service.RegisterHostRequest;
 import com.ecosystem.guard.domain.service.RegisterHostResponse;
 import com.ecosystem.guard.domain.service.UnregisterHostRequest;
 import com.ecosystem.guard.domain.service.UnregisterHostResponse;
+import com.ecosystem.guard.domain.service.UpdateIpRequest;
+import com.ecosystem.guard.domain.service.UpdateIpResponse;
 
 /**
  * 
@@ -62,6 +64,19 @@ public class HostRegistryManager {
 		if (response.getResult().getStatus() == Status.OK) {
 			hostConfigurator.setCredentials(credentials.getUsernamePassword());
 			hostConfigurator.save();
+		}
+		else {
+			ManagerOutput.printOperationStatus("Host registration status: ", response.getResult());
+		}
+		UpdateIpRequest ipRequest = new UpdateIpRequest();
+		ipRequest.setCredentials(new Credentials(hostConfigurator.getUsernamePassword().getUsername(), hostConfigurator
+				.getUsernamePassword().getPassword()));
+		ipRequest.setHostId(hostConfigurator.getHostId());
+		UpdateIpResponse ipResponse = CmdUtils.sendRequest(ipRequest, UpdateIpRequest.class, UpdateIpResponse.class,
+				ManagerConstants.UPDATE_IP_SERVICE);
+		if (ipResponse.getResult().getStatus() != Status.OK) {
+			ManagerOutput.printOperationStatus("Ip registration status: ", ipResponse.getResult());
+			return;
 		}
 		ManagerOutput.printOperationStatus("Host registration status: ", response.getResult());
 	}
