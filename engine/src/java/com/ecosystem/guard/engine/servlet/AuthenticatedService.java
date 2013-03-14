@@ -29,7 +29,6 @@ import com.ecosystem.guard.domain.exceptions.ServiceException;
 import com.ecosystem.guard.engine.authn.AuthenticationContext;
 import com.ecosystem.guard.engine.authn.AuthenticationService;
 import com.ecosystem.guard.logging.EcosystemGuardLogger;
-import com.ecosystem.guard.logging.ErrorXmlLogEncoder;
 import com.ecosystem.guard.persistence.DaoManager;
 import com.ecosystem.guard.persistence.JpaTransactionFactory;
 import com.ecosystem.guard.persistence.PersistenceHttpServlet;

@@ -10,18 +10,7 @@
 
 package com.ecosystem.guard.host;
 
-import java.io.StringReader;
 import java.util.Scanner;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-
-import com.ecosystem.guard.domain.Deserializer;
-import com.ecosystem.guard.domain.Serializer;
 
 /**
  * 
