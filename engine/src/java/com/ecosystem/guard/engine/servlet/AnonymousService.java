@@ -15,6 +15,8 @@ import com.ecosystem.guard.domain.Result;
 import com.ecosystem.guard.domain.Result.Status;
 import com.ecosystem.guard.domain.Serializer;
 import com.ecosystem.guard.domain.exceptions.DeserializerException;
+import com.ecosystem.guard.domain.exceptions.ServiceException;
+import com.ecosystem.guard.logging.EcosystemGuardLogger;
 import com.ecosystem.guard.persistence.DaoManager;
 import com.ecosystem.guard.persistence.JpaTransactionFactory;
 import com.ecosystem.guard.persistence.PersistenceHttpServlet;
@@ -42,19 +44,31 @@ public abstract class AnonymousService<T extends Request, R extends Response> ex
 			DaoManager daoManager = new DaoManager(entityManager);
 			execute(transaction, daoManager, requestObj, response.getWriter());
 			transaction.commitTransaction();
-		} catch (DeserializerException dEx) {
+		}
+		catch (DeserializerException dEx) {
+			EcosystemGuardLogger.logError(dEx, this.getClass());
 			rollback(transaction);
 			writeErrorResponse(new Result(Status.CLIENT_ERROR, dEx.getMessage()), response.getWriter());
-		} catch (ServiceException sEx) {
+		}
+		catch (ServiceException sEx) {
+			EcosystemGuardLogger.logError(sEx, this.getClass());
 			rollback(transaction);
 			writeErrorResponse(sEx.getResult(), response.getWriter());
-		} catch (Exception e) {
-			e.printStackTrace();
+		}
+		catch (Exception e) {
+			EcosystemGuardLogger.logError(e, this.getClass());
 			rollback(transaction);
 			writeErrorResponse(new Result(Status.SERVER_ERROR, e.getMessage()), response.getWriter());
 		}
 	}
 
+	
+
+	/**
+	 * Rollback de la transaccion
+	 * 
+	 * @param transaction
+	 */
 	private void rollback(Transaction transaction) {
 		if (transaction != null) {
 			transaction.rollbackTransaction();
@@ -66,21 +80,19 @@ public abstract class AnonymousService<T extends Request, R extends Response> ex
 			R clientResponse = getResponseJaxbClass().newInstance();
 			clientResponse.setResult(result);
 			Serializer.serialize(clientResponse, getResponseJaxbClass(), writer);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new IOException("AuthenticatedPersistenceService::writeErrorResponse() error");
 		}
 	}
 
 	/**
-	 * Método para la ejecución de la operación del servlet. Recibe el @see
-	 * DaoManager contra la base de datos de forma transaccional. Recibe un
-	 * writer donde escribir la respuesta. IMPORTANTE: La respuesta es
-	 * obligación del método execute() pero en caso de error deberá lanzar
-	 * excepción para que ENGINE sepa tirar atrás la transaccion
+	 * Método para la ejecución de la operación del servlet. Recibe el @see DaoManager contra la
+	 * base de datos de forma transaccional. Recibe un writer donde escribir la respuesta.
+	 * IMPORTANTE: La respuesta es obligación del método execute() pero en caso de error deberá
+	 * lanzar excepción para que ENGINE sepa tirar atrás la transaccion
 	 * 
-	 * @param request
-	 *            Objeto que contiene la peticion deserializada de XML a clase
-	 *            Java.
+	 * @param request Objeto que contiene la peticion deserializada de XML a clase Java.
 	 * @param entityManager
 	 * @param responseWriter
 	 * @throws Exception

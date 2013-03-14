@@ -12,7 +12,7 @@ import com.ecosystem.guard.domain.service.RegisterResponse;
 import com.ecosystem.guard.domain.service.RegisterStatus;
 import com.ecosystem.guard.engine.PasswordCipher;
 import com.ecosystem.guard.engine.servlet.AnonymousService;
-import com.ecosystem.guard.engine.servlet.ServiceException;
+import com.ecosystem.guard.domain.exceptions.ServiceException;
 import com.ecosystem.guard.persistence.DaoManager;
 import com.ecosystem.guard.persistence.Transaction;
 import com.ecosystem.guard.persistence.dao.AccountInfo;

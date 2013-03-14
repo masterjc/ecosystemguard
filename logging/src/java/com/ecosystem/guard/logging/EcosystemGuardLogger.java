@@ -10,7 +10,12 @@
 
 package com.ecosystem.guard.logging;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
+import com.ecosystem.guard.domain.exceptions.ServiceException;
+
+import com.ecosystem.guard.domain.logging.Parameter;
 
 /**
  * 
@@ -37,6 +42,32 @@ public class EcosystemGuardLogger {
 			}
 		}
 		return logger;
+	}
+
+	/**
+	 * Log error to EcosystemGuard logger. Errors of logger are ignored
+	 * 
+	 * @param ex
+	 */
+	public static void logError(Exception ex, Class<?> logFromClass) {
+		try {
+			List<Parameter> parameters = new ArrayList<Parameter>();
+			if (ex instanceof ServiceException) {
+				ServiceException exception = (ServiceException) ex;
+				parameters.add(new Parameter("Status", exception.getResult().getStatus().getStatusCode()));
+				if (exception.getResult().getAppStatus() != null) {
+					parameters.add(new Parameter("AppStatus", exception.getResult().getAppStatus()));
+				}
+				if (exception.getResult().getMessage() != null) {
+					parameters.add(new Parameter("Message", exception.getResult().getMessage()));
+				}
+			}
+			String xmlError = ErrorXmlLogEncoder.encode(logFromClass.getName() + "Error", ex, parameters);
+			EcosystemGuardLogger.getLogger().severe(xmlError);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static void initializeLoggerFactory() throws Exception {

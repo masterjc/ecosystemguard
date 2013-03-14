@@ -23,7 +23,7 @@ import com.ecosystem.guard.domain.service.RegisterStatus;
 import com.ecosystem.guard.engine.SystemProperties;
 import com.ecosystem.guard.engine.authn.AuthenticationContext;
 import com.ecosystem.guard.engine.servlet.AuthenticatedService;
-import com.ecosystem.guard.engine.servlet.ServiceException;
+import com.ecosystem.guard.domain.exceptions.ServiceException;
 import com.ecosystem.guard.persistence.DaoManager;
 import com.ecosystem.guard.persistence.Transaction;
 import com.ecosystem.guard.persistence.dao.HostInfo;

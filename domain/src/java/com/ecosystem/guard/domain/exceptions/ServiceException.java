@@ -1,4 +1,4 @@
-package com.ecosystem.guard.engine.servlet;
+package com.ecosystem.guard.domain.exceptions;
 
 import com.ecosystem.guard.domain.Result;
 

@@ -25,8 +25,11 @@ import com.ecosystem.guard.domain.Result;
 import com.ecosystem.guard.domain.Result.Status;
 import com.ecosystem.guard.domain.Serializer;
 import com.ecosystem.guard.domain.exceptions.DeserializerException;
+import com.ecosystem.guard.domain.exceptions.ServiceException;
 import com.ecosystem.guard.engine.authn.AuthenticationContext;
 import com.ecosystem.guard.engine.authn.AuthenticationService;
+import com.ecosystem.guard.logging.EcosystemGuardLogger;
+import com.ecosystem.guard.logging.ErrorXmlLogEncoder;
 
 /**
  * Clase base para Servlets sin acceso a la base de datos de EcosystemGuard. El tipo genérico indica
@@ -57,16 +60,30 @@ public abstract class NonTransactionalService<T extends Request, R extends Respo
 			execute(authContext, requestObj, response.getWriter());
 		}
 		catch (DeserializerException dEx) {
-			dEx.printStackTrace();
+			EcosystemGuardLogger.logError(dEx, this.getClass());
 			writeErrorResponse(new Result(Status.CLIENT_ERROR, dEx.getMessage()), response.getWriter());
 		}
 		catch (ServiceException sEx) {
-			sEx.printStackTrace();
+			EcosystemGuardLogger.logError(sEx, this.getClass());
 			writeErrorResponse(sEx.getResult(), response.getWriter());
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			EcosystemGuardLogger.logError(e, this.getClass());
 			writeErrorResponse(new Result(Status.SERVER_ERROR, e.getMessage()), response.getWriter());
+		}
+	}
+	
+	/**
+	 * Log error to EcosystemGuard logger. Errors of logger are ignored
+	 * 
+	 * @param ex
+	 */
+	private void logError(Exception ex) {
+		try {
+			EcosystemGuardLogger.getLogger().severe(ErrorXmlLogEncoder.encode(this.getClass().getName(), ex, null));
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

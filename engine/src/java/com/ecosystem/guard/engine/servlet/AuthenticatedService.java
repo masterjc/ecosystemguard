@@ -25,8 +25,11 @@ import com.ecosystem.guard.domain.Result;
 import com.ecosystem.guard.domain.Result.Status;
 import com.ecosystem.guard.domain.Serializer;
 import com.ecosystem.guard.domain.exceptions.DeserializerException;
+import com.ecosystem.guard.domain.exceptions.ServiceException;
 import com.ecosystem.guard.engine.authn.AuthenticationContext;
 import com.ecosystem.guard.engine.authn.AuthenticationService;
+import com.ecosystem.guard.logging.EcosystemGuardLogger;
+import com.ecosystem.guard.logging.ErrorXmlLogEncoder;
 import com.ecosystem.guard.persistence.DaoManager;
 import com.ecosystem.guard.persistence.JpaTransactionFactory;
 import com.ecosystem.guard.persistence.PersistenceHttpServlet;
@@ -70,17 +73,17 @@ public abstract class AuthenticatedService<T extends Request, R extends Response
 			transaction.commitTransaction();
 		}
 		catch (DeserializerException dEx) {
-			dEx.printStackTrace();
+			EcosystemGuardLogger.logError(dEx, this.getClass());
 			rollback(transaction);
 			writeErrorResponse(new Result(Status.CLIENT_ERROR, dEx.getMessage()), response.getWriter());
 		}
 		catch (ServiceException sEx) {
-			sEx.printStackTrace();
+			EcosystemGuardLogger.logError(sEx, this.getClass());
 			rollback(transaction);
 			writeErrorResponse(sEx.getResult(), response.getWriter());
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			EcosystemGuardLogger.logError(e, this.getClass());
 			rollback(transaction);
 			writeErrorResponse(new Result(Status.SERVER_ERROR, e.getMessage()), response.getWriter());
 		}

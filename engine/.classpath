@@ -14,5 +14,6 @@
 	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/httpclient/httpcomponents-client-4.2.3/lib/httpcore-4.2.2.jar"/>
 	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/httpclient/httpcomponents-client-4.2.3/lib/commons-codec-1.6.jar"/>
 	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/httpclient/httpcomponents-client-4.2.3/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="var" path="PROJECT_DIR/logging/lib/ecosystemguard-logging.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

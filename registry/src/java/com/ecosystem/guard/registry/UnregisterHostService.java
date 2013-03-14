@@ -22,7 +22,7 @@ import com.ecosystem.guard.domain.service.UnregisterHostResponse;
 import com.ecosystem.guard.domain.service.UnregisterHostStatus;
 import com.ecosystem.guard.engine.authn.AuthenticationContext;
 import com.ecosystem.guard.engine.servlet.AuthenticatedService;
-import com.ecosystem.guard.engine.servlet.ServiceException;
+import com.ecosystem.guard.domain.exceptions.ServiceException;
 import com.ecosystem.guard.persistence.DaoManager;
 import com.ecosystem.guard.persistence.Transaction;
 import com.ecosystem.guard.persistence.dao.HostInfo;
