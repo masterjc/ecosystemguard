@@ -20,6 +20,9 @@ import com.ecosystem.guard.domain.Credentials;
 import com.ecosystem.guard.domain.Result;
 import com.ecosystem.guard.domain.Result.Status;
 import com.ecosystem.guard.domain.service.AccountInformation;
+import com.ecosystem.guard.domain.service.GetHostsRequest;
+import com.ecosystem.guard.domain.service.GetHostsResponse;
+import com.ecosystem.guard.domain.service.GetHostsStatus;
 import com.ecosystem.guard.domain.service.GetIpRequest;
 import com.ecosystem.guard.domain.service.GetIpResponse;
 import com.ecosystem.guard.domain.service.HostInformation;
@@ -58,22 +61,42 @@ public class RegistryTest {
 	public void registryTest() throws Exception {
 		String username = "test@ecosystemguard.com";
 		String password1 = "demodemo";
-		String password2 = "demodemo";
-		String hostId = "hostid129838219839218392";
+		String password2 = "pepepepe";
+		String hostId1 = "hostid129838219839218392";
+		String hostId2 = "hostid978676949340299384";
 
 		Assert.assertEquals(Status.OK, register(username, password1).getStatus());
-		Assert.assertEquals(RegisterStatus.ALREADY_REGISTERED.getStatusCode(), register(username, password1).getAppStatus());
-		Assert.assertEquals(Status.OK, associate(username, password1, hostId).getStatus());
+		Assert.assertEquals(RegisterStatus.ALREADY_REGISTERED.getStatusCode(), register(username, password1)
+				.getAppStatus());
+		Assert.assertEquals(Status.OK, associate(username, password1, hostId1).getStatus());
 		Assert.assertEquals(Status.OK, changePassword(username, password1, password2).getStatus());
-		Assert.assertEquals(Status.OK, updateIp(username, password2, hostId).getStatus());
-		Assert.assertTrue(hasIpAddress(username, password2, hostId));
-		Assert.assertEquals(Status.OK, disassociate(username, password2, hostId).getStatus());
-		Assert.assertFalse(hasIpAddress(username, password2, hostId));
-		Assert.assertEquals(Status.OK, associate(username, password2, hostId).getStatus());
-		Assert.assertEquals(Status.OK, updateIp(username, password2, hostId).getStatus());
+		Assert.assertEquals(Status.OK, updateIp(username, password2, hostId1).getStatus());
+		Assert.assertTrue(hasIpAddress(username, password2, hostId1));
+		Assert.assertEquals(Status.OK, disassociate(username, password2, hostId1).getStatus());
+		Assert.assertFalse(hasIpAddress(username, password2, hostId1));
+		Assert.assertEquals(Status.OK, associate(username, password2, hostId1).getStatus());
+		Assert.assertEquals(Status.OK, associate(username, password2, hostId2).getStatus());
+		Assert.assertEquals(2, getHosts(username, password2));
+		Assert.assertEquals(Status.OK, disassociate(username, password2, hostId2).getStatus());
+		Assert.assertEquals(1, getHosts(username, password2));
+		Assert.assertEquals(Status.OK, updateIp(username, password2, hostId1).getStatus());
 		Assert.assertEquals(Status.OK, unregister(username, password2).getStatus());
-		Assert.assertFalse(hasIpAddress(username, password2, hostId));
-		Assert.assertEquals(Status.AUTHN_ERROR, associate(username, password2, hostId).getStatus());
+		Assert.assertFalse(hasIpAddress(username, password2, hostId1));
+		Assert.assertEquals(Status.AUTHN_ERROR, associate(username, password2, hostId1).getStatus());
+	}
+
+	private int getHosts(String username, String password) throws Exception {
+		GetHostsRequest request = new GetHostsRequest();
+		Credentials credentials = new Credentials(username, password);
+		request.setCredentials(credentials);
+		GetHostsResponse response = XmlServiceRequestor.sendRequest(request, GetHostsRequest.class,
+				GetHostsResponse.class, ecosystemGuardRegistryHost + "/gethosts");
+		if (response.getResult().getStatus() != Status.OK)
+			throw new Exception("getHosts error");
+		if (response.getResult().getAppStatus() != null
+				&& response.getResult().getAppStatus().equals(GetHostsStatus.NO_REGISTERED_HOSTS.getStatusCode()))
+			return 0;
+		return response.getHosts().size();
 	}
 
 	private Result register(String username, String password) throws Exception {

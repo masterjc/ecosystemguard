@@ -3,12 +3,13 @@
 -- set-env: Script para setear las variables de entorno necesarias para la generación de la aplicación. Ejecutar este script para compilar módulos sueltos.
 -- build.xml: Archivo ANT para compilar todos los módulos y generar una carpeta build-tools/build donde se copiará los archivos de la aplicación.
 -- generate: Script para setear el entorno y generar la aplicación. Lo hace llamando a los scripts anteriores.
+-- deploy: Script para setear el entorno y generar la aplicación. Además, despliega la aplicación en un entorno local de desarrollo.
 
 Cómo generar la aplicación:
 ---------------------------
 
 1. Situarse en el directorio "build-tools"
-2. Ejecutar "ant"
+2. Ejecutar "generate"
 
 Cómo compilar módulos sueltos:
 ------------------------------
