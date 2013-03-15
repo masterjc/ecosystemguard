@@ -13,8 +13,8 @@ package com.ecosystem.guard.host;
 import com.ecosystem.guard.common.XmlServiceRequestor;
 import com.ecosystem.guard.domain.Credentials;
 import com.ecosystem.guard.domain.Result.Status;
-import com.ecosystem.guard.domain.service.GetIpRequest;
-import com.ecosystem.guard.domain.service.GetIpResponse;
+import com.ecosystem.guard.domain.service.registry.GetIpRequest;
+import com.ecosystem.guard.domain.service.registry.GetIpResponse;
 
 /**
  * 

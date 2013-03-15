@@ -16,13 +16,13 @@ import java.util.Scanner;
 import com.ecosystem.guard.common.XmlServiceRequestor;
 import com.ecosystem.guard.domain.Credentials;
 import com.ecosystem.guard.domain.Result.Status;
-import com.ecosystem.guard.domain.service.AccountInformation;
-import com.ecosystem.guard.domain.service.RegisterRequest;
-import com.ecosystem.guard.domain.service.RegisterResponse;
-import com.ecosystem.guard.domain.service.UnregisterRequest;
-import com.ecosystem.guard.domain.service.UnregisterResponse;
-import com.ecosystem.guard.domain.service.UpdateCredentialsRequest;
-import com.ecosystem.guard.domain.service.UpdateCredentialsResponse;
+import com.ecosystem.guard.domain.service.registry.AccountInformation;
+import com.ecosystem.guard.domain.service.registry.RegisterRequest;
+import com.ecosystem.guard.domain.service.registry.RegisterResponse;
+import com.ecosystem.guard.domain.service.registry.UnregisterRequest;
+import com.ecosystem.guard.domain.service.registry.UnregisterResponse;
+import com.ecosystem.guard.domain.service.registry.UpdateCredentialsRequest;
+import com.ecosystem.guard.domain.service.registry.UpdateCredentialsResponse;
 
 /**
  * 

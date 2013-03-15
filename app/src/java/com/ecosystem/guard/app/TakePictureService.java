@@ -12,8 +12,8 @@ package com.ecosystem.guard.app;
 
 import java.io.Writer;
 
-import com.ecosystem.guard.domain.service.TakePictureRequest;
-import com.ecosystem.guard.domain.service.TakePictureResponse;
+import com.ecosystem.guard.domain.service.registry.TakePictureRequest;
+import com.ecosystem.guard.domain.service.registry.TakePictureResponse;
 import com.ecosystem.guard.engine.authn.AuthenticationContext;
 import com.ecosystem.guard.engine.servlet.NonTransactionalService;
 

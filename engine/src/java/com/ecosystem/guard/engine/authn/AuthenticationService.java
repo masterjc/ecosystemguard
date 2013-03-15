@@ -25,8 +25,8 @@ import com.ecosystem.guard.domain.Credentials;
 import com.ecosystem.guard.domain.Deserializer;
 import com.ecosystem.guard.domain.Result;
 import com.ecosystem.guard.domain.Serializer;
-import com.ecosystem.guard.domain.service.AuthNRequest;
-import com.ecosystem.guard.domain.service.AuthNResponse;
+import com.ecosystem.guard.domain.service.registry.AuthNRequest;
+import com.ecosystem.guard.domain.service.registry.AuthNResponse;
 import com.ecosystem.guard.engine.SystemProperties;
 
 /**

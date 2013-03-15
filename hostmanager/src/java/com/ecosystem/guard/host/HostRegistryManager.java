@@ -15,13 +15,13 @@ import java.util.Scanner;
 import com.ecosystem.guard.common.XmlServiceRequestor;
 import com.ecosystem.guard.domain.Credentials;
 import com.ecosystem.guard.domain.Result.Status;
-import com.ecosystem.guard.domain.service.HostInformation;
-import com.ecosystem.guard.domain.service.RegisterHostRequest;
-import com.ecosystem.guard.domain.service.RegisterHostResponse;
-import com.ecosystem.guard.domain.service.UnregisterHostRequest;
-import com.ecosystem.guard.domain.service.UnregisterHostResponse;
-import com.ecosystem.guard.domain.service.UpdateIpRequest;
-import com.ecosystem.guard.domain.service.UpdateIpResponse;
+import com.ecosystem.guard.domain.service.registry.HostInformation;
+import com.ecosystem.guard.domain.service.registry.RegisterHostRequest;
+import com.ecosystem.guard.domain.service.registry.RegisterHostResponse;
+import com.ecosystem.guard.domain.service.registry.UnregisterHostRequest;
+import com.ecosystem.guard.domain.service.registry.UnregisterHostResponse;
+import com.ecosystem.guard.domain.service.registry.UpdateIpRequest;
+import com.ecosystem.guard.domain.service.registry.UpdateIpResponse;
 
 /**
  * 

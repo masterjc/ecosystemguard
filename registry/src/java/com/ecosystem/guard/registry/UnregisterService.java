@@ -7,8 +7,8 @@ import javax.servlet.annotation.WebServlet;
 
 import com.ecosystem.guard.domain.Result;
 import com.ecosystem.guard.domain.Serializer;
-import com.ecosystem.guard.domain.service.UnregisterRequest;
-import com.ecosystem.guard.domain.service.UnregisterResponse;
+import com.ecosystem.guard.domain.service.registry.UnregisterRequest;
+import com.ecosystem.guard.domain.service.registry.UnregisterResponse;
 import com.ecosystem.guard.engine.authn.AuthenticationContext;
 import com.ecosystem.guard.engine.servlet.AuthenticatedService;
 import com.ecosystem.guard.persistence.DaoManager;
