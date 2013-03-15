@@ -8,7 +8,7 @@
  * permission of the copyright owner.
  */
 
-package com.ecosystem.guard.domain.service.registry;
+package com.ecosystem.guard.domain.service.host;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;

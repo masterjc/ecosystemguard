@@ -8,11 +8,12 @@
  * permission of the copyright owner.
  */
 
-package com.ecosystem.guard.domain.service.registry;
+package com.ecosystem.guard.domain.service.host;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
-import com.ecosystem.guard.domain.Request;
+import com.ecosystem.guard.domain.Response;
 
 /**
  * 
@@ -20,5 +21,7 @@ import com.ecosystem.guard.domain.Request;
  * @version $Revision$
  */
 @XmlRootElement
-public class TakePictureRequest extends Request {
+@XmlSeeAlso(TakePictureStatus.class)
+public class TakePictureResponse extends Response {
+
 }
