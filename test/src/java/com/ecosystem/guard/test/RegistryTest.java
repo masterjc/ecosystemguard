@@ -58,7 +58,7 @@ public class RegistryTest {
 	}
 
 	@Test
-	public void registryTest() throws Exception {
+	public void functionalRegistryTest() throws Exception {
 		String username = "test@ecosystemguard.com";
 		String password1 = "demodemo";
 		String password2 = "pepepepe";
@@ -70,6 +70,7 @@ public class RegistryTest {
 				.getAppStatus());
 		Assert.assertEquals(Status.OK, associate(username, password1, hostId1).getStatus());
 		Assert.assertEquals(Status.OK, changePassword(username, password1, password2).getStatus());
+		Assert.assertEquals(Status.AUTHN_ERROR, updateIp(username, password1, hostId1).getStatus());
 		Assert.assertEquals(Status.OK, updateIp(username, password2, hostId1).getStatus());
 		Assert.assertTrue(hasIpAddress(username, password2, hostId1));
 		Assert.assertEquals(Status.OK, disassociate(username, password2, hostId1).getStatus());
