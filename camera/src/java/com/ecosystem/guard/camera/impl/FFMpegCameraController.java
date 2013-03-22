@@ -18,19 +18,20 @@ import com.ecosystem.guard.camera.PictureManager;
 import com.ecosystem.guard.camera.VideoManager;
 
 /**
+ * Controlador de la cámara para tomar videos y fotos con la aplicación "FFMpeg"
  * 
  * @author juancarlos.fernandez
  * @version $Revision$
  */
 public class FFMpegCameraController implements CameraController {
 	private static final String DEVICES_DIR = "/dev";
-	private File videoDevice;
+	private File webcamDevice;
 
 	public FFMpegCameraController() throws Exception {
 		if (!isFFMpegInstalled())
 			throw new Exception("FFMpeg is not installed or accesible");
-		videoDevice = getVideoDevice();
-		if (videoDevice == null)
+		webcamDevice = getVideoDevice();
+		if (webcamDevice == null)
 			throw new Exception("No camera was detected. Please, plug your webcam");
 	}
 
@@ -41,8 +42,7 @@ public class FFMpegCameraController implements CameraController {
 	 */
 	@Override
 	public PictureManager createPictureManager() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return new FFMpegPictureManager(webcamDevice);
 	}
 
 	/*
@@ -52,7 +52,7 @@ public class FFMpegCameraController implements CameraController {
 	 */
 	@Override
 	public VideoManager createVideoManager() throws Exception {
-		return new FFMpegVideoManager(videoDevice);
+		return new FFMpegVideoManager(webcamDevice);
 	}
 
 	private class VideoFilenameFilter implements FilenameFilter {
@@ -62,15 +62,21 @@ public class FFMpegCameraController implements CameraController {
 				return true;
 			return false;
 		}
-
 	}
 
+	/**
+	 * Detecta si está instalado en el sistema FFMpeg
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	private boolean isFFMpegInstalled() throws Exception {
+		// TODO
 		return true;
 	}
 
 	/**
-	 * Detecta las camaras conectadas al sistema y devuelve la primera
+	 * Detecta las camaras conectadas al sistema (/dev/videoX) y devuelve la primera
 	 * 
 	 * @return
 	 * @throws Exception

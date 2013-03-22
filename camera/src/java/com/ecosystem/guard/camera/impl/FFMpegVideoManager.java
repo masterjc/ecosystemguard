@@ -11,6 +11,7 @@ import com.ecosystem.guard.camera.VideoManager;
  * @version $Revision$
  */
 public class FFMpegVideoManager implements VideoManager {
+	private static final String FFMPEG_EXEC = "ffmpeg";
 	private File cameraDevice;
 
 	/**

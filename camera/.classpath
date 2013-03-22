@@ -2,5 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="PROJECT_DIR/common/lib/ecosystemguard-common.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
