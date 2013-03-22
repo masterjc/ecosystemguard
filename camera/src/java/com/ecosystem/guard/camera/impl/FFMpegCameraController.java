@@ -27,7 +27,11 @@ public class FFMpegCameraController implements CameraController {
 	private File videoDevice;
 
 	public FFMpegCameraController() throws Exception {
+		if (!isFFMpegInstalled())
+			throw new Exception("FFMpeg is not installed or accesible");
 		videoDevice = getVideoDevice();
+		if (videoDevice == null)
+			throw new Exception("No camera was detected. Please, plug your webcam");
 	}
 
 	/*
@@ -61,6 +65,10 @@ public class FFMpegCameraController implements CameraController {
 
 	}
 
+	private boolean isFFMpegInstalled() throws Exception {
+		return true;
+	}
+
 	/**
 	 * Detecta las camaras conectadas al sistema y devuelve la primera
 	 * 
@@ -73,8 +81,8 @@ public class FFMpegCameraController implements CameraController {
 			throw new Exception("Cannot access system devices directory");
 
 		File[] videoDevices = devDir.listFiles(new VideoFilenameFilter());
-		if (videoDevices == null || videoDevices.length == 0)
-			throw new Exception("No camera was detected. Please, plug your webcam");
+		if (videoDevices == null)
+			return null;
 		return videoDevices[0];
 	}
 }
