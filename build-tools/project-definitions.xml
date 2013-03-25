@@ -32,7 +32,15 @@
 		<pathelement location="${ecosystemguard-domain.lib}" />
 	</path>
 	
-	<!-- Domain -->
+	<!-- Camera controller -->
+	<property name="ecosystemguard-camera.dir" value="${env.PROJECT_DIR}/camera"/>
+	<property name="ecosystemguard-camera.name" value="ecosystemguard-camera.jar"/>
+	<property name="ecosystemguard-camera.lib" value="${ecosystemguard-camera.dir}/${lib.dir}/${ecosystemguard-camera.name}"/>
+	<path id="ecosystemguard-camera.path">
+		<pathelement location="${ecosystemguard-camera.lib}" />
+	</path>
+	
+	<!-- Logging -->
 	<property name="ecosystemguard-logging.dir" value="${env.PROJECT_DIR}/logging"/>
 	<property name="ecosystemguard-logging.name" value="ecosystemguard-logging.jar"/>
 	<property name="ecosystemguard-logging.lib" value="${ecosystemguard-logging.dir}/${lib.dir}/${ecosystemguard-logging.name}"/>
@@ -104,6 +112,14 @@
 	<property name="commons-codec.lib" value="${commons-codec.dir}/${commons-codec.name}"/>
 	<path id="commons-codec.path">
 		<pathelement location="${commons-codec.lib}" />
+	</path>
+	
+	<!-- Apache Commons Exec -->
+	<property name="commons-exec.dir" value="${env.PROJECT_DIR}/thirdparty/commonsexec/commons-exec-1.1"/>
+	<property name="commons-exec.name" value="commons-exec-1.1.jar"/>
+	<property name="commons-exec.lib" value="${commons-exec.dir}/${commons-exec.name}"/>
+	<path id="commons-exec.path">
+		<pathelement location="${commons-exec.lib}" />
 	</path>
 	
 	<!-- HttpComponents API -->

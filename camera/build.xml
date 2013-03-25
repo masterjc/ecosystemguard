@@ -6,6 +6,8 @@
 	
 	<path id="classpath">
         <path refid="jpa.path" />
+		<path refid="ecosystemguard-common.path" />
+		<path refid="commons-exec.path" />
     </path>
 	
 	<target name="all" depends="clean, compile, jar"/>
