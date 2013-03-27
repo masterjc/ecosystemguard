@@ -4,7 +4,6 @@
 	<classpathentry kind="src" path="test/src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="PROJECT_DIR/common/lib/ecosystemguard-common.jar"/>
-	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/commons-exec/commons-exec-1.1/commons-exec-1.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
