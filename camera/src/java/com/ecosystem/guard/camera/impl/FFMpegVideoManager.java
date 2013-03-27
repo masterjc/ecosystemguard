@@ -1,8 +1,7 @@
 package com.ecosystem.guard.camera.impl;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.util.concurrent.Executor;
+import java.io.InputStream;
 
 import com.ecosystem.guard.camera.VideoConfig;
 import com.ecosystem.guard.camera.VideoManager;
@@ -48,9 +47,23 @@ public class FFMpegVideoManager implements VideoManager {
 		commandLine.addArgument("-t", Integer.toString(secLength));
 		commandLine.addArgument(videoFile.getAbsolutePath());
 		Process ffmpegProcess = commandLine.execute();
-		
+		ffmpegProcess.wait(waitSeconds(secLength));
+		checkAndThrowFFMpegError(ffmpegProcess.getInputStream(), ffmpegProcess.getErrorStream());
 	}
-	
+
+	/**
+	 * Parsea la salida estándar y de error de ffmpeg para detectar si ha funcionado bien el comando
+	 * o no
+	 * 
+	 * @param ffmpegOutput
+	 * @param ffmpegErrorOutput
+	 * @throws Exception
+	 */
+	private void checkAndThrowFFMpegError(InputStream ffmpegOutput, InputStream ffmpegErrorOutput) throws Exception {
+		// byte[] output = StreamingUtils.consumeInputStream(ffmpegOutput);
+		// byte[] errorOutput = StreamingUtils.consumeInputStream(ffmpegErrorOutput);
+	}
+
 	/**
 	 * Tiempo que esperará el proceso padre al comando que graba el video. Si es menor a 10
 	 * segundos, espera 30 segundos. Si es mayor a 10 segundos y menor a 30 segundos, espera el
@@ -66,5 +79,4 @@ public class FFMpegVideoManager implements VideoManager {
 			return videoLength * 2;
 		return videoLength + (videoLength * 20 / 100);
 	}
-
 }
