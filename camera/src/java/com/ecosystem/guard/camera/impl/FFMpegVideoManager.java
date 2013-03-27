@@ -13,8 +13,7 @@ import com.ecosystem.guard.common.CommandLine;
  * @version $Revision$
  */
 public class FFMpegVideoManager implements VideoManager {
-	private static final String FFMPEG_EXEC = "ffmpeg";
-	private static final String CAPTURE_DRIVER = "video4linux2";
+	
 	private File cameraDevice;
 
 	/**
@@ -38,8 +37,8 @@ public class FFMpegVideoManager implements VideoManager {
 	 */
 	@Override
 	public void record(VideoConfig videoConfig, int secLength, File videoFile) throws Exception {
-		CommandLine commandLine = new CommandLine(FFMPEG_EXEC);
-		commandLine.addArgument("-f", CAPTURE_DRIVER);
+		CommandLine commandLine = new CommandLine(FFMpegTraits.FFMPEG_EXEC);
+		commandLine.addArgument("-f", FFMpegTraits.CAPTURE_DRIVER);
 		commandLine.addArgument("-i", cameraDevice.getAbsolutePath());
 		commandLine.addArgument("-r", Integer.toString(videoConfig.getFps()));
 		commandLine.addArgument("-b:v", videoConfig.getBitrate());
@@ -48,20 +47,7 @@ public class FFMpegVideoManager implements VideoManager {
 		commandLine.addArgument(videoFile.getAbsolutePath());
 		Process ffmpegProcess = commandLine.execute();
 		ffmpegProcess.wait(waitSeconds(secLength));
-		checkAndThrowFFMpegError(ffmpegProcess.getInputStream(), ffmpegProcess.getErrorStream());
-	}
-
-	/**
-	 * Parsea la salida estándar y de error de ffmpeg para detectar si ha funcionado bien el comando
-	 * o no
-	 * 
-	 * @param ffmpegOutput
-	 * @param ffmpegErrorOutput
-	 * @throws Exception
-	 */
-	private void checkAndThrowFFMpegError(InputStream ffmpegOutput, InputStream ffmpegErrorOutput) throws Exception {
-		// byte[] output = StreamingUtils.consumeInputStream(ffmpegOutput);
-		// byte[] errorOutput = StreamingUtils.consumeInputStream(ffmpegErrorOutput);
+		FFMpegTraits.checkAndThrowFFMpegError(ffmpegProcess.getInputStream(), ffmpegProcess.getErrorStream());
 	}
 
 	/**
