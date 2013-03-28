@@ -44,19 +44,20 @@ public class FileStreamPumpTest {
 		FileStreamPump pump = new FileStreamPump();
 		pump.setAvailableThreshold(10);
 		pump.startPumping(file, output);
-		writePausedDataToFile(file, 10000);
+		writePausedDataToFile(file, 20000);
 		Thread.sleep(500);
 		pump.stopPumping();
-		Assert.assertEquals(10000, output.size());
+		Assert.assertEquals(20000, output.size());
 	}
 	
 	private void writeDataToFile(File file, int bytes) throws Exception {
 		FileOutputStream output = new FileOutputStream(file);
 		try {
+			int nIts = bytes / 4;
 			int nByte = 0;
-			while(nByte++ < bytes) {
-				output.write(1);
-				
+			byte[] data = new byte[] { 'a', 'a', 'a', 'a'};
+			while(nByte++ < nIts) {
+				output.write(data);
 			}
 		} finally {
 			output.flush();
@@ -68,9 +69,10 @@ public class FileStreamPumpTest {
 	private void writePausedDataToFile(File file, int bytes) throws Exception {
 		FileOutputStream output = new FileOutputStream(file);
 		try {
+			int nIts = bytes / 4;
 			int nByte = 0;
-			while(nByte++ < bytes) {
-				output.write(1);
+			while(nByte++ < nIts) {
+				output.write(new byte[] { 'a', 'a', 'a', 'a'});
 				if(nByte % 1024 == 0) {
 					Thread.sleep(1000);
 				}
