@@ -7,8 +7,16 @@
         <servlet-name>TakePictureService</servlet-name>
         <servlet-class>com.ecosystem.guard.app.TakePictureService</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RecordVideoService</servlet-name>
+        <servlet-class>com.ecosystem.guard.app.RecordVideoService</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>TakePictureService</servlet-name>
         <url-pattern>/takepicture</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RecordVideoService</servlet-name>
+        <url-pattern>/recordvideo</url-pattern>
     </servlet-mapping>
 </web-app>
