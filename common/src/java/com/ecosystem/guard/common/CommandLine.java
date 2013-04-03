@@ -3,7 +3,7 @@ package com.ecosystem.guard.common;
 import java.io.File;
 
 /**
- * Utilidad para ejecutar aplicaciones por línea de comandos en un proceso separado al actual
+ * Utilidad para ejecutar aplicaciones por línea de comandos
  * 
  * @author juancarlos.fernandez
  * @version $Revision$
@@ -13,6 +13,7 @@ public class CommandLine {
 
 	private StringBuffer command;
 	private File workDirectory;
+	private int execTimeoutSeconds = 0;
 
 	/**
 	 * Construye un comando con el ejecutable establecido
@@ -66,6 +67,15 @@ public class CommandLine {
 	}
 
 	/**
+	 * Especifica el timeout en segundos para ejecutar el comando
+	 * 
+	 * @param execTimeoutSeconds
+	 */
+	public void setExecTimeoutSeconds(int execTimeoutSeconds) {
+		this.execTimeoutSeconds = execTimeoutSeconds;
+	}
+
+	/**
 	 * Ejecuta el comando sin variables de entorno definidas por el usuario
 	 * 
 	 * @return El proceso correspondiente al comando
@@ -75,12 +85,67 @@ public class CommandLine {
 	}
 
 	/**
-	 * Ejecuta el comando utilizando unas variables de entorno concretas.
+	 * Ejecuta el comando utilizando unas variables de entorno concretas. Este método es síncrono,
+	 * no finaliza hasta que no acaba la ejecución del comando. Si se especifica un timeout, el
+	 * comando se interrumpe.
 	 * 
 	 * @return El proceso correspondiente al comando
 	 */
 	public Process execute(String[] environment) throws Exception {
-		return Runtime.getRuntime().exec(command.toString(), environment, workDirectory);
+		CommandWorker execThread = new CommandWorker(command.toString(), environment, workDirectory);
+		execThread.start();
+		if (execTimeoutSeconds != 0) {
+			execThread.join(execTimeoutSeconds * 1000);
+		}
+		else {
+			execThread.join();
+		}
+		if (execThread.getException() != null)
+			throw execThread.getException();
+		if (!execThread.finished()) {
+			execThread.interrupt();
+			throw new Exception("Command timeout exceeded: " + command.toString());
+		}
+		return execThread.getProcess();
+	}
+
+	private class CommandWorker extends Thread {
+		private String command;
+		private File workDirectory;
+		private String[] environment;
+		private Exception exception;
+		private Process process;
+		private boolean finished;
+
+		public CommandWorker(String command, String[] environment, File workDirectory) {
+			this.environment = environment;
+			this.command = command;
+			this.workDirectory = workDirectory;
+		}
+
+		public Exception getException() {
+			return exception;
+		}
+
+		public Process getProcess() {
+			return process;
+		}
+
+		public boolean finished() {
+			return finished;
+		}
+
+		public void run() {
+			finished = false;
+			try {
+				process = Runtime.getRuntime().exec(command.toString(), environment, workDirectory);
+				process.waitFor();
+			}
+			catch (Exception e) {
+				exception = e;
+			}
+			finished = true;
+		}
 	}
 
 }
