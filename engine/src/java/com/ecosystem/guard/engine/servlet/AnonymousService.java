@@ -29,7 +29,7 @@ public abstract class AnonymousService<T extends Request, R extends Response> ex
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		throw new ServletException("EcosystemGuard services do not support HTTP GET method");
+		throw new ServletException(this.getClass().getName() + " service do not support HTTP GET method");
 	}
 
 	@Override
