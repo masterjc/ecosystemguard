@@ -1,6 +1,5 @@
 package com.ecosystem.guard.camera;
 
-import com.ecosystem.guard.camera.impl.H264Resolution;
 
 /**
  * 

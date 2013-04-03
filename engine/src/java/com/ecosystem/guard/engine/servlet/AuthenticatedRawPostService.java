@@ -37,7 +37,7 @@ import com.ecosystem.guard.logging.EcosystemGuardLogger;
 public abstract class AuthenticatedRawPostService<T extends Request> extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		throw new ServletException(this.getClass().getName() + " service do not support HTTP GET method");
+		doPost(request, response);
 	}
 
 	@Override

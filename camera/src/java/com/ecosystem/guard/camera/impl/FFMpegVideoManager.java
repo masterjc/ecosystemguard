@@ -1,7 +1,6 @@
 package com.ecosystem.guard.camera.impl;
 
 import java.io.File;
-import java.io.InputStream;
 
 import com.ecosystem.guard.camera.VideoConfig;
 import com.ecosystem.guard.camera.VideoManager;
@@ -45,9 +44,8 @@ public class FFMpegVideoManager implements VideoManager {
 		commandLine.addArgument("-vcodec", videoConfig.getVideoCodec().getCodec());
 		commandLine.addArgument(videoConfig.getOptionalOptions());
 		commandLine.addArgument(videoFile.getAbsolutePath());
-		System.out.println(commandLine.getCommand());
+		commandLine.setExecTimeoutSeconds(waitSeconds(secLength));
 		Process ffmpegProcess = commandLine.execute();
-		Thread.sleep(secLength*1000 + 8000);
 		FFMpegTraits.checkAndThrowFFMpegError(ffmpegProcess.getInputStream(), ffmpegProcess.getErrorStream());
 	}
 
