@@ -44,7 +44,7 @@ public abstract class AnonymousService<T extends Request, R extends Response> ex
 			DaoManager daoManager = new DaoManager(entityManager);
 			execute(transaction, daoManager, requestObj, response.getWriter());
 			transaction.commitTransaction();
-		}
+		}  
 		catch (DeserializerException dEx) {
 			EcosystemGuardLogger.logError(dEx, this.getClass());
 			rollback(transaction);

@@ -115,7 +115,7 @@ public abstract class AuthenticatedService<T extends Request, R extends Response
 	 * base de datos de forma transaccional. Recibe un writer donde escribir la respuesta.
 	 * IMPORTANTE: La respuesta es obligación del método execute() pero en caso de error deberá
 	 * lanzar excepción para que ENGINE sepa tirar atrás la transaccion
-	 * 
+	 *  
 	 * @param request Objeto que contiene la peticion deserializada de XML a clase Java.
 	 * @param entityManager
 	 * @param responseWriter

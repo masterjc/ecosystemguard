@@ -57,7 +57,7 @@ public abstract class NonTransactionalService<T extends Request, R extends Respo
 			if (!authContext.isAuthenticated())
 				throw new ServiceException(new Result(Status.AUTHN_ERROR, "Not authenticated"));
 			execute(authContext, requestObj, response.getWriter());
-		}
+		} 
 		catch (DeserializerException dEx) {
 			EcosystemGuardLogger.logError(dEx, this.getClass());
 			writeErrorResponse(new Result(Status.CLIENT_ERROR, dEx.getMessage()), response.getWriter());
