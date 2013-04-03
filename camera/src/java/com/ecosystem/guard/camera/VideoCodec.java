@@ -8,7 +8,8 @@ package com.ecosystem.guard.camera;
  */
 public enum VideoCodec {
 
-	MP4("h264");
+	H264("libx264"),
+	H263("h263");
 
 	private String codec;
 

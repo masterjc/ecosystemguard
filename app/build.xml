@@ -6,8 +6,11 @@
 	
 	<path id="classpath">
         <path refid="servlet.path" />
+        <path refid="ecosystemguard-common.path" />
+        <path refid="ecosystemguard-camera.path" />
 		<path refid="ecosystemguard-domain.path" />
 		<path refid="ecosystemguard-engine.path" />
+		<path refid="commons-codec.path"/>
     </path>
 	
 	<target name="all" depends="clean, compile, war"/>
@@ -33,6 +36,7 @@
 			<lib file="${ecosystemguard-domain.lib}"/>
 			<lib file="${ecosystemguard-engine.lib}"/>
 			<lib file="${ecosystemguard-common.lib}"/>
+			<lib file="${ecosystemguard-camera.lib}"/>
 			<lib file="${commons-codec.lib}"/>
 			<lib file="${httpcomponents_dep_logging.lib}"/>
 			<lib file="${httpcomponents_core.lib}"/>

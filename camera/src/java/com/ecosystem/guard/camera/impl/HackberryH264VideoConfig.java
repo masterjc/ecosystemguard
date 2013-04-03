@@ -10,7 +10,6 @@
 
 package com.ecosystem.guard.camera.impl;
 
-import com.ecosystem.guard.camera.Resolution;
 import com.ecosystem.guard.camera.VideoCodec;
 import com.ecosystem.guard.camera.VideoConfig;
 
@@ -20,12 +19,13 @@ import com.ecosystem.guard.camera.VideoConfig;
  * @author juancarlos.fernandez
  * @version $Revision$
  */
-public class DefaultVideoConfig extends VideoConfig {
+public class HackberryH264VideoConfig extends VideoConfig {
 
-	public DefaultVideoConfig() {
-		super.setBitrate("200k");
-		super.setFps(30);
-		super.setResolution(Resolution.QVGA);
-		super.setVideoCodec(VideoCodec.MP4);
+	public HackberryH264VideoConfig() {
+		super.setResolution(H264Resolution.HVGA);
+		super.setVideoCodec(VideoCodec.H264);
+		super.setOptionalOptions("-preset veryfast -crf 28");
+		super.setContainerExtension("mp4");
+		
 	}
 }

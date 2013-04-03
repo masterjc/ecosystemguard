@@ -114,22 +114,14 @@
 		<pathelement location="${commons-codec.lib}" />
 	</path>
 	
-	<!-- Apache Commons Exec -->
-	<property name="commons-exec.dir" value="${env.PROJECT_DIR}/thirdparty/commonsexec/commons-exec-1.1"/>
-	<property name="commons-exec.name" value="commons-exec-1.1.jar"/>
-	<property name="commons-exec.lib" value="${commons-exec.dir}/${commons-exec.name}"/>
-	<path id="commons-exec.path">
-		<pathelement location="${commons-exec.lib}" />
-	</path>
-	
 	<!-- HttpComponents API -->
 	<property name="httpcomponents.dir" value="${env.PROJECT_DIR}/thirdparty/httpclient/httpcomponents-client-4.2.3/lib"/>
 	<property name="httpcomponents_dep_codec.name" value="commons-codec-1.6.jar"/>
 	<property name="httpcomponents_dep_logging.name" value="commons-logging-1.1.1.jar"/>
 	<property name="httpcomponents_core.name" value="httpcore-4.2.2.jar"/>
 	<property name="httpcomponents_client.name" value="httpclient-4.2.3.jar"/>
-	<property name="httpcomponents_dep_codec.lib" value="${httpcomponents.dir}/${httpcomponents_dep_codec.name}"/>
 	<property name="httpcomponents_dep_logging.lib" value="${httpcomponents.dir}/${httpcomponents_dep_logging.name}"/>
+	<property name="httpcomponents_dep_codec.lib" value="${httpcomponents.dir}/${httpcomponents_dep_codec.name}"/>
 	<property name="httpcomponents_core.lib" value="${httpcomponents.dir}/${httpcomponents_core.name}"/>
 	<property name="httpcomponents_client.lib" value="${httpcomponents.dir}/${httpcomponents_client.name}"/>
 	<path id="httpcomponents.path">

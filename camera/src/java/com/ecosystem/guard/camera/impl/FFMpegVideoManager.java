@@ -40,13 +40,14 @@ public class FFMpegVideoManager implements VideoManager {
 		CommandLine commandLine = new CommandLine(FFMpegTraits.FFMPEG_EXEC);
 		commandLine.addArgument("-f", FFMpegTraits.CAPTURE_DRIVER);
 		commandLine.addArgument("-i", cameraDevice.getAbsolutePath());
-		commandLine.addArgument("-r", Integer.toString(videoConfig.getFps()));
-		commandLine.addArgument("-b:v", videoConfig.getBitrate());
 		commandLine.addArgument("-s", videoConfig.getResolution().getResolution());
 		commandLine.addArgument("-t", Integer.toString(secLength));
+		commandLine.addArgument("-vcodec", videoConfig.getVideoCodec().getCodec());
+		commandLine.addArgument(videoConfig.getOptionalOptions());
 		commandLine.addArgument(videoFile.getAbsolutePath());
+		System.out.println(commandLine.getCommand());
 		Process ffmpegProcess = commandLine.execute();
-		ffmpegProcess.wait(waitSeconds(secLength));
+		Thread.sleep(secLength*1000 + 8000);
 		FFMpegTraits.checkAndThrowFFMpegError(ffmpegProcess.getInputStream(), ffmpegProcess.getErrorStream());
 	}
 

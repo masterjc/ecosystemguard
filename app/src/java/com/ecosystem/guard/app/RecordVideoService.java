@@ -18,7 +18,7 @@ import org.apache.commons.codec.binary.Hex;
 
 import com.ecosystem.guard.camera.VideoConfig;
 import com.ecosystem.guard.camera.VideoManager;
-import com.ecosystem.guard.camera.impl.DefaultVideoConfig;
+import com.ecosystem.guard.camera.impl.HackberryH264VideoConfig;
 import com.ecosystem.guard.common.RandomGenerator;
 import com.ecosystem.guard.common.StreamingUtils;
 import com.ecosystem.guard.domain.service.host.RecordVideoRequest;
@@ -46,7 +46,7 @@ public class RecordVideoService extends AuthenticatedRawPostService<RecordVideoR
 			throws Exception {
 		// Cosas que deben venir por petición
 		int videoLength = 10;
-		VideoConfig videoConfig = new DefaultVideoConfig();
+		VideoConfig videoConfig = new HackberryH264VideoConfig();
 		String contentType = "video/mp4";
 		// Código fijo
 		File videoFile = new File(Hex.encodeHexString(RandomGenerator.generateRandom(16)));

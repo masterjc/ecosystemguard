@@ -1,5 +1,7 @@
 package com.ecosystem.guard.camera;
 
+import com.ecosystem.guard.camera.impl.H264Resolution;
+
 /**
  * Configuración de parámetros básicos de video
  * 
@@ -9,9 +11,9 @@ package com.ecosystem.guard.camera;
 public class VideoConfig {
 
 	private Resolution resolution;
-	private String bitrate;
-	private int fps;
 	private VideoCodec videoCodec;
+	private String containerExtension;
+	private String optionalOptions;
 
 	public Resolution getResolution() {
 		return resolution;
@@ -21,22 +23,6 @@ public class VideoConfig {
 		this.resolution = resolution;
 	}
 
-	public String getBitrate() {
-		return bitrate;
-	}
-
-	public void setBitrate(String bitrate) {
-		this.bitrate = bitrate;
-	}
-
-	public int getFps() {
-		return fps;
-	}
-
-	public void setFps(int fps) {
-		this.fps = fps;
-	}
-
 	public VideoCodec getVideoCodec() {
 		return videoCodec;
 	}
@@ -44,5 +30,23 @@ public class VideoConfig {
 	public void setVideoCodec(VideoCodec videoCodec) {
 		this.videoCodec = videoCodec;
 	}
+	
+	public void setOptionalOptions(String options) {
+		this.optionalOptions = options;
+	}
+	
+	public String getOptionalOptions() {
+		return optionalOptions;
+	}
+
+	public String getContainerExtension() {
+		return containerExtension;
+	}
+
+	public void setContainerExtension(String containerExtension) {
+		this.containerExtension = containerExtension;
+	}
+	
+	
 	
 }
