@@ -7,6 +7,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import com.ecosystem.guard.persistence.dao.AccountInfo;
+import com.ecosystem.guard.persistence.dao.AuthZInfo;
 import com.ecosystem.guard.persistence.dao.HostInfo;
 import com.ecosystem.guard.persistence.dao.IpInfo;
 
@@ -121,6 +122,45 @@ public class DaoManager {
 		try {
 			TypedQuery<HostInfo> query = entityManager.createQuery("SELECT a FROM HostInfo a WHERE a.username = '"
 					+ username + "'", HostInfo.class);
+			return query.getResultList();
+		}
+		catch (NoResultException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Busca los recursos autorizados para un usuario en un host concreto
+	 * 
+	 * @param username El identificador de usuario
+	 * @param hostId El identificador del host
+	 * @return La información de la autorización del usuario en el host. Null si no existe existe
+	 *         info del usuario en dicho host
+	 * @throws Exception
+	 */
+	public List<AuthZInfo> getAuthZInfo(String username, String hostId) throws Exception {
+		try {
+			TypedQuery<AuthZInfo> query = entityManager.createQuery("SELECT a FROM AuthZInfo a WHERE a.username = '"
+					+ username + "' AND a.hostId='" + hostId + "'", AuthZInfo.class);
+			return query.getResultList();
+		}
+		catch (NoResultException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Busca los usuarios y recursos autorizados de un host concreto
+	 * 
+	 * @param hostId El identificador del host
+	 * @return La información de la autorización del usuario en el host. Null si no existe existe
+	 *         info del usuario en dicho host
+	 * @throws Exception
+	 */
+	public List<AuthZInfo> getAuthZInfo(String hostId) throws Exception {
+		try {
+			TypedQuery<AuthZInfo> query = entityManager.createQuery("SELECT a FROM AuthZInfo a WHERE a.hostId='"
+					+ hostId + "'", AuthZInfo.class);
 			return query.getResultList();
 		}
 		catch (NoResultException e) {

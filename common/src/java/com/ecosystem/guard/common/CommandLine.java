@@ -93,6 +93,7 @@ public class CommandLine {
 	 */
 	public Process execute(String[] environment) throws Exception {
 		CommandWorker execThread = new CommandWorker(command.toString(), environment, workDirectory);
+		System.out.println(command.toString());
 		execThread.start();
 		if (execTimeoutSeconds != 0) {
 			execThread.join(execTimeoutSeconds * 1000);
@@ -142,6 +143,7 @@ public class CommandLine {
 				process.waitFor();
 			}
 			catch (Exception e) {
+				e.printStackTrace();
 				exception = e;
 			}
 			finished = true;

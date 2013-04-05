@@ -26,6 +26,7 @@ import com.ecosystem.guard.engine.authn.AuthenticationContext;
 import com.ecosystem.guard.engine.servlet.AuthenticatedService;
 import com.ecosystem.guard.persistence.DaoManager;
 import com.ecosystem.guard.persistence.Transaction;
+import com.ecosystem.guard.persistence.dao.AuthZInfo;
 import com.ecosystem.guard.persistence.dao.HostInfo;
 
 /**
@@ -35,20 +36,17 @@ import com.ecosystem.guard.persistence.dao.HostInfo;
  */
 @WebServlet(value = "/registerhost", name = "registerhost-service")
 public class RegisterHostService extends AuthenticatedService<RegisterHostRequest, RegisterHostResponse> {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3648887587603810905L;
 
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.ecosystem.guard.engine.servlet.AuthenticatedService#execute(com.ecosystem.guard.engine
-	 * .authn.AuthenticationContext, com.ecosystem.guard.persistence.Transaction,
-	 * com.ecosystem.guard.persistence.DaoManager, com.ecosystem.guard.domain.Request,
-	 * java.io.Writer)
+	 * com.ecosystem.guard.engine.servlet.AuthenticatedService#execute(com.ecosystem
+	 * .guard.engine .authn.AuthenticationContext,
+	 * com.ecosystem.guard.persistence.Transaction,
+	 * com.ecosystem.guard.persistence.DaoManager,
+	 * com.ecosystem.guard.domain.Request, java.io.Writer)
 	 */
 	@Override
 	protected void execute(AuthenticationContext authnContext, Transaction transaction, DaoManager daoManager,
@@ -64,6 +62,11 @@ public class RegisterHostService extends AuthenticatedService<RegisterHostReques
 		daoInfo.setUsername(authnContext.getUsername());
 		daoInfo.setVersion(SystemProperties.getVersion());
 		daoManager.insert(daoInfo);
+		AuthZInfo authz = new AuthZInfo();
+		authz.setHostId(request.getHostInformation().getId());
+		authz.setUsername(authnContext.getUsername());
+		authz.setResourceId(AuthZService.AUTHORIZE_ALL_SERVICES);
+		daoManager.insert(authz);
 		RegisterHostResponse response = new RegisterHostResponse();
 		response.setResult(new Result(Status.OK));
 		Serializer.serialize(response, RegisterHostResponse.class, writer);
@@ -72,7 +75,9 @@ public class RegisterHostService extends AuthenticatedService<RegisterHostReques
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.ecosystem.guard.engine.servlet.AuthenticatedService#getRequestJaxbClass()
+	 * @see
+	 * com.ecosystem.guard.engine.servlet.AuthenticatedService#getRequestJaxbClass
+	 * ()
 	 */
 	@Override
 	protected Class<RegisterHostRequest> getRequestJaxbClass() {
@@ -82,7 +87,9 @@ public class RegisterHostService extends AuthenticatedService<RegisterHostReques
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.ecosystem.guard.engine.servlet.AuthenticatedService#getResponseJaxbClass()
+	 * @see
+	 * com.ecosystem.guard.engine.servlet.AuthenticatedService#getResponseJaxbClass
+	 * ()
 	 */
 	@Override
 	protected Class<RegisterHostResponse> getResponseJaxbClass() {

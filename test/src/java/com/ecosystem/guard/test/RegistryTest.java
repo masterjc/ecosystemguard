@@ -20,6 +20,8 @@ import com.ecosystem.guard.domain.Credentials;
 import com.ecosystem.guard.domain.Result;
 import com.ecosystem.guard.domain.Result.Status;
 import com.ecosystem.guard.domain.service.registry.AccountInformation;
+import com.ecosystem.guard.domain.service.registry.AuthZRequest;
+import com.ecosystem.guard.domain.service.registry.AuthZResponse;
 import com.ecosystem.guard.domain.service.registry.GetHostsRequest;
 import com.ecosystem.guard.domain.service.registry.GetHostsResponse;
 import com.ecosystem.guard.domain.service.registry.GetHostsStatus;
@@ -64,6 +66,7 @@ public class RegistryTest {
 		String password2 = "pepepepe";
 		String hostId1 = "hostid129838219839218392";
 		String hostId2 = "hostid978676949340299384";
+		String resource1 = "resource1";
 
 		Assert.assertEquals(Status.OK, register(username, password1).getStatus());
 		Assert.assertEquals(RegisterStatus.ALREADY_REGISTERED.getStatusCode(), register(username, password1)
@@ -73,7 +76,10 @@ public class RegistryTest {
 		Assert.assertEquals(Status.AUTHN_ERROR, updateIp(username, password1, hostId1).getStatus());
 		Assert.assertEquals(Status.OK, updateIp(username, password2, hostId1).getStatus());
 		Assert.assertTrue(hasIpAddress(username, password2, hostId1));
+		Assert.assertTrue(isAuthorized(username, password2, hostId1, resource1));
+		Assert.assertFalse(isAuthorized(username, password2, hostId2, resource1));
 		Assert.assertEquals(Status.OK, disassociate(username, password2, hostId1).getStatus());
+		Assert.assertFalse(isAuthorized(username, password2, hostId1, resource1));
 		Assert.assertFalse(hasIpAddress(username, password2, hostId1));
 		Assert.assertEquals(Status.OK, associate(username, password2, hostId1).getStatus());
 		Assert.assertEquals(Status.OK, associate(username, password2, hostId2).getStatus());
@@ -174,5 +180,15 @@ public class RegistryTest {
 		GetIpResponse response = XmlServiceRequestor.sendRequest(request, GetIpRequest.class, GetIpResponse.class,
 				ecosystemGuardRegistryHost + "/getip");
 		return (response.getResult().getStatus().equals(Status.OK) && response.getIpInformation().getPublicIp() != null);
+	}
+	
+	private boolean isAuthorized(String username, String password, String hostId, String resource) throws Exception {
+		AuthZRequest request = new AuthZRequest();
+		request.setCredentials(new Credentials(username, password));
+		request.setHostId(hostId);
+		request.setResourceId(resource);
+		AuthZResponse response = XmlServiceRequestor.sendRequest(request, AuthZRequest.class, AuthZResponse.class,
+				ecosystemGuardRegistryHost + "/authz");
+		return response.getResult().getStatus().equals(Status.OK);
 	}
 }

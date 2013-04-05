@@ -49,7 +49,7 @@ public class RecordVideoService extends AuthenticatedRawPostService<RecordVideoR
 		VideoConfig videoConfig = new HackberryH264VideoConfig();
 		String contentType = "video/mp4";
 		// Código fijo
-		File videoFile = new File(Hex.encodeHexString(RandomGenerator.generateRandom(16)));
+		File videoFile = new File(Hex.encodeHexString(RandomGenerator.generateRandom(16)) + ".mp4");
 		try {
 			VideoManager videoManager = CameraControllerFactory.getCameraController().createVideoManager();
 			videoManager.record(videoConfig, videoLength, videoFile);

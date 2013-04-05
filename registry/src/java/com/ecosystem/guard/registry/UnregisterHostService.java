@@ -11,6 +11,7 @@
 package com.ecosystem.guard.registry;
 
 import java.io.Writer;
+import java.util.List;
 
 import javax.servlet.annotation.WebServlet;
 
@@ -25,6 +26,7 @@ import com.ecosystem.guard.engine.authn.AuthenticationContext;
 import com.ecosystem.guard.engine.servlet.AuthenticatedService;
 import com.ecosystem.guard.persistence.DaoManager;
 import com.ecosystem.guard.persistence.Transaction;
+import com.ecosystem.guard.persistence.dao.AuthZInfo;
 import com.ecosystem.guard.persistence.dao.HostInfo;
 import com.ecosystem.guard.persistence.dao.IpInfo;
 
@@ -61,6 +63,12 @@ public class UnregisterHostService extends AuthenticatedService<UnregisterHostRe
 			throw new ServiceException(new Result(Status.CLIENT_ERROR, UnregisterHostStatus.NOT_ASSOCIATED_HOST));
 		if (ipInfo != null) {
 			daoManager.delete(ipInfo);
+		}
+		List<AuthZInfo> authzList = daoManager.getAuthZInfo(request.getHostInformation().getId());
+		if( authzList != null ) {
+			for( AuthZInfo authz : authzList ) {
+				daoManager.delete(authz);
+			}
 		}
 		daoManager.delete(hostInfo);
 		UnregisterHostResponse response = new UnregisterHostResponse();

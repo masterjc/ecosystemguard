@@ -5,6 +5,7 @@ USE ecosystemguard;
 DROP TABLE IF EXISTS ipInfo;
 DROP TABLE IF EXISTS hostInfo;
 DROP TABLE IF EXISTS accountInfo;
+DROP TABLE IF EXISTS authzInfo;
 
 CREATE TABLE accountInfo (
 	username VARCHAR(254) NOT NULL,
@@ -28,6 +29,13 @@ CREATE TABLE hostInfo (
 	version VARCHAR(16) NOT NULL,
 	description VARCHAR(1000),
 	PRIMARY KEY( hostId )
+) ENGINE=innodb;
+
+CREATE TABLE authzInfo (
+	userName VARCHAR(254) NOT NULL,
+	hostId VARCHAR(64) NOT NULL,
+	resourceId VARCHAR(256) NOT NULL,
+	PRIMARY KEY( userName, hostId, resourceId )
 ) ENGINE=innodb;
 
 COMMIT;

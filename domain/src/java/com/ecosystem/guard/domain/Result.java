@@ -21,7 +21,10 @@ public class Result {
 		SERVER_ERROR( "SERVER_ERROR" ),
 		
 		@XmlEnumValue("AUTHN_ERROR")
-		AUTHN_ERROR( "AUTHN_ERROR" );
+		AUTHN_ERROR( "AUTHN_ERROR" ),
+		
+		@XmlEnumValue("AUTHZ_ERROR")
+		AUTHZ_ERROR( "AUTHZ_ERROR" );
 		
 		private String statusCode;
 		
