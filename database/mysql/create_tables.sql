@@ -34,7 +34,7 @@ CREATE TABLE hostInfo (
 CREATE TABLE authzInfo (
 	userName VARCHAR(254) NOT NULL,
 	hostId VARCHAR(64) NOT NULL,
-	resourceId VARCHAR(256) NOT NULL,
+	resourceId VARCHAR(64) NOT NULL,
 	PRIMARY KEY( userName, hostId, resourceId )
 ) ENGINE=innodb;
 

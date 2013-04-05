@@ -67,7 +67,7 @@ public class AuthenticationService {
 		return authnContext;
 	}
 
-	private static void setCommonServiceAuthnContext(AuthenticationContext authContext, HttpServletRequest request)
+	public static void setCommonServiceAuthnContext(AuthenticationContext authContext, HttpServletRequest request)
 			throws Exception {
 		authContext.setRemoteIpAddress(request.getRemoteAddr());
 	}

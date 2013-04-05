@@ -25,7 +25,8 @@ import com.ecosystem.guard.domain.Serializer;
 import com.ecosystem.guard.domain.exceptions.DeserializerException;
 import com.ecosystem.guard.domain.exceptions.ServiceException;
 import com.ecosystem.guard.engine.authn.AuthenticationContext;
-import com.ecosystem.guard.engine.authn.AuthenticationService;
+import com.ecosystem.guard.engine.authn.AuthorizationContext;
+import com.ecosystem.guard.engine.authn.AuthorizationService;
 import com.ecosystem.guard.logging.EcosystemGuardLogger;
 
 /**
@@ -34,7 +35,7 @@ import com.ecosystem.guard.logging.EcosystemGuardLogger;
  * @version $Revision$
  */
 @SuppressWarnings("serial")
-public abstract class AuthenticatedRawPostService<T extends Request> extends HttpServlet {
+public abstract class AuthorizedRawPostService<T extends Request> extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -47,22 +48,21 @@ public abstract class AuthenticatedRawPostService<T extends Request> extends Htt
 			T requestObj = Deserializer.deserialize(getRequestJaxbClass(), request.getReader());
 			if (requestObj.getCredentials() == null || !requestObj.getCredentials().defined())
 				throw new ServiceException(new Result(Status.AUTHN_ERROR, "Missing credentials"));
-			AuthenticationContext authContext = AuthenticationService
-					.authenticate(request, requestObj.getCredentials());
-			if (!authContext.isAuthenticated())
+			AuthorizationContext authContext = AuthorizationService.authorize(request, requestObj.getCredentials(),
+					this.getClass().getSimpleName());
+			if (!authContext.getAuthnContext().isAuthenticated())
 				throw new ServiceException(new Result(Status.AUTHN_ERROR, "Not authenticated"));
+			if (!authContext.isAuthorized())
+				throw new ServiceException(new Result(Status.AUTHZ_ERROR, "Not authorized"));
 			execute(authContext, requestObj, response);
-		}
-		catch (DeserializerException dEx) {
+		} catch (DeserializerException dEx) {
 			EcosystemGuardLogger.logError(dEx, this.getClass());
 			writeErrorResponse(new Result(Status.CLIENT_ERROR, dEx.getMessage()), HttpServletResponse.SC_BAD_REQUEST,
 					response);
-		}
-		catch (ServiceException sEx) {
+		} catch (ServiceException sEx) {
 			EcosystemGuardLogger.logError(sEx, this.getClass());
 			writeErrorResponse(sEx.getResult(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			EcosystemGuardLogger.logError(e, this.getClass());
 			writeErrorResponse(new Result(Status.SERVER_ERROR, e.getMessage()),
 					HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response);
@@ -73,22 +73,22 @@ public abstract class AuthenticatedRawPostService<T extends Request> extends Htt
 		try {
 			response.setStatus(httpStatus);
 			Serializer.serialize(result, Result.class, response.getWriter());
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new IOException("AuthenticatedRawPostService::writeErrorResponse() error", e);
 		}
-	} 
+	}
 
 	/**
-	 * Método para la ejecución de la operación del servlet. IMPORTANTE: La respuesta es obligación
-	 * del método execute() pero en caso de error deberá
+	 * Método para la ejecución de la operación del servlet. IMPORTANTE: La
+	 * respuesta es obligación del método execute() pero en caso de error
+	 * deberá
 	 * 
 	 * @param authContext
 	 * @param request
 	 * @param httpResponse
 	 * @throws Exception
 	 */
-	protected abstract void execute(AuthenticationContext authContext, T request, HttpServletResponse httpResponse)
+	protected abstract void execute(AuthorizationContext authContext, T request, HttpServletResponse httpResponse)
 			throws Exception;
 
 	/**

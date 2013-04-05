@@ -22,6 +22,8 @@ public final class SystemProperties {
 	private static final String ECOSYSTEM_GUARD_VERSION = "0.1";
 	public static final String CONFIG_DIR_PROPERTY = "com.ecosystem.guard.config.directory";
 	public static final String AUTHN_SERVICE_URL = "com.ecosystem.guard.config.authn.url";
+	public static final String AUTHZ_SERVICE_URL = "com.ecosystem.guard.config.authz.url";
+	public static final String HOST_CONFIG_FILENAME = "host.xml";
 
 	/**
 	 * Devuelve el directory donde se encuentra la configuración del sistema EcosystemGuard. Si no
@@ -55,6 +57,15 @@ public final class SystemProperties {
 		return url;
 
 	}
+	
+	public static String getAuthZServiceUrl() throws Exception {
+		String url = System.getProperty(AUTHZ_SERVICE_URL);
+		if (url == null)
+			throw new Exception("EcosystemGuard AuthZ Service URL property is not configured");
+		return url;
+	}
+	
+	
 
 	/**
 	 * Devuelve la versión software de Ecosystem Guard

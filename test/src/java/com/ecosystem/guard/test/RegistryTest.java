@@ -88,6 +88,7 @@ public class RegistryTest {
 		Assert.assertEquals(1, getHosts(username, password2));
 		Assert.assertEquals(Status.OK, updateIp(username, password2, hostId1).getStatus());
 		Assert.assertEquals(Status.OK, unregister(username, password2).getStatus());
+		Assert.assertFalse(isAuthorized(username, password2, hostId2, resource1));
 		Assert.assertFalse(hasIpAddress(username, password2, hostId1));
 		Assert.assertEquals(Status.AUTHN_ERROR, associate(username, password2, hostId1).getStatus());
 	}

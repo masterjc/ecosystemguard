@@ -26,4 +26,11 @@ public class Credentials {
 	public boolean defined() {
 		return (usernamePassword != null) && usernamePassword.defined();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		Credentials thisObj = (Credentials)obj;
+		return thisObj.getUsernamePassword().getUsername().equals(this.usernamePassword.getUsername()) && 
+				thisObj.getUsernamePassword().getPassword().equals(this.usernamePassword.getPassword());
+	}
 }
