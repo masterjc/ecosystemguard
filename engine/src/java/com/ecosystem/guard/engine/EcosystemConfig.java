@@ -9,6 +9,7 @@ import com.ecosystem.guard.domain.config.HostConfig;
 public class EcosystemConfig {
 	private static long hostConfigDate = 0;
 	private static HostConfig hostConfig;
+	private static Integer lock = 0;
 
 	public static HostConfig getHostConfig() throws Exception {
 		File configFile = getHostConfigFile();
@@ -24,14 +25,15 @@ public class EcosystemConfig {
 	}
 
 	private static boolean hasBeenUpdated(File file) {
-		return file.lastModified() > hostConfigDate;
-
+		return file.lastModified() > hostConfigDate;	
 	}
 
 	private static void loadHostConfig(File file) throws Exception {
 		FileReader input = new FileReader(file);
 		try {
-			hostConfig = Deserializer.deserialize(HostConfig.class, input);
+			synchronized (lock) {
+				hostConfig = Deserializer.deserialize(HostConfig.class, input);
+			}
 		} finally {
 			input.close();
 		}

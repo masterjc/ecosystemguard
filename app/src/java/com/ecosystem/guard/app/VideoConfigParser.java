@@ -8,6 +8,7 @@ import com.ecosystem.guard.camera.impl.H263Resolution;
 import com.ecosystem.guard.camera.impl.H264Resolution;
 import com.ecosystem.guard.camera.impl.VideoCodec;
 import com.ecosystem.guard.camera.impl.VideoContainer;
+import com.ecosystem.guard.domain.service.host.VideoConfiguration;
 
 /**
  * 
@@ -27,7 +28,7 @@ public class VideoConfigParser {
 		this.containerClass = VideoContainer.class;
 	}
 	
-	public VideoConfig parseVideoConfig() {
+	public VideoConfig parseVideoConfig(VideoConfiguration videoConfig) {
 		
 		return null;
 	}

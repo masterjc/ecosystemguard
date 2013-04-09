@@ -8,9 +8,10 @@ import org.apache.commons.codec.binary.Hex;
 
 import com.ecosystem.guard.camera.VideoConfig;
 import com.ecosystem.guard.camera.VideoManager;
-import com.ecosystem.guard.camera.impl.HackberryH264VideoConfig;
 import com.ecosystem.guard.common.RandomGenerator;
 import com.ecosystem.guard.common.StreamingUtils;
+import com.ecosystem.guard.domain.Result;
+import com.ecosystem.guard.domain.exceptions.ServiceException;
 import com.ecosystem.guard.domain.service.host.RecordVideoRequest;
 import com.ecosystem.guard.engine.authn.AuthorizationContext;
 import com.ecosystem.guard.engine.servlet.AuthorizedRawPostService;
@@ -21,31 +22,32 @@ import com.ecosystem.guard.engine.servlet.AuthorizedRawPostService;
  * @version $Revision$
  */
 public class RecordVideoService extends AuthorizedRawPostService<RecordVideoRequest> {
+	private static VideoConfigParser videoConfigParser = new VideoConfigParser();
 	private static final long serialVersionUID = 1947515630361657851L;
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.ecosystem.guard.engine.servlet.AuthenticatedRawPostService#execute
-	 * (com.ecosystem.guard .engine.authn.AuthenticationContext,
-	 * com.ecosystem.guard.domain.Request,
+	 * @see com.ecosystem.guard.engine.servlet.AuthenticatedRawPostService#execute
+	 * (com.ecosystem.guard .engine.authn.AuthenticationContext, com.ecosystem.guard.domain.Request,
 	 * javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
 	protected void execute(AuthorizationContext authn, RecordVideoRequest request, HttpServletResponse response)
 			throws Exception {
-		// Cosas que deben venir por petición
-		int videoLength = 10;
-		VideoConfig videoConfig = null;
-		// Código fijo
-		File videoFile = new File(Hex.encodeHexString(RandomGenerator.generateRandom(16)) + videoConfig.getContainer().getExtension());
+		if (request.getLength() == null || request.getVideoConfiguration() == null)
+			throw new ServiceException(new Result(Result.Status.CLIENT_ERROR, "Missing video config information"));
+		VideoManager videoManager = CameraControllerFactory.acquireCameraController().createVideoManager();
+		VideoConfig videoConfig = videoConfigParser.parseVideoConfig(request.getVideoConfiguration());
+		File videoFile = new File(Hex.encodeHexString(RandomGenerator.generateRandom(8))
+				+ videoConfig.getContainer().getExtension());
 		try {
-			VideoManager videoManager = CameraControllerFactory.getCameraController().createVideoManager();
-			videoManager.record(videoConfig, videoLength, videoFile);
+			videoManager.record(videoConfig, request.getLength(), videoFile);
 			response.setContentType(videoConfig.getContainer().getContentType());
 			StreamingUtils.consumeFileStream(videoFile, response.getOutputStream());
-		} finally {
+		}
+		finally {
+			CameraControllerFactory.releaseCameraController();
 			if (videoFile.exists()) {
 				videoFile.delete();
 			}
@@ -55,8 +57,7 @@ public class RecordVideoService extends AuthorizedRawPostService<RecordVideoRequ
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.ecosystem.guard.engine.servlet.AuthenticatedRawPostService#
-	 * getRequestJaxbClass()
+	 * @see com.ecosystem.guard.engine.servlet.AuthenticatedRawPostService# getRequestJaxbClass()
 	 */
 	@Override
 	protected Class<RecordVideoRequest> getRequestJaxbClass() {

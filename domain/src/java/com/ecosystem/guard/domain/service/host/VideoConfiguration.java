@@ -1,32 +1,47 @@
-/*
- * Copyright (c) 1999-2013 Safelayer Secure Communications, S.A.
- *
- * All rights reserved. No part of this source code may be reproduced,
- * stored in a retrieval system, or transmitted, in any form or by any
- * means, electronic, mechanical, photocopying, recording or otherwise,
- * except as in the end-user license agreement, without the prior
- * permission of the copyright owner.
- */
-
 package com.ecosystem.guard.domain.service.host;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * 
  * @author juancarlos.fernandez
  * @version $Revision$
  */
+@XmlRootElement
 public class VideoConfiguration {
-
+	
+	private String codec;
+	private String resolution;
+	private String container;
+	
 	public String getCodec() {
-		return null;
+		return codec;
+	}
+	
+	@XmlElement
+	public void setCodec(String codec) {
+		this.codec = codec;
 	}
 	
 	public String getResolution() {
-		return null;
+		return resolution;
+	}
+	
+	@XmlElement
+	public void setResolution(String resolution) {
+		this.resolution = resolution;
 	}
 	
 	public String getContainer() {
-		return null;
+		return container;
 	}
+	
+	@XmlElement
+	public void setContainer(String container) {
+		this.container = container;
+	}
+
+	
 
 }
