@@ -5,9 +5,8 @@ import java.io.File;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ecosystem.guard.camera.impl.HackberryH264VideoConfig;
-import com.ecosystem.guard.camera.impl.FFMpegCameraController;
 import com.ecosystem.guard.camera.impl.FFMpegVideoManager;
+import com.ecosystem.guard.camera.impl.HackberryH264VideoConfig;
 
 /**
  * 

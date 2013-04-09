@@ -24,7 +24,6 @@ import com.ecosystem.guard.domain.Result.Status;
 import com.ecosystem.guard.domain.Serializer;
 import com.ecosystem.guard.domain.exceptions.DeserializerException;
 import com.ecosystem.guard.domain.exceptions.ServiceException;
-import com.ecosystem.guard.engine.authn.AuthenticationContext;
 import com.ecosystem.guard.engine.authn.AuthorizationContext;
 import com.ecosystem.guard.engine.authn.AuthorizationService;
 import com.ecosystem.guard.logging.EcosystemGuardLogger;

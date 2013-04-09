@@ -25,7 +25,6 @@ import com.ecosystem.guard.camera.CameraController;
 import com.ecosystem.guard.camera.VideoManager;
 import com.ecosystem.guard.camera.impl.FFMpegCameraController;
 import com.ecosystem.guard.camera.impl.HackberryH264VideoConfig;
-import com.ecosystem.guard.common.FileStreamPump;
 import com.ecosystem.guard.common.RandomGenerator;
 import com.ecosystem.guard.common.StreamingUtils;
 import com.ecosystem.guard.domain.service.host.TakePictureRequest;

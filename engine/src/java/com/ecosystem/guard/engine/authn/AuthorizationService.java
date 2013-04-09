@@ -27,15 +27,13 @@ import com.ecosystem.guard.domain.Result;
 import com.ecosystem.guard.domain.Result.Status;
 import com.ecosystem.guard.domain.Serializer;
 import com.ecosystem.guard.domain.config.HostConfig;
-import com.ecosystem.guard.domain.exceptions.ServiceException;
-import com.ecosystem.guard.domain.service.registry.AuthNResponse;
 import com.ecosystem.guard.domain.service.registry.AuthZRequest;
 import com.ecosystem.guard.domain.service.registry.AuthZResponse;
 import com.ecosystem.guard.engine.EcosystemConfig;
 import com.ecosystem.guard.engine.SystemProperties;
 
 /**
- * Servicio de autorización de EcosystemGuard. Es un cliente HTTP del servicio
+ * Servicio de autorizaciï¿½n de EcosystemGuard. Es un cliente HTTP del servicio
  * AuthZRequest.
  * 
  * @author juancarlos.fernandez
