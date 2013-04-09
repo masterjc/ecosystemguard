@@ -9,7 +9,7 @@ import com.ecosystem.guard.camera.Resolution;
  * @version $Revision$
  */
 public enum H263Resolution implements Resolution {
-	LD(352, 288, "QVGA"), SD(704, 576, "VGA"), HD(1408, 1152, "SVGA");
+	QVGA(352, 288, "QVGA"), VGA(704, 576, "VGA"), SVGA(1408, 1152, "SVGA");
 
 	private int xRes;
 	private int yRes;

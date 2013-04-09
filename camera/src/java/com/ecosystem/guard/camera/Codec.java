@@ -8,4 +8,5 @@ package com.ecosystem.guard.camera;
 public interface Codec {
 	public String getCodec();
 	public String getCodecOptions();
+	public Class<? extends Resolution> getResolutionClass(); 
 }

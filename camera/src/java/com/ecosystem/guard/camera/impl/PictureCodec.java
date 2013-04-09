@@ -1,6 +1,7 @@
 package com.ecosystem.guard.camera.impl;
 
 import com.ecosystem.guard.camera.Codec;
+import com.ecosystem.guard.camera.Resolution;
 
 /**
  * 
@@ -26,6 +27,15 @@ public enum PictureCodec implements Codec {
 	@Override
 	public String getCodecOptions() {
 		return options;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.ecosystem.guard.camera.Codec#getResolutionClass()
+	 */
+	@Override
+	public Class<? extends Resolution> getResolutionClass() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
