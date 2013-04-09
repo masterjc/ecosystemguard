@@ -5,7 +5,6 @@
 	<include file="${env.PROJECT_DIR}/build-tools/project-definitions.xml"/>
 	
 	<path id="classpath">
-        <path refid="jpa.path" />
 		<path refid="ecosystemguard-common.path" />
     </path>
 	

@@ -11,9 +11,9 @@
 	</target>
 	
 	<target name="clean-all">
-		<ant dir="${ecosystemguard-domain.dir}" target="clean-all" />
 		<ant dir="${ecosystemguard-common.dir}" target="clean-all" />
 		<ant dir="${ecosystemguard-camera.dir}" target="clean-all" />
+		<ant dir="${ecosystemguard-domain.dir}" target="clean-all" />
 		<ant dir="${ecosystemguard-logging.dir}" target="clean-all" />
 		<ant dir="${ecosystemguard-persistence.dir}" target="clean-all" />
 		<ant dir="${ecosystemguard-engine.dir}" target="clean-all" />
@@ -23,9 +23,9 @@
 	</target>
 	
 	<target name="compile">
-		<ant dir="${ecosystemguard-domain.dir}" target="all" />
 		<ant dir="${ecosystemguard-common.dir}" target="all" />
 		<ant dir="${ecosystemguard-camera.dir}" target="all" />
+		<ant dir="${ecosystemguard-domain.dir}" target="all" />
 		<ant dir="${ecosystemguard-logging.dir}" target="all" />
 		<ant dir="${ecosystemguard-persistence.dir}" target="all" />
 		<ant dir="${ecosystemguard-engine.dir}" target="all" />

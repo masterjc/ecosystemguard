@@ -2,7 +2,6 @@ package com.ecosystem.guard.camera.impl;
 
 import java.io.File;
 
-import com.ecosystem.guard.camera.PictureCodec;
 import com.ecosystem.guard.camera.PictureConfig;
 import com.ecosystem.guard.camera.PictureManager;
 import com.ecosystem.guard.common.CommandLine;

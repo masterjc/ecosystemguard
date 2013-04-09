@@ -17,11 +17,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ecosystem.guard.domain.Deserializer;
+import com.ecosystem.guard.common.Deserializer;
+import com.ecosystem.guard.common.Serializer;
 import com.ecosystem.guard.domain.Request;
 import com.ecosystem.guard.domain.Result;
 import com.ecosystem.guard.domain.Result.Status;
-import com.ecosystem.guard.domain.Serializer;
 import com.ecosystem.guard.domain.exceptions.DeserializerException;
 import com.ecosystem.guard.domain.exceptions.ServiceException;
 import com.ecosystem.guard.engine.authn.AuthorizationContext;

@@ -8,22 +8,25 @@
  * permission of the copyright owner.
  */
 
-package com.ecosystem.guard.camera.impl;
-
-import com.ecosystem.guard.camera.VideoConfig;
+package com.ecosystem.guard.domain.service.host;
 
 /**
- * Configuración por defecto de baja resolución. QVGA, 30 fps, bitrate 200k y codec H264 (MP4)
  * 
  * @author juancarlos.fernandez
  * @version $Revision$
  */
-public class HackberryH264VideoConfig extends VideoConfig {
+public class VideoConfiguration {
 
-	public HackberryH264VideoConfig() {
-		super.setResolution(H264Resolution.HVGA);
-		super.setVideoCodec(VideoCodec.H264);
-		super.setOptionalOptions("-preset veryfast -crf 28");
-		super.setContainer(VideoContainer.MP4);
+	public String getCodec() {
+		return null;
 	}
+	
+	public String getResolution() {
+		return null;
+	}
+	
+	public String getContainer() {
+		return null;
+	}
+
 }

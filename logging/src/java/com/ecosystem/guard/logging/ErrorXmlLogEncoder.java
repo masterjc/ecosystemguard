@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
 
-import com.ecosystem.guard.domain.Serializer;
+import com.ecosystem.guard.common.Serializer;
 import com.ecosystem.guard.domain.logging.Error;
 import com.ecosystem.guard.domain.logging.Parameter;
 

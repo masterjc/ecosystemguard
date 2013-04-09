@@ -1,11 +1,14 @@
-package com.ecosystem.guard.camera;
+package com.ecosystem.guard.camera.impl;
+
+import com.ecosystem.guard.camera.Codec;
 
 /**
  * 
  * @author juancarlos.fernandez
  * @version $Revision$
  */
-public enum PictureCodec {
+public enum PictureCodec implements Codec {
+
 	JPEG("jpeg");
 
 	private String codec;
@@ -17,4 +20,5 @@ public enum PictureCodec {
 	public String getCodec() {
 		return codec;
 	}
+
 }

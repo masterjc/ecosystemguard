@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.servlet.annotation.WebServlet;
 
+import com.ecosystem.guard.common.Serializer;
 import com.ecosystem.guard.domain.Result;
-import com.ecosystem.guard.domain.Serializer;
 import com.ecosystem.guard.domain.service.registry.UnregisterRequest;
 import com.ecosystem.guard.domain.service.registry.UnregisterResponse;
 import com.ecosystem.guard.engine.authn.AuthenticationContext;

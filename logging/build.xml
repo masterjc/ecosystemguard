@@ -6,6 +6,7 @@
 	
 	<path id="classpath">
 		<path refid="ecosystemguard-domain.path" />
+		<path refid="ecosystemguard-common.path" />
 		<path refid="commons-codec.path" />
    	</path>
 	

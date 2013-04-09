@@ -1,6 +1,5 @@
 package com.ecosystem.guard.camera;
 
-
 /**
  * Configuración de parámetros básicos de video
  * 
@@ -10,8 +9,8 @@ package com.ecosystem.guard.camera;
 public class VideoConfig {
 
 	private Resolution resolution;
-	private VideoCodec videoCodec;
-	private String containerExtension;
+	private Codec videoCodec;
+	private Container container;
 	private String optionalOptions;
 
 	public Resolution getResolution() {
@@ -22,30 +21,28 @@ public class VideoConfig {
 		this.resolution = resolution;
 	}
 
-	public VideoCodec getVideoCodec() {
+	public Codec getVideoCodec() {
 		return videoCodec;
 	}
 
-	public void setVideoCodec(VideoCodec videoCodec) {
+	public void setVideoCodec(Codec videoCodec) {
 		this.videoCodec = videoCodec;
 	}
-	
+
 	public void setOptionalOptions(String options) {
 		this.optionalOptions = options;
 	}
-	
+
 	public String getOptionalOptions() {
 		return optionalOptions;
 	}
 
-	public String getContainerExtension() {
-		return containerExtension;
+	public Container getContainer() {
+		return container;
 	}
 
-	public void setContainerExtension(String containerExtension) {
-		this.containerExtension = containerExtension;
+	public void setContainer(Container container) {
+		this.container = container;
 	}
-	
-	
-	
+
 }

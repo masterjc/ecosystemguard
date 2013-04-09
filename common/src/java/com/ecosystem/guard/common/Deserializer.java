@@ -1,4 +1,4 @@
-package com.ecosystem.guard.domain;
+package com.ecosystem.guard.common;
 
 import java.io.Reader;
 

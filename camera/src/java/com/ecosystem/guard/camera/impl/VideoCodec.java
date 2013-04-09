@@ -1,4 +1,6 @@
-package com.ecosystem.guard.camera;
+package com.ecosystem.guard.camera.impl;
+
+import com.ecosystem.guard.camera.Codec;
 
 /**
  * Codecs de Video soportados por EcosystemGuard
@@ -6,7 +8,7 @@ package com.ecosystem.guard.camera;
  * @author juancarlos.fernandez
  * @version $Revision$
  */
-public enum VideoCodec {
+public enum VideoCodec implements Codec {
 
 	H264("libx264"),
 	H263("h263");

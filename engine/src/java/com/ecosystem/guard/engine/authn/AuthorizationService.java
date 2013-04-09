@@ -21,11 +21,11 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
+import com.ecosystem.guard.common.Deserializer;
+import com.ecosystem.guard.common.Serializer;
 import com.ecosystem.guard.domain.Credentials;
-import com.ecosystem.guard.domain.Deserializer;
 import com.ecosystem.guard.domain.Result;
 import com.ecosystem.guard.domain.Result.Status;
-import com.ecosystem.guard.domain.Serializer;
 import com.ecosystem.guard.domain.config.HostConfig;
 import com.ecosystem.guard.domain.service.registry.AuthZRequest;
 import com.ecosystem.guard.domain.service.registry.AuthZResponse;

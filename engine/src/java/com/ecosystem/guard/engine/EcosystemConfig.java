@@ -3,9 +3,8 @@ package com.ecosystem.guard.engine;
 import java.io.File;
 import java.io.FileReader;
 
-import com.ecosystem.guard.domain.Deserializer;
+import com.ecosystem.guard.common.Deserializer;
 import com.ecosystem.guard.domain.config.HostConfig;
-import com.ecosystem.guard.engine.SystemProperties;
 
 public class EcosystemConfig {
 	private static long hostConfigDate = 0;

@@ -37,14 +37,13 @@ public class RecordVideoService extends AuthorizedRawPostService<RecordVideoRequ
 			throws Exception {
 		// Cosas que deben venir por petición
 		int videoLength = 10;
-		VideoConfig videoConfig = new HackberryH264VideoConfig();
-		String contentType = "video/mp4";
+		VideoConfig videoConfig = null;
 		// Código fijo
-		File videoFile = new File(Hex.encodeHexString(RandomGenerator.generateRandom(16)) + ".mp4");
+		File videoFile = new File(Hex.encodeHexString(RandomGenerator.generateRandom(16)) + videoConfig.getContainer().getExtension());
 		try {
 			VideoManager videoManager = CameraControllerFactory.getCameraController().createVideoManager();
 			videoManager.record(videoConfig, videoLength, videoFile);
-			response.setContentType(contentType);
+			response.setContentType(videoConfig.getContainer().getContentType());
 			StreamingUtils.consumeFileStream(videoFile, response.getOutputStream());
 		} finally {
 			if (videoFile.exists()) {

@@ -15,9 +15,9 @@ import java.sql.Date;
 
 import javax.servlet.annotation.WebServlet;
 
+import com.ecosystem.guard.common.Serializer;
 import com.ecosystem.guard.domain.Result;
 import com.ecosystem.guard.domain.Result.Status;
-import com.ecosystem.guard.domain.Serializer;
 import com.ecosystem.guard.domain.exceptions.ServiceException;
 import com.ecosystem.guard.domain.service.registry.UpdateIpRequest;
 import com.ecosystem.guard.domain.service.registry.UpdateIpResponse;

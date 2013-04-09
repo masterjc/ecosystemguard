@@ -16,10 +16,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.math.BigInteger;
 
+import com.ecosystem.guard.common.Deserializer;
 import com.ecosystem.guard.common.RandomGenerator;
+import com.ecosystem.guard.common.Serializer;
 import com.ecosystem.guard.domain.Credentials;
-import com.ecosystem.guard.domain.Deserializer;
-import com.ecosystem.guard.domain.Serializer;
 import com.ecosystem.guard.domain.UsernamePassword;
 import com.ecosystem.guard.domain.config.HostConfig;
 

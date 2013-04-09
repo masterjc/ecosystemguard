@@ -19,9 +19,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import com.ecosystem.guard.domain.Deserializer;
-import com.ecosystem.guard.domain.Serializer;
-
 /**
  * 
  * @author juancarlos.fernandez
