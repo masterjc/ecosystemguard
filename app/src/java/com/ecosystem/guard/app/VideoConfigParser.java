@@ -3,6 +3,9 @@ package com.ecosystem.guard.app;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ecosystem.guard.camera.Codec;
+import com.ecosystem.guard.camera.Container;
+import com.ecosystem.guard.camera.Resolution;
 import com.ecosystem.guard.camera.VideoConfig;
 import com.ecosystem.guard.camera.impl.H263Resolution;
 import com.ecosystem.guard.camera.impl.H264Resolution;
@@ -16,20 +19,44 @@ import com.ecosystem.guard.domain.service.host.VideoConfiguration;
  * @version $Revision$
  */
 public class VideoConfigParser {
-	private Class<?> codecClass;
-	private Class<?> containerClass;
-	private List<Class<?>> resolutionClasses;
-	
-	public VideoConfigParser() {
-		resolutionClasses = new ArrayList<Class<?>>();
-		this.resolutionClasses.add(H263Resolution.class);
-		this.resolutionClasses.add(H264Resolution.class);
-		this.codecClass = VideoCodec.class;
-		this.containerClass = VideoContainer.class;
+
+	public VideoConfig parseVideoConfig(VideoConfiguration config) throws Exception {
+		Container container = parseContainer(config);
+		Codec codec = parseCodec(config);
+		Resolution res = parseResolution(config, codec);
+		VideoConfig videoConfig = new VideoConfig();
+		videoConfig.setContainer(container);
+		videoConfig.setVideoCodec(codec);
+		videoConfig.setOptionalOptions(codec.getCodecOptions());
+		videoConfig.setResolution(res);
+		return videoConfig;
 	}
-	
-	public VideoConfig parseVideoConfig(VideoConfiguration videoConfig) {
-		
+
+	private Container parseContainer(VideoConfiguration videoConfig) throws Exception {
+		if( videoConfig.getContainer() == null)
+			throw new Exception("Container configuration is not present");
+		String requested = videoConfig.getContainer();
+		Container container = VideoContainer.valueOf(requested);
+		if( container == null )
+			throw new Exception("Container '" + requested + "' is not supported" );
+		return container;
+	}
+
+	private Codec parseCodec(VideoConfiguration videoConfig) throws Exception {
+		if( videoConfig.getCodec() == null)
+			throw new Exception("Codec configuration is not present");
+		String requested = videoConfig.getCodec();
+		Codec codec = VideoCodec.valueOf(requested);
+		if( codec == null )
+			throw new Exception("Codec '" + requested + "' is not supported" );
+		return codec;
+	}
+
+	private Resolution parseResolution(VideoConfiguration videoConfig, Codec usedCodec) throws Exception {
+		if( videoConfig.getResolution() == null)
+			throw new Exception("Resolution configuration is not present");
+			
 		return null;
 	}
+
 }

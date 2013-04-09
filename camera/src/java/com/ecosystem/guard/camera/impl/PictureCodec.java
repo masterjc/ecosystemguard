@@ -9,16 +9,23 @@ import com.ecosystem.guard.camera.Codec;
  */
 public enum PictureCodec implements Codec {
 
-	JPEG("jpeg");
+	JPEG("jpeg", null);
 
 	private String codec;
+	private String options;
 
-	private PictureCodec(String codecStr) {
+	private PictureCodec(String codecStr, String options) {
 		this.codec = codecStr;
 	}
 
+	@Override
 	public String getCodec() {
 		return codec;
+	}
+	
+	@Override
+	public String getCodecOptions() {
+		return options;
 	}
 
 }
