@@ -1,17 +1,11 @@
-/*
- * Copyright (c) 1999-2013 Safelayer Secure Communications, S.A.
- *
- * All rights reserved. No part of this source code may be reproduced,
- * stored in a retrieval system, or transmitted, in any form or by any
- * means, electronic, mechanical, photocopying, recording or otherwise,
- * except as in the end-user license agreement, without the prior
- * permission of the copyright owner.
- */
-
 package com.ecosystem.guard.app.listener;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+
+import com.ecosystem.guard.engine.EcosystemConfig;
+import com.ecosystem.guard.engine.TimerService;
+import com.ecosystem.guard.logging.EcosystemGuardLogger;
 
 /**
  * 
@@ -20,21 +14,32 @@ import javax.servlet.ServletContextListener;
  */
 public class ContextListener implements ServletContextListener {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)
 	 */
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
-		System.out.println("ContextListener::contextDestroyed()");
-		
+		TimerService.getInstance().stopTimers();
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
 	 */
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
-		System.out.println("ContextListener::contextInitialized()");	
+		try {
+			TimerService.getInstance().registerTimer(new PublicIpUpdater(),
+					EcosystemConfig.getAppConfig().getUpdatePublicIpThreshold());
+			TimerService.getInstance().startTimers();
+		}
+		catch (Exception e) {
+			EcosystemGuardLogger.logError(e, ContextListener.class);
+		}
 	}
 
 }

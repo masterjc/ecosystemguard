@@ -24,7 +24,7 @@ public class PasswordCipherTest {
 
 	@BeforeClass
 	public static void setup() {
-		System.setProperty(SystemProperties.CONFIG_DIR_PROPERTY, ".");
+		System.setProperty("com.ecosystem.guard.config.directory", ".");
 	}
 
 	@Test

@@ -10,6 +10,7 @@
         <path refid="ecosystemguard-camera.path" />
 		<path refid="ecosystemguard-domain.path" />
 		<path refid="ecosystemguard-engine.path" />
+		<path refid="ecosystemguard-logging.path" />
 		<path refid="commons-codec.path"/>
     </path>
 	

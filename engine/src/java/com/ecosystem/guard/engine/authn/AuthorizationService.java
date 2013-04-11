@@ -30,7 +30,7 @@ import com.ecosystem.guard.domain.config.HostConfig;
 import com.ecosystem.guard.domain.service.registry.AuthZRequest;
 import com.ecosystem.guard.domain.service.registry.AuthZResponse;
 import com.ecosystem.guard.engine.EcosystemConfig;
-import com.ecosystem.guard.engine.SystemProperties;
+import com.ecosystem.guard.engine.RegistryServices;
 
 /**
  * Servicio de autorizaci�n de EcosystemGuard. Es un cliente HTTP del servicio
@@ -66,9 +66,8 @@ public class AuthorizationService {
 		request.setCredentials(credentials);
 		request.setResourceId(resourceId);
 		request.setHostId(hostConfig.getId());
-		String authZUrl = SystemProperties.getAuthZServiceUrl();
 		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost(authZUrl);
+		HttpPost httpPost = new HttpPost(RegistryServices.getAuthZUrl());
 		httpPost.setEntity(new StringEntity(Serializer.serialize(request, AuthZRequest.class)));
 		HttpResponse httpResponse = httpclient.execute(httpPost);
 		String response = EntityUtils.toString(httpResponse.getEntity());

@@ -27,7 +27,7 @@ import com.ecosystem.guard.domain.Credentials;
 import com.ecosystem.guard.domain.Result;
 import com.ecosystem.guard.domain.service.registry.AuthNRequest;
 import com.ecosystem.guard.domain.service.registry.AuthNResponse;
-import com.ecosystem.guard.engine.SystemProperties;
+import com.ecosystem.guard.engine.RegistryServices;
 
 /**
  * Servicio de autenticaci�n de EcosystemGuard. Es un cliente HTTP del servicio AuthNRequest.
@@ -53,9 +53,8 @@ public class AuthenticationService {
 
 		AuthNRequest request = new AuthNRequest();
 		request.setCredentials(credentials);
-		String authNUrl = SystemProperties.getAuthNServiceUrl();
 		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost(authNUrl);
+		HttpPost httpPost = new HttpPost(RegistryServices.getAuthNUrl());
 		httpPost.setEntity(new StringEntity(Serializer.serialize(request, AuthNRequest.class)));
 		HttpResponse httpResponse = httpclient.execute(httpPost);
 		String response = EntityUtils.toString(httpResponse.getEntity());

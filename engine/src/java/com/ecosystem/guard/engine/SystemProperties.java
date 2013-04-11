@@ -13,17 +13,17 @@ package com.ecosystem.guard.engine;
 import java.io.File;
 
 /**
- * Propiedades del sistema EcosystemGuard local
+ * Propiedades del sistema EcosystemGuard local que no está en ficheros. Es la configuración
+ * estática en código o en tiempo de carga de las aplicaciones.
  * 
  * @author juancarlos.fernandez
  * @version $Revision$
  */
 public final class SystemProperties {
 	private static final String ECOSYSTEM_GUARD_VERSION = "0.1";
-	public static final String CONFIG_DIR_PROPERTY = "com.ecosystem.guard.config.directory";
-	public static final String AUTHN_SERVICE_URL = "com.ecosystem.guard.config.authn.url";
-	public static final String AUTHZ_SERVICE_URL = "com.ecosystem.guard.config.authz.url";
-	public static final String HOST_CONFIG_FILENAME = "host.xml";
+	private static final String CONFIG_DIR_PROPERTY = "com.ecosystem.guard.config.directory";
+	private static final String HOST_CONFIG_FILENAME = "host.xml";
+	private static final String APP_CONFIG_FILENAME = "app.xml";
 
 	/**
 	 * Devuelve el directory donde se encuentra la configuración del sistema EcosystemGuard. Si no
@@ -44,28 +44,13 @@ public final class SystemProperties {
 		return directory;
 	}
 
-	/**
-	 * Devuelve la URL del servicio de autenticaci�n de usuarios. Si no existe lanza excepci�n.
-	 * 
-	 * @return
-	 * @throws Exception
-	 */
-	public static String getAuthNServiceUrl() throws Exception {
-		String url = System.getProperty(AUTHN_SERVICE_URL);
-		if (url == null)
-			throw new Exception("EcosystemGuard AuthN Service URL property is not configured");
-		return url;
+	public static String getHostConfigFilename() {
+		return HOST_CONFIG_FILENAME;
+	}
 
+	public static String getAppConfigFilename() {
+		return APP_CONFIG_FILENAME;
 	}
-	
-	public static String getAuthZServiceUrl() throws Exception {
-		String url = System.getProperty(AUTHZ_SERVICE_URL);
-		if (url == null)
-			throw new Exception("EcosystemGuard AuthZ Service URL property is not configured");
-		return url;
-	}
-	
-	
 
 	/**
 	 * Devuelve la versión software de Ecosystem Guard
