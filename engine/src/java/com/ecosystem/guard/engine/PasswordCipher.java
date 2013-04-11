@@ -18,6 +18,7 @@ import org.apache.commons.codec.binary.Base64;
 
 import com.ecosystem.guard.common.FileUtils;
 import com.ecosystem.guard.common.TrippleDesCipher;
+import com.ecosystem.guard.engine.config.SystemProperties;
 
 /**
  * 

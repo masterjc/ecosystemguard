@@ -7,8 +7,8 @@ import com.ecosystem.guard.domain.Result.Status;
 import com.ecosystem.guard.domain.config.HostConfig;
 import com.ecosystem.guard.domain.service.registry.UpdateIpRequest;
 import com.ecosystem.guard.domain.service.registry.UpdateIpResponse;
-import com.ecosystem.guard.engine.EcosystemConfig;
-import com.ecosystem.guard.engine.RegistryServices;
+import com.ecosystem.guard.engine.config.EcosystemConfig;
+import com.ecosystem.guard.engine.config.RegistryServices;
 
 /**
  * Actualiza la IP pública del host en el servicio EcosystemGuard registry

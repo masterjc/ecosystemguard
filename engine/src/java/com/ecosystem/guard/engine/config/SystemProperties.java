@@ -8,7 +8,7 @@
  * permission of the copyright owner.
  */
 
-package com.ecosystem.guard.engine;
+package com.ecosystem.guard.engine.config;
 
 import java.io.File;
 

@@ -3,8 +3,8 @@ package com.ecosystem.guard.app.listener;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import com.ecosystem.guard.engine.EcosystemConfig;
 import com.ecosystem.guard.engine.TimerService;
+import com.ecosystem.guard.engine.config.EcosystemConfig;
 import com.ecosystem.guard.logging.EcosystemGuardLogger;
 
 /**

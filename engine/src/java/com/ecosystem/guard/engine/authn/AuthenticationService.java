@@ -27,7 +27,7 @@ import com.ecosystem.guard.domain.Credentials;
 import com.ecosystem.guard.domain.Result;
 import com.ecosystem.guard.domain.service.registry.AuthNRequest;
 import com.ecosystem.guard.domain.service.registry.AuthNResponse;
-import com.ecosystem.guard.engine.RegistryServices;
+import com.ecosystem.guard.engine.config.RegistryServices;
 
 /**
  * Servicio de autenticaci�n de EcosystemGuard. Es un cliente HTTP del servicio AuthNRequest.

@@ -1,6 +1,6 @@
-package com.ecosystem.guard.engine;
+package com.ecosystem.guard.engine.config;
 
-import com.ecosystem.guard.engine.EcosystemConfig;
+import com.ecosystem.guard.engine.config.EcosystemConfig;
 
 /**
  * 
