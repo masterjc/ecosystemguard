@@ -8,9 +8,8 @@
  * permission of the copyright owner.
  */
 
-package com.ecosystem.guard.app;
+package com.ecosystem.guard.camera;
 
-import com.ecosystem.guard.camera.CameraController;
 import com.ecosystem.guard.camera.impl.FFMpegCameraController;
 
 /**

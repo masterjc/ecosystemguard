@@ -9,7 +9,7 @@ package com.ecosystem.guard.camera;
 public class PictureConfig {
 
 	private Resolution resolution;
-	private Codec codec;
+	private Container container;
 	
 	public Resolution getResolution() {
 		return resolution;
@@ -19,11 +19,11 @@ public class PictureConfig {
 		this.resolution = resolution;
 	}
 	
-	public Codec getCodec() {
-		return codec;
+	public Container getContainer() {
+		return container;
 	}
 	
-	public void setCodec(Codec codec) {
-		this.codec = codec;
+	public void setContainer(Container container) {
+		this.container = container;
 	}	
 }

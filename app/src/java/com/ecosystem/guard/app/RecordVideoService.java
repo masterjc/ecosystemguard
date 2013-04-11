@@ -6,13 +6,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Hex;
 
+import com.ecosystem.guard.camera.CameraControllerFactory;
 import com.ecosystem.guard.camera.VideoConfig;
 import com.ecosystem.guard.camera.VideoManager;
 import com.ecosystem.guard.common.RandomGenerator;
 import com.ecosystem.guard.common.StreamingUtils;
 import com.ecosystem.guard.domain.Result;
 import com.ecosystem.guard.domain.exceptions.ServiceException;
-import com.ecosystem.guard.domain.service.host.RecordVideoRequest;
+import com.ecosystem.guard.domain.service.app.RecordVideoRequest;
 import com.ecosystem.guard.engine.authn.AuthorizationContext;
 import com.ecosystem.guard.engine.servlet.AuthorizedRawPostService;
 
@@ -22,7 +23,6 @@ import com.ecosystem.guard.engine.servlet.AuthorizedRawPostService;
  * @version $Revision$
  */
 public class RecordVideoService extends AuthorizedRawPostService<RecordVideoRequest> {
-	private static VideoConfigParser videoConfigParser = new VideoConfigParser();
 	private static final long serialVersionUID = 1947515630361657851L;
 
 	/*
@@ -38,6 +38,7 @@ public class RecordVideoService extends AuthorizedRawPostService<RecordVideoRequ
 		if (request.getLength() == null || request.getVideoConfiguration() == null)
 			throw new ServiceException(new Result(Result.Status.CLIENT_ERROR, "Missing video config information"));
 		VideoManager videoManager = CameraControllerFactory.acquireCameraController().createVideoManager();
+		VideoConfigParser videoConfigParser = new VideoConfigParser();
 		VideoConfig videoConfig = videoConfigParser.parseVideoConfig(request.getVideoConfiguration());
 		File videoFile = new File(Hex.encodeHexString(RandomGenerator.generateRandom(8))
 				+ videoConfig.getContainer().getExtension());

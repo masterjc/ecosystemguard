@@ -8,7 +8,7 @@
  * permission of the copyright owner.
  */
 
-package com.ecosystem.guard.domain.service.host;
+package com.ecosystem.guard.domain.service.app;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

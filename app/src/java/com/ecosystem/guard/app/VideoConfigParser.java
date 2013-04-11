@@ -6,7 +6,7 @@ import com.ecosystem.guard.camera.Resolution;
 import com.ecosystem.guard.camera.VideoConfig;
 import com.ecosystem.guard.camera.impl.VideoCodec;
 import com.ecosystem.guard.camera.impl.VideoContainer;
-import com.ecosystem.guard.domain.service.host.VideoConfiguration;
+import com.ecosystem.guard.domain.service.app.VideoConfiguration;
 
 /**
  * 

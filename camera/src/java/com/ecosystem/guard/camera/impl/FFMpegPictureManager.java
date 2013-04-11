@@ -13,7 +13,7 @@ import com.ecosystem.guard.common.FileUtils;
  * @version $Revision$
  */
 public class FFMpegPictureManager implements PictureManager {
-	private static final int TAKE_PHOTO_TIMEOUT = 20;
+	private static final int TAKE_PHOTO_TIMEOUT = 15;
 	private File cameraDevice;
 
 	public FFMpegPictureManager(File linuxCameraDevice) throws Exception {
@@ -31,14 +31,12 @@ public class FFMpegPictureManager implements PictureManager {
 	 */
 	@Override
 	public void takePicture(PictureConfig pictureConfig, File pictureFile) throws Exception {
-		if (pictureConfig.getCodec() != PictureCodec.JPEG)
-			throw new Exception("Only jpeg webcam snapshot is supported");
 		CommandLine commandLine = new CommandLine(FFMpegTraits.FFMPEG_EXEC);
 		commandLine.addArgument("-f", FFMpegTraits.CAPTURE_DRIVER);
 		commandLine.addArgument("-i", cameraDevice.getAbsolutePath());
 		commandLine.addArgument("-s", pictureConfig.getResolution().getResolution());
+		commandLine.setExecTimeoutSeconds(TAKE_PHOTO_TIMEOUT);
 		Process ffmpegProcess = commandLine.execute();
-		ffmpegProcess.wait(TAKE_PHOTO_TIMEOUT);
 		FFMpegTraits.checkAndThrowFFMpegError(ffmpegProcess.getInputStream(), ffmpegProcess.getErrorStream());
 	}
 
