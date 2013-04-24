@@ -81,6 +81,13 @@
 	<property name="ecosystemguard-hostmanager.lib" value="${ecosystemguard-hostmanager.dir}/${lib.dir}/${lib.dir}/${ecosystemguard-hostmanager.name}"/>
 	<property name="ecosystemguard-hostmanager.zip" value="${ecosystemguard-hostmanager.dir}/${lib.dir}/${ecosystemguard-hostmanager.zipname}"/>
 	
+	<!-- PC CMD Client -->
+	<property name="ecosystemguard-pc-client.dir" value="${env.PROJECT_DIR}/client/pc"/>
+	<property name="ecosystemguard-pc-client.name" value="ecosystemguard-pc-client.jar"/>
+	<property name="ecosystemguard-pc-client.zipname" value="ecosystemguard-pc-client.zip"/>
+	<property name="ecosystemguard-pc-client.lib" value="${ecosystemguard-pc-client.dir}/${lib.dir}/${lib.dir}/${ecosystemguard-pc-client.name}"/>
+	<property name="ecosystemguard-pc-client.zip" value="${ecosystemguard-pc-client.dir}/${lib.dir}/${ecosystemguard-pc-client.zipname}"/>
+	
 	<!-- PKI files -->
 	<property name="ecosystemguard-pki.dir" value="${env.PROJECT_DIR}/config/pki"/>
 	<property name="ecosystemguard-keystore.name" value="ecosystemguard.keystore"/>

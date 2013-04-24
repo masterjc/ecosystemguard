@@ -20,6 +20,7 @@
 		<ant dir="${ecosystemguard-registry.dir}" target="clean-all" />
 		<ant dir="${ecosystemguard-hostmanager.dir}" target="clean-all" />
 		<ant dir="${ecosystemguard-app.dir}" target="clean-all" />
+		<ant dir="${ecosystemguard-pc-client.dir}" target="clean-all" />
 	</target>
 	
 	<target name="compile">
@@ -32,6 +33,7 @@
 		<ant dir="${ecosystemguard-registry.dir}" target="all" />
 		<ant dir="${ecosystemguard-hostmanager.dir}" target="all" />
 		<ant dir="${ecosystemguard-app.dir}" target="all" />
+		<ant dir="${ecosystemguard-pc-client.dir}" target="all" />
 	</target>
 	
 	<target name="mpi">
@@ -40,6 +42,7 @@
 			 <fileset file="${ecosystemguard-registry.lib}"/>
 			 <fileset file="${ecosystemguard-app.lib}"/>
 			 <fileset file="${ecosystemguard-hostmanager.zip}"/>
+			 <fileset file="${ecosystemguard-pc-client.zip}"/>
 		</copy>
 	</target>
 	

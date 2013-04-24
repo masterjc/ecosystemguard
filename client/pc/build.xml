@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<project name="ecosystemguard-pc-client" default="all">
+	<property environment="env" />
+
+	<include file="${env.PROJECT_DIR}/build-tools/project-definitions.xml"/>
+	
+	<property name="executable.name" value="client"/>
+	<property name="executable.class" value="com.ecosystem.guard.pc.Client"/>
+	
+	<path id="classpath">
+		<path refid="ecosystemguard-domain.path" />
+		<path refid="ecosystemguard-common.path" />
+		<path refid="httpcomponents.path" />
+    	</path>
+	
+	<target name="all" depends="clean, compile, jar, dependencies, executable"/>
+	
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+		<delete dir="${lib.dir}"/>
+	</target>
+	
+	<target name="clean-all" depends="clean">
+		<delete dir="${bin.dir}"/>
+	</target>
+
+	<target name="compile">
+	    <mkdir dir="${classes.dir}"/>
+	    <javac srcdir="src" destdir="${classes.dir}" debug="true" includeantruntime="false" classpathref="classpath"/>
+	</target>
+	
+	<target name="jar">
+		<mkdir dir="${lib.dir}/${lib.dir}"/>
+		<jar destfile="${lib.dir}/${lib.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+			<manifest>
+				<attribute name="Main-Class" value="${executable.class}"/>
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="dependencies">
+		<copy todir="${lib.dir}/${lib.dir}">
+			<fileset file="${ecosystemguard-domain.lib}"/>
+			<fileset file="${ecosystemguard-common.lib}"/>
+			<fileset file="${httpcomponents_dep_codec.lib}"/>
+			<fileset file="${httpcomponents_dep_logging.lib}"/>
+			<fileset file="${httpcomponents_core.lib}"/>
+			<fileset file="${httpcomponents_client.lib}"/>
+		</copy>
+	</target>
+	
+	<target name="executable">
+		<echo file="${lib.dir}/${executable.name}"><![CDATA[java -classpath ${lib.dir}/${ecosystemguard-pc-client.name}${env.JAVA_SEPARATOR}${lib.dir}/${ecosystemguard-common.name}${env.JAVA_SEPARATOR}${lib.dir}/${ecosystemguard-domain.name}${env.JAVA_SEPARATOR}${lib.dir}/${httpcomponents_dep_codec.name}${env.JAVA_SEPARATOR}${lib.dir}/${httpcomponents_dep_logging.name}${env.JAVA_SEPARATOR}${lib.dir}/${httpcomponents_core.name}${env.JAVA_SEPARATOR}${lib.dir}/${httpcomponents_client.name} ${executable.class} %1]]></echo>
+		<zip basedir="${lib.dir}" destfile="${lib.dir}/${ant.project.name}.zip"></zip>
+	</target>
+</project>
