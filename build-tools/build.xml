@@ -15,6 +15,7 @@
 		<ant dir="${ecosystemguard-camera.dir}" target="clean-all" />
 		<ant dir="${ecosystemguard-domain.dir}" target="clean-all" />
 		<ant dir="${ecosystemguard-logging.dir}" target="clean-all" />
+		<ant dir="${ecosystemguard-phidgets.dir}" target="clean-all" />
 		<ant dir="${ecosystemguard-persistence.dir}" target="clean-all" />
 		<ant dir="${ecosystemguard-engine.dir}" target="clean-all" />
 		<ant dir="${ecosystemguard-registry.dir}" target="clean-all" />
@@ -28,6 +29,7 @@
 		<ant dir="${ecosystemguard-camera.dir}" target="all" />
 		<ant dir="${ecosystemguard-domain.dir}" target="all" />
 		<ant dir="${ecosystemguard-logging.dir}" target="all" />
+		<ant dir="${ecosystemguard-phidgets.dir}" target="all" />
 		<ant dir="${ecosystemguard-persistence.dir}" target="all" />
 		<ant dir="${ecosystemguard-engine.dir}" target="all" />
 		<ant dir="${ecosystemguard-registry.dir}" target="all" />

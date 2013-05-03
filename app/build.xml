@@ -11,6 +11,7 @@
 		<path refid="ecosystemguard-domain.path" />
 		<path refid="ecosystemguard-engine.path" />
 		<path refid="ecosystemguard-logging.path" />
+		<path refid="ecosystemguard-phidgets.path" />
 		<path refid="commons-codec.path"/>
     </path>
 	
@@ -39,6 +40,7 @@
 			<lib file="${ecosystemguard-common.lib}"/>
 			<lib file="${ecosystemguard-camera.lib}"/>
 			<lib file="${ecosystemguard-logging.lib}"/>
+			<lib file="${ecosystemguard-phidgets..path}"/>
 			<lib file="${commons-codec.lib}"/>
 			<lib file="${httpcomponents_dep_logging.lib}"/>
 			<lib file="${httpcomponents_core.lib}"/>

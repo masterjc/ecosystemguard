@@ -5,6 +5,8 @@
 	<include file="${env.PROJECT_DIR}/build-tools/project-definitions.xml"/>
 	
 	<path id="classpath">
+		<path refid="phidgets.path" />
+		<path refid="ecosystemguard-logging.path" />
     </path>
 	
 	<target name="all" depends="clean, compile, jar"/>

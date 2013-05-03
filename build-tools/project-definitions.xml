@@ -48,6 +48,14 @@
 		<pathelement location="${ecosystemguard-logging.lib}" />
 	</path>
 	
+	<!-- Phidgets -->
+	<property name="ecosystemguard-phidgets.dir" value="${env.PROJECT_DIR}/phidgets"/>
+	<property name="ecosystemguard-phidgets.name" value="ecosystemguard-phidgets.jar"/>
+	<property name="ecosystemguard-phidgets.lib" value="${ecosystemguard-phidgets.dir}/${lib.dir}/${ecosystemguard-phidgets.name}"/>
+	<path id="ecosystemguard-phidgets.path">
+		<pathelement location="${ecosystemguard-phidgets.lib}" />
+	</path>
+	
 	<!-- Persistence -->
 	<property name="ecosystemguard-persistence.dir" value="${env.PROJECT_DIR}/persistence"/>
 	<property name="ecosystemguard-persistence.name" value="ecosystemguard-persistence.jar"/>
@@ -111,6 +119,14 @@
 	<property name="servlet.lib" value="${servlet.dir}/${servlet.name}"/>
 	<path id="servlet.path">
 		<pathelement location="${servlet.lib}" />
+	</path>
+	
+	<!-- Phidgets Sensors API -->
+	<property name="phidgets.dir" value="${env.PROJECT_DIR}/thirdparty/phidgets"/>
+	<property name="phidgets.name" value="phidget21.jar"/>
+	<property name="phidgets.lib" value="${phidgets.dir}/${phidgets.name}"/>
+	<path id="phidgets.path">
+		<pathelement location="${phidgets.lib}" />
 	</path>
 	
 	<!-- Apache Commons Codec -->

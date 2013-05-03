@@ -5,6 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="var" path="PROJECT_DIR/logging/lib/ecosystemguard-logging.jar"/>
-	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/phidget/phidget21.jar"/>
+	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/phidgets/phidget21.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
