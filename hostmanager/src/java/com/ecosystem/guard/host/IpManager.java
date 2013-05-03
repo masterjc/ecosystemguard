@@ -15,6 +15,8 @@ import com.ecosystem.guard.domain.Credentials;
 import com.ecosystem.guard.domain.Result.Status;
 import com.ecosystem.guard.domain.service.registry.GetIpRequest;
 import com.ecosystem.guard.domain.service.registry.GetIpResponse;
+import com.ecosystem.guard.phidgets.SensorManager;
+import com.ecosystem.guard.phidgets.sensors.LcdScreen;
 
 /**
  * 
@@ -37,6 +39,7 @@ public class IpManager {
 		GetIpResponse response = XmlServiceRequestor.sendRequest(request, GetIpRequest.class, GetIpResponse.class,
 				ManagerConstants.GET_IP_SERVICE);
 		printIpInformation(response);
+		showLcdIpInformation(response);
 	}
 
 	public void printIpInformation(GetIpResponse response) {
@@ -48,5 +51,14 @@ public class IpManager {
 		System.out.println("Public IP Address: " + response.getIpInformation().getPublicIp());
 		System.out.println("Last public IP Address update: " + response.getIpInformation().getLastChange());
 		ManagerOutput.printSeparatorLine();
+	}
+	
+	public void showLcdIpInformation(GetIpResponse response) throws Exception {
+		LcdScreen lcd = SensorManager.getInstance().getSensor(LcdScreen.class);
+		if (response.getResult().getStatus() != Status.OK) {
+			lcd.showIntermitentMessage("ERROR:", response.getResult().getStatus().getStatusCode(), 5);
+			return;
+		}
+		lcd.showMessage("Public IP:", response.getIpInformation().getPublicIp(), 5000);
 	}
 }

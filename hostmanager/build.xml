@@ -10,6 +10,7 @@
 	<path id="classpath">
 		<path refid="ecosystemguard-domain.path" />
 		<path refid="ecosystemguard-common.path" />
+		<path refid="ecosystemguard-phidgets.path" />
 		<path refid="httpcomponents.path" />
     	</path>
 	
@@ -42,10 +43,12 @@
 		<copy todir="${lib.dir}/${lib.dir}">
 			<fileset file="${ecosystemguard-domain.lib}"/>
 			<fileset file="${ecosystemguard-common.lib}"/>
+			<fileset file="${ecosystemguard-phidgets.lib}" />
 			<fileset file="${httpcomponents_dep_codec.lib}"/>
 			<fileset file="${httpcomponents_dep_logging.lib}"/>
 			<fileset file="${httpcomponents_core.lib}"/>
 			<fileset file="${httpcomponents_client.lib}"/>
+			<fileset file="${phidgets.lib}"/>
 		</copy>
 	</target>
 	
