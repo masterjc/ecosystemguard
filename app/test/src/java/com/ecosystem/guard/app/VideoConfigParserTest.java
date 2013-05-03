@@ -4,6 +4,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import com.ecosystem.guard.app.camera.VideoConfigParser;
 import com.ecosystem.guard.camera.VideoConfig;
 import com.ecosystem.guard.camera.impl.H263Resolution;
 import com.ecosystem.guard.camera.impl.H264Resolution;

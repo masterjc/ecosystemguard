@@ -4,6 +4,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import com.ecosystem.guard.app.camera.PictureConfigParser;
 import com.ecosystem.guard.camera.PictureConfig;
 import com.ecosystem.guard.camera.impl.PictureContainer;
 import com.ecosystem.guard.camera.impl.PictureResolution;
