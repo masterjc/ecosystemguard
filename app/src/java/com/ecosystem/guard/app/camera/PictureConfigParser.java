@@ -1,4 +1,4 @@
-package com.ecosystem.guard.app;
+package com.ecosystem.guard.app.camera;
 
 import com.ecosystem.guard.camera.Container;
 import com.ecosystem.guard.camera.PictureConfig;
