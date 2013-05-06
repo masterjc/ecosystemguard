@@ -24,6 +24,7 @@ public final class SystemProperties {
 	private static final String CONFIG_DIR_PROPERTY = "com.ecosystem.guard.config.directory";
 	private static final String HOST_CONFIG_FILENAME = "host.xml";
 	private static final String APP_CONFIG_FILENAME = "app.xml";
+	private static final String REGISTRY_CONFIG_FILENAME = "registry.xml";
 
 	/**
 	 * Devuelve el directory donde se encuentra la configuración del sistema EcosystemGuard. Si no
@@ -50,6 +51,10 @@ public final class SystemProperties {
 
 	public static String getAppConfigFilename() {
 		return APP_CONFIG_FILENAME;
+	}
+	
+	public static String getRegistryConfigFilename() {
+		return REGISTRY_CONFIG_FILENAME;
 	}
 
 	/**

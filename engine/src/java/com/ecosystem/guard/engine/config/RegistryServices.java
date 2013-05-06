@@ -26,7 +26,7 @@ public class RegistryServices {
 	}
 
 	private static String getServiceUrl(String service) throws Exception {
-		String baseUrl = EcosystemConfig.getAppConfig().getRegistryUrl();
+		String baseUrl = EcosystemConfig.getRegistryConfig().getRegistryUrl();
 		if (baseUrl.endsWith("/")) {
 			return baseUrl + service;
 		}

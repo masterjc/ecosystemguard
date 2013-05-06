@@ -9,22 +9,19 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version $Revision$
  */
 @XmlRootElement
-public class AppConfig {
-	private Integer updatePublicIpThreshold;
+public class RegistryConfig {
 	private String registryUrl;
 	
-	public Integer getUpdatePublicIpThreshold() {
-		return updatePublicIpThreshold;
+	public String getRegistryUrl() {
+		return registryUrl;
 	}
 	
 	@XmlElement
-	public void setUpdatePublicIpThreshold(int updatePublicIpThreshold) {
-		this.updatePublicIpThreshold = updatePublicIpThreshold;
+	public void setRegistryUrl(String registryUrl) {
+		this.registryUrl = registryUrl;
 	}
 	
 	public void check() throws Exception {
-		if( updatePublicIpThreshold == null )
-			throw new Exception("updatePublicIpThreshold config property is not set");
 		if( registryUrl == null )
 			throw new Exception("registryUrl config property is not set");
 	}
