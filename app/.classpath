@@ -12,5 +12,7 @@
 	<classpathentry kind="var" path="PROJECT_DIR/camera/lib/ecosystemguard-camera.jar"/>
 	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/commons-codec/commons-codec-1.7/commons-codec-1.7.jar"/>
 	<classpathentry kind="var" path="PROJECT_DIR/logging/lib/ecosystemguard-logging.jar"/>
+	<classpathentry kind="var" path="PROJECT_DIR/phidgets/lib/ecosystemguard-phidgets.jar"/>
+	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/phidgets/phidget21.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

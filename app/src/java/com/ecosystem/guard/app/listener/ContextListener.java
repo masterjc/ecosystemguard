@@ -6,6 +6,8 @@ import javax.servlet.ServletContextListener;
 import com.ecosystem.guard.engine.TimerService;
 import com.ecosystem.guard.engine.config.EcosystemConfig;
 import com.ecosystem.guard.logging.EcosystemGuardLogger;
+import com.ecosystem.guard.phidgets.SensorManager;
+import com.ecosystem.guard.phidgets.sensors.LcdScreen;
 
 /**
  * 
@@ -21,7 +23,14 @@ public class ContextListener implements ServletContextListener {
 	 */
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
-		TimerService.getInstance().stopTimers();
+		try {
+			TimerService.getInstance().stopTimers();
+			LcdScreen lcd = SensorManager.getInstance().getSensor(LcdScreen.class);
+			lcd.showAsynchronousMessage("Shutting down", "    EcosystemGuard", 5000);
+		}
+		catch (Exception e) {
+			EcosystemGuardLogger.logError(e, ContextListener.class);
+		}
 	}
 
 	/*
@@ -33,6 +42,8 @@ public class ContextListener implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 		try {
+			LcdScreen lcd = SensorManager.getInstance().getSensor(LcdScreen.class);
+			lcd.showAsynchronousMessage("Starting up", "    EcosystemGuard", 5000);
 			TimerService.getInstance().registerTimer(new PublicIpUpdater(),
 					EcosystemConfig.getAppConfig().getUpdatePublicIpThreshold());
 			TimerService.getInstance().startTimers();

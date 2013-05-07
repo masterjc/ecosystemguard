@@ -38,7 +38,7 @@ public class AccountManager {
 	}
 
 	public void createAccount() throws Exception {
-		System.out.print("Enter e-mail account (main username): ");
+		System.out.print("Enter account username: ");
 		String username = scanner.nextLine();
 		System.out.print("Enter new password: ");
 		char[] password = CmdUtils.readPassword();
@@ -48,7 +48,7 @@ public class AccountManager {
 			throw new Exception("ERROR: Passwords do not match.");
 		System.out.print("Telephone number: ");
 		String telephone = scanner.nextLine();
-		System.out.print("Recover e-mail account: ");
+		System.out.print("User e-mail account: ");
 		String recoverMail = scanner.nextLine();
 		AccountInformation info = new AccountInformation();
 		info.setTelephoneNumber(telephone);
@@ -63,7 +63,7 @@ public class AccountManager {
 	}
 
 	public void deleteAccount() throws Exception {
-		System.out.print("Enter e-mail account (main username): ");
+		System.out.print("Enter account username: ");
 		String username = scanner.nextLine();
 		System.out.print("Enter password: ");
 		char[] password = CmdUtils.readPassword();
@@ -89,7 +89,7 @@ public class AccountManager {
 	}
 
 	public void changePassword() throws Exception {
-		System.out.print("Enter e-mail account (main username): ");
+		System.out.print("Enter account username: ");
 		String username = scanner.nextLine();
 		System.out.print("Enter password: ");
 		char[] password = CmdUtils.readPassword();

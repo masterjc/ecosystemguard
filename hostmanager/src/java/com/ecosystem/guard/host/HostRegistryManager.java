@@ -44,7 +44,7 @@ public class HostRegistryManager {
 		String summary = scanner.nextLine();
 		System.out.print("Type your EcosystemGuard host purposes description? ");
 		String description = scanner.nextLine();
-		System.out.print("Enter e-mail account (main username): ");
+		System.out.print("Enter user account: ");
 		String username = scanner.nextLine();
 		System.out.print("Enter password: ");
 		char[] password = CmdUtils.readPassword();
