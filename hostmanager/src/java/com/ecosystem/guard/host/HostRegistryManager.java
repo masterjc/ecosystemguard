@@ -12,6 +12,7 @@ package com.ecosystem.guard.host;
 
 import java.util.Scanner;
 
+import com.ecosystem.guard.common.CmdUtils;
 import com.ecosystem.guard.common.XmlServiceRequestor;
 import com.ecosystem.guard.domain.Credentials;
 import com.ecosystem.guard.domain.Result.Status;

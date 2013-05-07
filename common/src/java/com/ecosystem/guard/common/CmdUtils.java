@@ -8,7 +8,7 @@
  * permission of the copyright owner.
  */
 
-package com.ecosystem.guard.host;
+package com.ecosystem.guard.common;
 
 import java.util.Scanner;
 
