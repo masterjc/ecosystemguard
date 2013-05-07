@@ -18,7 +18,8 @@ CREATE TABLE accountInfo (
 CREATE TABLE ipInfo (
 	hostId VARCHAR(64) NOT NULL,
 	publicIp VARCHAR(39) NOT NULL,
-	lastChange DATETIME NOT NULL,
+	privateIp VARCHAR(39) NOT NULL,
+	lastPublicIpChange DATETIME NOT NULL,
 	PRIMARY KEY( hostId )
 ) ENGINE=innodb;
 
