@@ -23,8 +23,11 @@ public class IpInfo implements Serializable {
 
 	@Column(name = "publicIp", nullable = false, length = 39)
 	private String publicIp;
+	
+	@Column(name = "privateIp", nullable = false, length = 39)
+	private String privateIp;
 
-	@Column(name = "lastChange", nullable = false)
+	@Column(name = "lastPublicIpChange", nullable = false)
 	private java.sql.Date lastChange;
 
 	public IpInfo() {
@@ -45,12 +48,20 @@ public class IpInfo implements Serializable {
 	public void setPublicIp(String publicIp) {
 		this.publicIp = publicIp;
 	}
+	
+	public String getPrivateIp() {
+		return privateIp;
+	}
 
-	public java.sql.Date getLastChange() {
+	public void setPrivateIp(String privateIp) {
+		this.privateIp = privateIp;
+	}
+
+	public java.sql.Date getLastPublicIpChange() {
 		return lastChange;
 	}
 
-	public void setLastChange(java.sql.Date lastChange) {
+	public void setLastPublicIpChange(java.sql.Date lastChange) {
 		this.lastChange = lastChange;
 	}
 }

@@ -63,14 +63,16 @@ public class UpdateIpService extends AuthenticatedService<UpdateIpRequest, Updat
 			ipInfo = new IpInfo();
 			ipInfo.setHostId(request.getHostId());
 			ipInfo.setPublicIp(authContext.getRemoteIpAddress());
-			ipInfo.setLastChange(new Date(new java.util.Date().getTime()));
+			ipInfo.setPrivateIp(request.getPrivateIp());
+			ipInfo.setLastPublicIpChange(new Date(new java.util.Date().getTime()));
 			daoManager.insert(ipInfo);
 			updated = true;
 		}
 		else {
 			if (!ipInfo.getPublicIp().equals(authContext.getRemoteIpAddress())) {
 				ipInfo.setPublicIp(authContext.getRemoteIpAddress());
-				ipInfo.setLastChange(new Date(new java.util.Date().getTime()));
+				ipInfo.setPrivateIp(request.getPrivateIp());
+				ipInfo.setLastPublicIpChange(new Date(new java.util.Date().getTime()));
 				daoManager.update(ipInfo);
 				updated = true;
 			}

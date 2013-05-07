@@ -23,6 +23,7 @@ import com.ecosystem.guard.domain.Request;
 @XmlRootElement
 public class UpdateIpRequest extends Request {
 	private String hostId;
+	private String privateIp;
 
 	public String getHostId() {
 		return hostId;
@@ -32,6 +33,14 @@ public class UpdateIpRequest extends Request {
 	public void setHostId(String hostId) {
 		this.hostId = hostId;
 	}
+
 	
-	
+	public String getPrivateIp() {
+		return privateIp;
+	}
+
+	@XmlElement
+	public void setPrivateIp(String privateIp) {
+		this.privateIp = privateIp;
+	}
 }

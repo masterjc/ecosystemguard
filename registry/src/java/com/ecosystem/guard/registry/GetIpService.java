@@ -61,8 +61,9 @@ public class GetIpService extends AuthenticatedService<GetIpRequest, GetIpRespon
 		GetIpResponse response = new GetIpResponse();
 		response.setResult(new Result(Result.Status.OK));
 		IpInformation ipInformation = new IpInformation();
-		ipInformation.setLastChange(ipInfo.getLastChange());
+		ipInformation.setLastPublicIpChange(ipInfo.getLastPublicIpChange());
 		ipInformation.setPublicIp(ipInfo.getPublicIp());
+		ipInformation.setPrivateIp(ipInfo.getPrivateIp());
 		response.setIpInformation(ipInformation);
 		Serializer.serialize(response, GetIpResponse.class, writer);
 	}

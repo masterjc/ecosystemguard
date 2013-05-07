@@ -24,7 +24,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class IpInformation {
 
 	private String publicIp;
-	private Date lastChange;
+	private String privateIp;
+	private Date lastPublicIpChange;
 
 	public String getPublicIp() {
 		return publicIp;
@@ -35,13 +36,22 @@ public class IpInformation {
 		this.publicIp = publicIp;
 	}
 
-	public Date getLastChange() {
-		return lastChange;
+	public Date getLastPublicIpChange() {
+		return lastPublicIpChange;
 	}
 
 	@XmlElement
-	public void setLastChange(Date lastChange) {
-		this.lastChange = lastChange;
+	public void setLastPublicIpChange(Date lastChange) {
+		this.lastPublicIpChange = lastChange;
 	}
 
+	
+	public String getPrivateIp() {
+		return privateIp;
+	}
+
+	@XmlElement
+	public void setPrivateIp(String privateIp) {
+		this.privateIp = privateIp;
+	}
 }
