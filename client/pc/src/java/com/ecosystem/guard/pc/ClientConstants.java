@@ -22,4 +22,5 @@ public class ClientConstants {
 
 	public static String GET_IP_SERVICE = ECOSYSTEM_BASE_URL + "getip";
 	public static String GET_HOSTS_SERVICE = ECOSYSTEM_BASE_URL + "gethosts";
+	public static String AUTHN_SERVICE = ECOSYSTEM_BASE_URL + "authn";
 }
