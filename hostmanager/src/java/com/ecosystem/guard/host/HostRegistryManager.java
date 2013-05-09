@@ -10,6 +10,7 @@
 
 package com.ecosystem.guard.host;
 
+import java.net.InetAddress;
 import java.util.Scanner;
 
 import com.ecosystem.guard.common.CmdUtils;
@@ -63,24 +64,23 @@ public class HostRegistryManager {
 		request.setHostInformation(info);
 		RegisterHostResponse response = XmlServiceRequestor.sendRequest(request, RegisterHostRequest.class,
 				RegisterHostResponse.class, ManagerConstants.REGISTER_HOST_SERVICE);
-		if (response.getResult().getStatus() == Status.OK) {
-			hostConfigurator.setCredentials(credentials.getUsernamePassword());
-			hostConfigurator.save();
-		}
-		else {
+		if (response.getResult().getStatus() != Status.OK) {
 			ManagerOutput.printOperationStatus("Host registration status: ", response.getResult());
+			return;
 		}
 		UpdateIpRequest ipRequest = new UpdateIpRequest();
-		ipRequest.setCredentials(new Credentials(hostConfigurator.getUsernamePassword().getUsername(), hostConfigurator
-				.getUsernamePassword().getPassword()));
+		ipRequest.setCredentials(credentials);
 		ipRequest.setHostId(hostConfigurator.getHostId());
+		ipRequest.setPrivateIp(InetAddress.getLocalHost().getHostAddress());
 		UpdateIpResponse ipResponse = XmlServiceRequestor.sendRequest(ipRequest, UpdateIpRequest.class, UpdateIpResponse.class,
 				ManagerConstants.UPDATE_IP_SERVICE);
 		if (ipResponse.getResult().getStatus() != Status.OK) {
 			ManagerOutput.printOperationStatus("Ip registration status: ", ipResponse.getResult());
 			return;
 		}
-		ManagerOutput.printOperationStatus("Host registration status: ", response.getResult());
+		hostConfigurator.setCredentials(credentials.getUsernamePassword());
+		hostConfigurator.save();
+		ManagerOutput.printOperationStatus("Host registration status: ", ipResponse.getResult());
 	}
 
 	public void unregisterHost() throws Exception {
