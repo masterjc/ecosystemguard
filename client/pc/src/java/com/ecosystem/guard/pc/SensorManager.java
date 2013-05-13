@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class SensorManager {
 	private Scanner scanner = new Scanner(System.in);
 	private PictureManager picManager = new PictureManager();
+	private VideoManager videoManager = new VideoManager();
 	
 
 	private enum SensorsOptionFunction {
@@ -30,6 +31,7 @@ public class SensorManager {
 			picManager.takePicture(session);
 			break;
 		case RECORD_VIDEO:
+			videoManager.recordVideo(session);
 			break;
 		case BACK:
 		}

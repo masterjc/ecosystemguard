@@ -80,6 +80,8 @@ public class Client {
 		case SENSOR_MANAGEMENT:
 			sensorManager.execute(session);
 			break;
+		case HOST_CONFIGURATION:
+			break;
 		case ACCOUNT_MANAGEMENT:
 			accountManager.execute();
 			break;

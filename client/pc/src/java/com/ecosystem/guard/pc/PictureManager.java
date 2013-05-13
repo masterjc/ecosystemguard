@@ -43,12 +43,12 @@ public class PictureManager {
 			StreamServiceRequestor.sendRequest(request, TakePictureRequest.class, session.getAppUrl()
 					+ ClientConstants.TAKE_PICTURE_SERVICE, outputPic);
 			outputPic.close();
-			Desktop.getDesktop().open(picture);
 			System.out.println("OK");
-			System.out.println("** Picture should be open with your default JPEG desktop application.");
+			Desktop.getDesktop().open(picture);
+			System.out.println("** Picture '" + picture.getName() + "'should be open with your default JPEG desktop application.");
 		}
 		finally {
-			picture.delete();
+			picture.deleteOnExit();
 			ClientOutput.printSeparatorLine();
 		}
 	}
