@@ -94,17 +94,17 @@ public class Client {
 		OptionSelections<MainOptionFunction> selection = new OptionSelections<MainOptionFunction>();
 		int option = 1;
 		if( session == null ) {
-			System.out.println(option + ". Login into your Ecosystemguard account");
+			System.out.println(option + ". Login your account");
 			selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.LOGIN));
 		}
-		System.out.println(option + ". Manage EcosystemGuard accounts");
+		System.out.println(option + ". Manage accounts");
 		selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.ACCOUNT_MANAGEMENT));
 		if( session != null ) {
-			System.out.println(option + ". EcosystemGuard host sensors management");
+			System.out.println(option + ". Host sensors management");
 			selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.SENSOR_MANAGEMENT));
-			System.out.println(option + ". EcosystemGuard host configuration");
+			System.out.println(option + ". Host configuration");
 			selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.HOST_CONFIGURATION));
-			System.out.println(option + ". Logout of Ecosystemguard account");
+			System.out.println(option + ". Logout");
 			selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.LOGOUT));
 		}
 		System.out.println(option + ". Exit");

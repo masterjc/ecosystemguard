@@ -29,6 +29,12 @@ public class ClientOutput {
 		printSeparatorLine();
 	}
 	
+	public static void printOperationStatus(String operationMessage) {
+		printSeparatorLine();
+		System.out.println(operationMessage);
+		printSeparatorLine();
+	}
+	
 	public static void printSeparatorLine() {
 		System.out.println("==============================================");
 	}
