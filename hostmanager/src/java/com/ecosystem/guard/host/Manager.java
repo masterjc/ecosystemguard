@@ -4,16 +4,11 @@ import java.util.Scanner;
 
 public class Manager {
 	private enum MainOptionFunction {
-		ACCOUNT_SETTINGS, REGISTER, UNREGISTER, GETIP, EXIT;
-	}
-
-	private enum RegistryOptionFunction {
-		CREATE_ACCOUNT, DELETE_ACCOUNT, CHANGE_PASSWORD, BACK;
+		REGISTER, UNREGISTER, GETIP, EXIT;
 	}
 
 	private ManagerConfig managerConfig;
 	private HostConfigurator hostConfigurator;
-	private AccountManager accountManager;
 	private HostRegistryManager hostRegistryManager;
 	private IpManager ipManager;
 	private Scanner scanner = new Scanner(System.in);
@@ -26,7 +21,6 @@ public class Manager {
 	public Manager(String[] args) throws Exception {
 		managerConfig = new ManagerConfig(args);
 		hostConfigurator = new HostConfigurator(managerConfig);
-		accountManager = new AccountManager(hostConfigurator);
 		hostRegistryManager = new HostRegistryManager(hostConfigurator);
 		ipManager = new IpManager(hostConfigurator);
 	}
@@ -69,9 +63,6 @@ public class Manager {
 		if (optionSelected == null)
 			throw new Exception("Incorrect option selected - " + selection);
 		switch (optionSelected) {
-		case ACCOUNT_SETTINGS:
-			accountSettings();
-			break;
 		case REGISTER:
 			hostRegistryManager.registerHost();
 			break;
@@ -87,36 +78,10 @@ public class Manager {
 		return false;
 	}
 
-	private void accountSettings() throws Exception {
-		ManagerOutput.printLogo();
-		OptionSelections<RegistryOptionFunction> registryOptions = showRegistryOptions();
-		System.out.println();
-		System.out.print("-> Select an option: ");
-		int selection = Integer.parseInt(scanner.nextLine());
-		RegistryOptionFunction optionSelected = registryOptions.getSelection(selection);
-		if (optionSelected == null)
-			throw new Exception("Incorrect option selected - " + selection);
-		switch (optionSelected) {
-		case CREATE_ACCOUNT:
-			accountManager.createAccount();
-			break;
-		case DELETE_ACCOUNT:
-			accountManager.deleteAccount();
-			break;
-		case CHANGE_PASSWORD:
-			accountManager.changePassword();
-			break;
-		case BACK:
-			return;
-		}
-	}
-
 	private OptionSelections<MainOptionFunction> showMainOptions() {
 		System.out.println();
 		OptionSelections<MainOptionFunction> selection = new OptionSelections<MainOptionFunction>();
 		int option = 1;
-		System.out.println(option + ". Account management");
-		selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.ACCOUNT_SETTINGS));
 		if (!hostConfigurator.hasCredentials()) {
 			System.out.println(option + ". Associate host with an existing account");
 			selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.REGISTER));
@@ -129,23 +94,6 @@ public class Manager {
 		}
 		System.out.println(option + ". Exit");
 		selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.EXIT));
-		return selection;
-	}
-
-	private OptionSelections<RegistryOptionFunction> showRegistryOptions() {
-		System.out.println();
-		System.out.println("Account Management");
-		System.out.println("------------------");
-		OptionSelections<RegistryOptionFunction> selection = new OptionSelections<RegistryOptionFunction>();
-		int option = 1;
-		System.out.println(option + ". Create Account");
-		selection.add(new OptionSelection<RegistryOptionFunction>(option++, RegistryOptionFunction.CREATE_ACCOUNT));
-		System.out.println(option + ". Change Account Password");
-		selection.add(new OptionSelection<RegistryOptionFunction>(option++, RegistryOptionFunction.CHANGE_PASSWORD));
-		System.out.println(option + ". Delete Account");
-		selection.add(new OptionSelection<RegistryOptionFunction>(option++, RegistryOptionFunction.DELETE_ACCOUNT));
-		System.out.println(option + ". Back");
-		selection.add(new OptionSelection<RegistryOptionFunction>(option++, RegistryOptionFunction.BACK));
 		return selection;
 	}
 

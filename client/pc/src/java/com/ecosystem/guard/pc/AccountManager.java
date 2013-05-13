@@ -1,14 +1,4 @@
-/*
- * Copyright (c) 1999-2013 Safelayer Secure Communications, S.A.
- *
- * All rights reserved. No part of this source code may be reproduced,
- * stored in a retrieval system, or transmitted, in any form or by any
- * means, electronic, mechanical, photocopying, recording or otherwise,
- * except as in the end-user license agreement, without the prior
- * permission of the copyright owner.
- */
-
-package com.ecosystem.guard.host;
+package com.ecosystem.guard.pc;
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -16,7 +6,6 @@ import java.util.Scanner;
 import com.ecosystem.guard.common.CmdUtils;
 import com.ecosystem.guard.common.XmlServiceRequestor;
 import com.ecosystem.guard.domain.Credentials;
-import com.ecosystem.guard.domain.Result.Status;
 import com.ecosystem.guard.domain.service.registry.AccountInformation;
 import com.ecosystem.guard.domain.service.registry.RegisterRequest;
 import com.ecosystem.guard.domain.service.registry.RegisterResponse;
@@ -31,14 +20,37 @@ import com.ecosystem.guard.domain.service.registry.UpdateCredentialsResponse;
  * @version $Revision$
  */
 public class AccountManager {
-	private HostConfigurator hostConfigurator;
 	private Scanner scanner = new Scanner(System.in);
-
-	public AccountManager(HostConfigurator hostConfigurator) {
-		this.hostConfigurator = hostConfigurator;
+	
+	private enum RegistryOptionFunction {
+		CREATE_ACCOUNT, DELETE_ACCOUNT, CHANGE_PASSWORD, BACK;
+	}
+	
+	public void execute() throws Exception {
+		ClientOutput.printLogo();
+		OptionSelections<RegistryOptionFunction> registryOptions = showRegistryOptions();
+		System.out.println();
+		System.out.print("-> Select an option: ");
+		int selection = Integer.parseInt(scanner.nextLine());
+		RegistryOptionFunction optionSelected = registryOptions.getSelection(selection);
+		if (optionSelected == null)
+			throw new Exception("Incorrect option selected - " + selection);
+		switch (optionSelected) {
+		case CREATE_ACCOUNT:
+			createAccount();
+			break;
+		case DELETE_ACCOUNT:
+			deleteAccount();
+			break;
+		case CHANGE_PASSWORD:
+			changePassword();
+			break;
+		case BACK:
+			return;
+		}
 	}
 
-	public void createAccount() throws Exception {
+	private void createAccount() throws Exception {
 		System.out.print("Enter account username: ");
 		String username = scanner.nextLine();
 		System.out.print("Enter new password: ");
@@ -58,12 +70,12 @@ public class AccountManager {
 		RegisterRequest request = new RegisterRequest();
 		request.setCredentials(credentials);
 		request.setAccountInformation(info);
-		RegisterResponse response = XmlServiceRequestor.sendRequest(request, RegisterRequest.class, RegisterResponse.class,
-				ManagerConstants.REGISTER_SERVICE);
-		ManagerOutput.printOperationStatus("Account registration status: ", response.getResult());
+		RegisterResponse response = XmlServiceRequestor.sendRequest(request, RegisterRequest.class,
+				RegisterResponse.class, ClientConstants.REGISTER_SERVICE);
+		ClientOutput.printOperationStatus("Account registration status: ", response.getResult());
 	}
 
-	public void deleteAccount() throws Exception {
+	private void deleteAccount() throws Exception {
 		System.out.print("Enter account username: ");
 		String username = scanner.nextLine();
 		System.out.print("Enter password: ");
@@ -72,24 +84,15 @@ public class AccountManager {
 		String sure = scanner.nextLine();
 		if (!sure.toUpperCase().equals("Y"))
 			throw new Exception("Delete account operation cancelled");
-		if (hostConfigurator.hasCredentials() && username.equals(hostConfigurator.getUsernamePassword().getUsername())) {
-			System.out.print("This host is registered with '" + username + "'. Delete account? [Y|N]: ");
-			sure = scanner.nextLine();
-			if (!sure.toUpperCase().equals("Y"))
-				throw new Exception("Delete account operation cancelled");
-		}
 		Credentials credentials = new Credentials(username, new String(password));
 		UnregisterRequest request = new UnregisterRequest();
 		request.setCredentials(credentials);
-		UnregisterResponse response = XmlServiceRequestor.sendRequest(request, UnregisterRequest.class, UnregisterResponse.class,
-				ManagerConstants.UNREGISTER_SERVICE);
-		if (response.getResult().getStatus() == Status.OK && hostConfigurator.hasCredentials() && username.equals(hostConfigurator.getUsernamePassword().getUsername())) {
-			hostConfigurator.reset();
-		}
-		ManagerOutput.printOperationStatus("Account unregistration status: ", response.getResult());
+		UnregisterResponse response = XmlServiceRequestor.sendRequest(request, UnregisterRequest.class,
+				UnregisterResponse.class, ClientConstants.UNREGISTER_SERVICE);
+		ClientOutput.printOperationStatus("Account unregistration status: ", response.getResult());
 	}
 
-	public void changePassword() throws Exception {
+	private void changePassword() throws Exception {
 		System.out.print("Enter account username: ");
 		String username = scanner.nextLine();
 		System.out.print("Enter password: ");
@@ -105,8 +108,25 @@ public class AccountManager {
 		request.setCredentials(credentials);
 		request.setNewPassword(new String(newPassword1));
 		UpdateCredentialsResponse response = XmlServiceRequestor.sendRequest(request, UpdateCredentialsRequest.class,
-				UpdateCredentialsResponse.class, ManagerConstants.UPDATE_CREDENTIALS_SERVICE);
-		ManagerOutput.printOperationStatus("Update credentials status: ", response.getResult());
+				UpdateCredentialsResponse.class, ClientConstants.UPDATE_CREDENTIALS_SERVICE);
+		ClientOutput.printOperationStatus("Update credentials status: ", response.getResult());
+	}
+	
+	private OptionSelections<RegistryOptionFunction> showRegistryOptions() {
+		System.out.println();
+		System.out.println("Account Management");
+		System.out.println("------------------");
+		OptionSelections<RegistryOptionFunction> selection = new OptionSelections<RegistryOptionFunction>();
+		int option = 1;
+		System.out.println(option + ". Create Account");
+		selection.add(new OptionSelection<RegistryOptionFunction>(option++, RegistryOptionFunction.CREATE_ACCOUNT));
+		System.out.println(option + ". Change Account Password");
+		selection.add(new OptionSelection<RegistryOptionFunction>(option++, RegistryOptionFunction.CHANGE_PASSWORD));
+		System.out.println(option + ". Delete Account");
+		selection.add(new OptionSelection<RegistryOptionFunction>(option++, RegistryOptionFunction.DELETE_ACCOUNT));
+		System.out.println(option + ". Back");
+		selection.add(new OptionSelection<RegistryOptionFunction>(option++, RegistryOptionFunction.BACK));
+		return selection;
 	}
 
 }

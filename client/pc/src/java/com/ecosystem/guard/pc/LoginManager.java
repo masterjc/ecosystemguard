@@ -30,11 +30,11 @@ public class LoginManager {
 	public Session startSession() throws Exception {
 		Session session = new Session();
 		Credentials credentials = authn();
-		String hostId = getHostId(credentials);
+		HostInformation hostId = getHost(credentials);
 		String ipAddress = getAppIpAddress(credentials, hostId);
 		session.setCredentials(credentials);
 		session.setAppIpAddress(ipAddress);
-		session.setHostId(hostId);
+		session.setHostInformation(hostId);
 		return session;
 	}
 
@@ -64,7 +64,7 @@ public class LoginManager {
 		return selection;
 	}
 
-	private String getAppIpAddress(Credentials credentials, String hostId) throws Exception {
+	private String getAppIpAddress(Credentials credentials, HostInformation hostId) throws Exception {
 		OptionSelections<ConnectionOption> mainOptions = showConnectionOptions();
 		System.out.println();
 		System.out.print("-> Select an option: ");
@@ -74,7 +74,7 @@ public class LoginManager {
 			throw new Exception("Incorrect option selected - " + selection);
 		GetIpRequest request = new GetIpRequest();
 		request.setCredentials(credentials);
-		request.setHostId(hostId);
+		request.setHostId(hostId.getId());
 		GetIpResponse response = XmlServiceRequestor.sendRequest(request, GetIpRequest.class, GetIpResponse.class,
 				ClientConstants.GET_IP_SERVICE);
 		if (response.getResult().getStatus() != Status.OK)
@@ -86,13 +86,13 @@ public class LoginManager {
 		throw new Exception("Connection option not supported");
 	}
 
-	private String getHostId(Credentials credentials) throws Exception {
+	private HostInformation getHost(Credentials credentials) throws Exception {
 		GetHostsRequest request = new GetHostsRequest();
 		request.setCredentials(credentials);
 		GetHostsResponse response = XmlServiceRequestor.sendRequest(request, GetHostsRequest.class,
 				GetHostsResponse.class, ClientConstants.GET_HOSTS_SERVICE);
 		if (response.getResult().getStatus() != Status.OK)
-			throw new Exception(response.getResult().getStatus().toString());
+			throw new Exception(response.getResult().getStatus().toString() + " - " + response.getResult().getAppStatus().toString());
 		OptionSelections<HostInformation> mainOptions = showHosts(response.getHosts());
 		System.out.println();
 		System.out.print("-> Select a host: ");
@@ -100,7 +100,7 @@ public class LoginManager {
 		HostInformation optionSelected = mainOptions.getSelection(selection);
 		if (optionSelected == null)
 			throw new Exception("Incorrect host selected - " + selection);
-		return optionSelected.getId();
+		return optionSelected;
 	}
 
 	private Credentials authn() throws Exception {

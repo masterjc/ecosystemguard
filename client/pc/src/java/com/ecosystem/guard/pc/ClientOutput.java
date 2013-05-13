@@ -32,4 +32,11 @@ public class ClientOutput {
 	public static void printSeparatorLine() {
 		System.out.println("==============================================");
 	}
+	
+	public static void printAccountInfo(Session session) {
+		if (session != null && session.getCredentials() != null) {
+			System.out.println("** Logged in as '"
+					+ session.getCredentials().getUsernamePassword().getUsername() + "' into your '" + session.getHostInformation().getSummary() + "' EcosystemGuard host **");
+		}
+	}
 }

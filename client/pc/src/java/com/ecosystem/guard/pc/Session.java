@@ -1,6 +1,7 @@
 package com.ecosystem.guard.pc;
 
 import com.ecosystem.guard.domain.Credentials;
+import com.ecosystem.guard.domain.service.registry.HostInformation;
 
 /**
  * 
@@ -11,7 +12,7 @@ public class Session {
 
 	private String appIpAddress;
 	private Credentials credentials;
-	private String hostId;
+	private HostInformation hostInfo;
 
 	public String getAppIpAddress() {
 		return appIpAddress;
@@ -29,11 +30,11 @@ public class Session {
 		this.credentials = credentials;
 	}
 
-	public String getHostId() {
-		return hostId;
+	public HostInformation getHostInformation() {
+		return hostInfo;
 	}
 
-	public void setHostId(String hostId) {
-		this.hostId = hostId;
+	public void setHostInformation(HostInformation hostId) {
+		this.hostInfo = hostId;
 	}
 }

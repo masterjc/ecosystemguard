@@ -23,4 +23,7 @@ public class ClientConstants {
 	public static String GET_IP_SERVICE = ECOSYSTEM_BASE_URL + "getip";
 	public static String GET_HOSTS_SERVICE = ECOSYSTEM_BASE_URL + "gethosts";
 	public static String AUTHN_SERVICE = ECOSYSTEM_BASE_URL + "authn";
+	public static String REGISTER_SERVICE = ECOSYSTEM_BASE_URL + "register";
+	public static String UNREGISTER_SERVICE = ECOSYSTEM_BASE_URL + "unregister";
+	public static String UPDATE_CREDENTIALS_SERVICE = ECOSYSTEM_BASE_URL + "updatecredentials";
 }
