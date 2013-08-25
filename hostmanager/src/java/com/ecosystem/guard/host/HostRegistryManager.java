@@ -24,6 +24,8 @@ import com.ecosystem.guard.domain.service.registry.UnregisterHostRequest;
 import com.ecosystem.guard.domain.service.registry.UnregisterHostResponse;
 import com.ecosystem.guard.domain.service.registry.UpdateIpRequest;
 import com.ecosystem.guard.domain.service.registry.UpdateIpResponse;
+import com.ecosystem.guard.phidgets.SensorManager;
+import com.ecosystem.guard.phidgets.sensors.LcdScreen;
 
 /**
  * 
@@ -53,7 +55,7 @@ public class HostRegistryManager {
 		System.out.print("Are you sure you want to register '" + summary + "' with user '" + username + "'? [Y|N]: ");
 		String sure = scanner.nextLine();
 		if (!sure.toUpperCase().equals("Y"))
-			throw new Exception("Registe host operation cancelled");
+			throw new Exception("Register host operation cancelled");
 		RegisterHostRequest request = new RegisterHostRequest();
 		Credentials credentials = new Credentials(username, new String(password));
 		request.setCredentials(credentials);
@@ -81,6 +83,7 @@ public class HostRegistryManager {
 		hostConfigurator.setCredentials(credentials.getUsernamePassword());
 		hostConfigurator.save();
 		ManagerOutput.printOperationStatus("Host registration status: ", ipResponse.getResult());
+		showLcdMessage("Register: " + response.getResult().getStatus(), "User: " + credentials.getUsernamePassword().getUsername(), 10);
 	}
 
 	public void unregisterHost() throws Exception {
@@ -102,6 +105,12 @@ public class HostRegistryManager {
 			hostConfigurator.reset();
 		}
 		ManagerOutput.printOperationStatus("Host unregistration status: ", response.getResult());
+		showLcdMessage("Unregister: " + response.getResult().getStatus(), "User: " + credentials.getUsernamePassword().getUsername(), 10);
+	}
+	
+	private void showLcdMessage( String text1, String text2, int seconds ) throws Exception {
+		LcdScreen lcd = SensorManager.getInstance().getSensor(LcdScreen.class);
+		lcd.showAsynchronousMessage(text1, text2, seconds * 1000);
 	}
 
 }

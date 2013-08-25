@@ -1,5 +1,6 @@
 package com.ecosystem.guard.app.listener;
 
+import java.net.Inet4Address;
 import java.util.concurrent.Callable;
 
 import com.ecosystem.guard.common.XmlServiceRequestor;
@@ -29,6 +30,7 @@ public class PublicIpUpdater implements Callable<Void> {
 		UpdateIpRequest ipRequest = new UpdateIpRequest();
 		ipRequest.setCredentials(hostConfig.getCredentials());
 		ipRequest.setHostId(hostConfig.getId());
+		ipRequest.setPrivateIp(Inet4Address.getLocalHost().getHostAddress());
 		UpdateIpResponse ipResponse = XmlServiceRequestor.sendRequest(ipRequest, UpdateIpRequest.class,
 				UpdateIpResponse.class, RegistryServices.getUpdateIpUrl());
 		if (ipResponse.getResult().getStatus() != Status.OK)

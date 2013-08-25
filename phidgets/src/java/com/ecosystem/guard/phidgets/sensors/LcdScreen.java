@@ -1,5 +1,6 @@
 package com.ecosystem.guard.phidgets.sensors;
 
+import com.ecosystem.guard.logging.EcosystemGuardLogger;
 import com.ecosystem.guard.phidgets.Sensor;
 import com.phidgets.TextLCDPhidget;
 
@@ -14,9 +15,11 @@ public class LcdScreen extends Sensor<TextLCDPhidget> {
 	private static final int FIRST_LINE = 0;
 	private static final int SECOND_LINE = 1;
 	private static final String EMPTY_LINE = new String();
+	private Thread asyncThread = null;
+	
 
 	public enum Contrast {
-		LOW(2), MEDIUM(5), HIGH(8);
+		LOW(20), MEDIUM(128), HIGH(255);
 
 		private int contrast;
 
@@ -30,7 +33,7 @@ public class LcdScreen extends Sensor<TextLCDPhidget> {
 	}
 
 	public enum Brightness {
-		LOW(2), MEDIUM(5), HIGH(8);
+		LOW(20), MEDIUM(128), HIGH(255);
 
 		private int brightness;
 
@@ -63,10 +66,10 @@ public class LcdScreen extends Sensor<TextLCDPhidget> {
 	}
 
 	/**
-	 * Imprime un mensaje de texto en la primera línea de la LCD de máximo 20 caracteres. Imprime un
-	 * mensaje de texto en la segunda línea de la LCD de máximo 20 caracteres. El mensaje
-	 * permanecerá N segundos en la LCD con iluminación, después desaparecerá el mensaje y la
-	 * iluminación.
+	 * Imprime un mensaje de texto en la primera línea de la LCD de máximo 20
+	 * caracteres. Imprime un mensaje de texto en la segunda línea de la LCD de
+	 * máximo 20 caracteres. El mensaje permanecerá N segundos en la LCD con
+	 * iluminación, después desaparecerá el mensaje y la iluminación.
 	 * 
 	 * @param line1
 	 * @param line2
@@ -89,16 +92,21 @@ public class LcdScreen extends Sensor<TextLCDPhidget> {
 		if (line2 != null) {
 			getSensor().setDisplayString(SECOND_LINE, line2);
 		}
-		Thread.sleep(timeMs);
+		try {
+			Thread.sleep(timeMs);	
+		} catch(InterruptedException e) {
+			return;
+		}
 		getSensor().setBacklight(false);
 		getSensor().setDisplayString(FIRST_LINE, EMPTY_LINE);
 		getSensor().setDisplayString(SECOND_LINE, EMPTY_LINE);
 	}
 
 	/**
-	 * Imprime un mensaje de texto en la primera línea de la LCD de máximo 20 caracteres. La segunda
-	 * linea estará vacía. El mensaje permanecerá N segundos en la LCD con iluminación, después
-	 * desaparecerá el mensaje y la iluminación.
+	 * Imprime un mensaje de texto en la primera línea de la LCD de máximo 20
+	 * caracteres. La segunda linea estará vacía. El mensaje permanecerá N
+	 * segundos en la LCD con iluminación, después desaparecerá el mensaje y
+	 * la iluminación.
 	 * 
 	 * @param line1
 	 * @param seconds
@@ -109,9 +117,10 @@ public class LcdScreen extends Sensor<TextLCDPhidget> {
 	}
 
 	/**
-	 * Imprime un mensaje de texto en la primera línea de la LCD de máximo 20 caracteres. La segunda
-	 * linea estará vacía. La retroiluminación parpadeará: 1 segundo encendida, 0,5 segundos
-	 * apagada. Al cabo de N segundos desaparecerá el mensaje y la iluminación.
+	 * Imprime un mensaje de texto en la primera línea de la LCD de máximo 20
+	 * caracteres. La segunda linea estará vacía. La retroiluminación
+	 * parpadeará: 1 segundo encendida, 0,5 segundos apagada. Al cabo de N
+	 * segundos desaparecerá el mensaje y la iluminación.
 	 * 
 	 * @param line1
 	 * @param seconds
@@ -122,9 +131,10 @@ public class LcdScreen extends Sensor<TextLCDPhidget> {
 	}
 
 	/**
-	 * Imprime un mensaje de texto en la primera línea de la LCD de máximo 20 caracteres. Imprime un
-	 * mensaje de texto en la segunda línea de la LCD de máximo 20 caracteres. El mensaje
-	 * parpadeará: 1 segundo muestra el mensaje, 0,5 segundos sin mensaje. Al cabo de N repeticiones
+	 * Imprime un mensaje de texto en la primera línea de la LCD de máximo 20
+	 * caracteres. Imprime un mensaje de texto en la segunda línea de la LCD de
+	 * máximo 20 caracteres. El mensaje parpadeará: 1 segundo muestra el
+	 * mensaje, 0,5 segundos sin mensaje. Al cabo de N repeticiones
 	 * desaparecerá el mensaje y la iluminación.
 	 * 
 	 * @param line1
@@ -134,10 +144,72 @@ public class LcdScreen extends Sensor<TextLCDPhidget> {
 	public void showIntermitentMessage(String line1, String line2, int intermitentRepetitions) throws Exception {
 		for (int i = 0; i < intermitentRepetitions; i++) {
 			if (i != 0) {
-				Thread.sleep(500);
+				try {
+					Thread.sleep(500);	
+				} catch(InterruptedException e) {
+					return;
+				}
 			}
 			showMessage(line1, line2, 1000);
 		}
+	}
+
+	/**
+	 * @param line1
+	 * @param line2
+	 * @param timeMs
+	 * @throws Exception
+	 */
+	public void showAsynchronousMessage(String line1, String line2, int timeMs) throws Exception {
+		final String firstLine = line1;
+		final String secondLine = line2;
+		final int threadTime = timeMs;
+		asyncThread = new Thread(new Runnable() {
+			public void run() {
+				try {
+					showMessage(firstLine, secondLine, threadTime);
+				} catch (Exception e) {
+					EcosystemGuardLogger.logError(e, LcdScreen.class);
+				}
+			}
+		});
+		asyncThread.start();
+	}
+
+	/**
+	 * 
+	 * 
+	 * @param line1
+	 * @param seconds
+	 * @throws Exception
+	 */
+	public void showAsynchronousIntermitentMessage(String line1, String line2, int intermitentRepetitions)
+			throws Exception {
+		final String firstLine = line1;
+		final String secondLine = line2;
+		final int repetitions = intermitentRepetitions;
+		asyncThread = new Thread(new Runnable() {
+			public void run() {
+				try {
+					showIntermitentMessage(firstLine, secondLine, repetitions);
+				} catch (Exception e) {
+					EcosystemGuardLogger.logError(e, LcdScreen.class);
+				}
+			}
+		});
+		asyncThread.start();
+	}
+	
+	@Override
+	public void close() throws Exception {
+		if(asyncThread != null && asyncThread.isAlive()) {
+			asyncThread.interrupt();
+			asyncThread.join();
+		}
+		getSensor().setBacklight(false);
+		getSensor().setDisplayString(0, "");
+		getSensor().setDisplayString(1, "");
+		super.close();
 	}
 
 }

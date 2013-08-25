@@ -2,6 +2,10 @@ package com.ecosystem.guard.host;
 
 import java.util.Scanner;
 
+import com.ecosystem.guard.logging.EcosystemGuardLogger;
+import com.ecosystem.guard.phidgets.SensorManager;
+import com.ecosystem.guard.phidgets.sensors.LcdScreen;
+
 public class Manager {
 	private enum MainOptionFunction {
 		REGISTER, UNREGISTER, GETIP, EXIT;
@@ -29,28 +33,27 @@ public class Manager {
 	 * Main loop
 	 */
 	public void execute() {
+		try {
+			showLcdWelcomeMessage();
+		} catch (Exception e) {
+			printException(e);
+			return;
+		}
 		boolean exit = false;
 		while (!exit) {
 			try {
 				exit = processMainOptions();
-			}
-			catch (Exception e) {
-				if (managerConfig.isDebug()) {
-					e.printStackTrace();
-				}
-				ManagerOutput.printSeparatorLine();
-				if (!e.getClass().getCanonicalName().equals(Exception.class.getCanonicalName())) {
-					System.out.println("ERROR: " + e.getClass().getCanonicalName() + ": " + e.getMessage());
-				}
-				else {
-					System.out.println("ERROR: " + e.getMessage());
-				}
-				ManagerOutput.printSeparatorLine();
+			} catch (Exception e) {
+				printException(e);
 			}
 		}
+		closeLcdScreen();
 	}
-	
-	
+
+	private void showLcdWelcomeMessage() throws Exception {
+		LcdScreen lcd = SensorManager.getInstance().getSensor(LcdScreen.class);
+		lcd.showAsynchronousMessage("EcosystemGuard:", " HostManager started", 10000);
+	}
 
 	private boolean processMainOptions() throws Exception {
 		ManagerOutput.printLogo();
@@ -85,8 +88,7 @@ public class Manager {
 		if (!hostConfigurator.hasCredentials()) {
 			System.out.println(option + ". Associate host with an existing account");
 			selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.REGISTER));
-		}
-		else {
+		} else {
 			System.out.println(option + ". Disassociate host with current account");
 			selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.UNREGISTER));
 			System.out.println(option + ". Show public IP Address information");
@@ -95,6 +97,28 @@ public class Manager {
 		System.out.println(option + ". Exit");
 		selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.EXIT));
 		return selection;
+	}
+
+	private void closeLcdScreen() {
+		try {
+			LcdScreen lcd = SensorManager.getInstance().getSensor(LcdScreen.class);
+			lcd.close();
+		} catch (Exception e) {
+			EcosystemGuardLogger.logError(e, Manager.class);
+		}
+	}
+
+	private void printException(Exception e) {
+		if (managerConfig.isDebug()) {
+			e.printStackTrace();
+		}
+		ManagerOutput.printSeparatorLine();
+		if (!e.getClass().getCanonicalName().equals(Exception.class.getCanonicalName())) {
+			System.out.println("ERROR: " + e.getClass().getCanonicalName() + ": " + e.getMessage());
+		} else {
+			System.out.println("ERROR: " + e.getMessage());
+		}
+		ManagerOutput.printSeparatorLine();
 	}
 
 }

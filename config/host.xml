@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<host id="HostId7fe3d7615475072ec2371a620f423df8">
+    <credentials>
+        <usernamePassword>
+            <password>demodemo</password>
+            <username>masterjc</username>
+        </usernamePassword>
+    </credentials>
+</host>

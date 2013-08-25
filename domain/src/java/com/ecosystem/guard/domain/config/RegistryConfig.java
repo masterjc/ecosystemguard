@@ -10,19 +10,19 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class RegistryConfig {
-	private String registryUrl;
+	private String url;
 	
-	public String getRegistryUrl() {
-		return registryUrl;
+	public String getUrl() {
+		return url;
 	}
 	
 	@XmlElement
-	public void setRegistryUrl(String registryUrl) {
-		this.registryUrl = registryUrl;
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
 	public void check() throws Exception {
-		if( registryUrl == null )
-			throw new Exception("registryUrl config property is not set");
+		if( url == null )
+			throw new Exception("url config property is not set");
 	}
 }

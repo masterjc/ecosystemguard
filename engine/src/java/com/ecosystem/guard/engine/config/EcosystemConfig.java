@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 
 import com.ecosystem.guard.common.Deserializer;
+import com.ecosystem.guard.common.FileUtils;
 import com.ecosystem.guard.domain.config.AppConfig;
 import com.ecosystem.guard.domain.config.HostConfig;
 import com.ecosystem.guard.domain.config.RegistryConfig;

@@ -35,6 +35,8 @@ public class XmlServiceRequestor {
 			httpPost.setEntity(new StringEntity(xmlRequest));
 			HttpResponse httpResponse = httpclient.execute(httpPost);
 			String response = EntityUtils.toString(httpResponse.getEntity());
+			System.out.println("**********************");
+			System.out.println(response);
 			return Deserializer.deserialize(responseClass, new StringReader(response));
 		}
 		finally {

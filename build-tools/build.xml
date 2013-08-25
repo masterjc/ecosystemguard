@@ -48,14 +48,18 @@
 		</copy>
 	</target>
 	
-	<target name="deploy" depends="all">
+	<target name="deploy">
 		<copy todir="${env.JBOSS_DEPLOYMENT_DIR}">
 			 <fileset file="${ecosystemguard-registry.lib}"/>
 		</copy>
 		<copy todir="${env.TOMCAT_DEPLOYMENT_DIR}">
 			 <fileset file="${ecosystemguard-app.lib}"/>
 		</copy>
-		<unzip src="${ecosystemguard-hostmanager.zip}" dest="${env.HOST_DEPLOYMENT_DIR}"/>
+		<mkdir dir="${env.HOST_DEPLOYMENT_DIR}/hostmanager"/>
+		<mkdir dir="${env.HOST_DEPLOYMENT_DIR}/pc-client"/>
+		<unzip src="${ecosystemguard-hostmanager.zip}" dest="${env.HOST_DEPLOYMENT_DIR}/hostmanager"/>
+		<unzip src="${ecosystemguard-pc-client.zip}" dest="${env.PC_CLIENT_DEPLOYMENT_DIR}/pc-client"/>
+		
 		<mkdir dir="${env.HOST_DEPLOYMENT_DIR}/config"/>
 		<copy todir="${env.HOST_DEPLOYMENT_DIR}/config">
 			 <fileset file="${ecosystemguard-pki.dir}/${ecosystemguard-keystore.name}"/>

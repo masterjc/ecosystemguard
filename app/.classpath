@@ -14,5 +14,6 @@
 	<classpathentry kind="var" path="PROJECT_DIR/logging/lib/ecosystemguard-logging.jar"/>
 	<classpathentry kind="var" path="PROJECT_DIR/phidgets/lib/ecosystemguard-phidgets.jar"/>
 	<classpathentry kind="var" path="PROJECT_DIR/thirdparty/phidgets/phidget21.jar"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

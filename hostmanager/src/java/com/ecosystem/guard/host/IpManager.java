@@ -49,7 +49,7 @@ public class IpManager {
 		}
 		ManagerOutput.printSeparatorLine();
 		System.out.println("Public IP Address: " + response.getIpInformation().getPublicIp());
-		System.out.println("Last public IP Address update: " + response.getIpInformation().getLastChange());
+		System.out.println("Last public IP Address update: " + response.getIpInformation().getLastPublicIpChange());
 		ManagerOutput.printSeparatorLine();
 	}
 	
@@ -59,6 +59,6 @@ public class IpManager {
 			lcd.showIntermitentMessage("ERROR:", response.getResult().getStatus().getStatusCode(), 5);
 			return;
 		}
-		lcd.showMessage("Public IP:", response.getIpInformation().getPublicIp(), 5000);
+		lcd.showAsynchronousMessage("Public IP:", response.getIpInformation().getPublicIp(), 10000);
 	}
 }

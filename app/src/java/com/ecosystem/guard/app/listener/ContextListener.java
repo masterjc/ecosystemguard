@@ -26,7 +26,7 @@ public class ContextListener implements ServletContextListener {
 		try {
 			TimerService.getInstance().stopTimers();
 			LcdScreen lcd = SensorManager.getInstance().getSensor(LcdScreen.class);
-			lcd.showAsynchronousMessage("Shutting down", "    EcosystemGuard", 5000);
+			lcd.showAsynchronousMessage("Shutting down", "    EcosystemGuard", 15000);
 		}
 		catch (Exception e) {
 			EcosystemGuardLogger.logError(e, ContextListener.class);
@@ -43,9 +43,9 @@ public class ContextListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent arg0) {
 		try {
 			LcdScreen lcd = SensorManager.getInstance().getSensor(LcdScreen.class);
-			lcd.showAsynchronousMessage("Starting up", "    EcosystemGuard", 5000);
+			lcd.showAsynchronousMessage("Starting up", "    EcosystemGuard", 15000);
 			TimerService.getInstance().registerTimer(new PublicIpUpdater(),
-					EcosystemConfig.getAppConfig().getUpdatePublicIpThreshold());
+					Integer.parseInt(EcosystemConfig.getAppConfig().getUpdateIpThreshold()));
 			TimerService.getInstance().startTimers();
 		}
 		catch (Exception e) {
