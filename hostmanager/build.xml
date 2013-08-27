@@ -10,7 +10,6 @@
 	<path id="classpath">
 		<path refid="ecosystemguard-domain.path" />
 		<path refid="ecosystemguard-common.path" />
-		<path refid="ecosystemguard-phidgets.path" />
 		<path refid="ecosystemguard-logging.path" />
 		<path refid="httpcomponents.path" />
     	</path>
@@ -45,17 +44,15 @@
 			<fileset file="${ecosystemguard-domain.lib}"/>
 			<fileset file="${ecosystemguard-logging.lib}"/>
 			<fileset file="${ecosystemguard-common.lib}"/>
-			<fileset file="${ecosystemguard-phidgets.lib}" />
 			<fileset file="${httpcomponents_dep_codec.lib}"/>
 			<fileset file="${httpcomponents_dep_logging.lib}"/>
 			<fileset file="${httpcomponents_core.lib}"/>
 			<fileset file="${httpcomponents_client.lib}"/>
-			<fileset file="${phidgets.lib}"/>
 		</copy>
 	</target>
 	
 	<target name="executable">
-		<echo file="${lib.dir}/${executable.name}"><![CDATA[sudo java -classpath ${lib.dir}/${ecosystemguard-hostmanager.name}${env.JAVA_LINUX_SEPARATOR}${lib.dir}/${ecosystemguard-common.name}${env.JAVA_LINUX_SEPARATOR}${lib.dir}/${ecosystemguard-logging.name}${env.JAVA_LINUX_SEPARATOR}${lib.dir}/${ecosystemguard-phidgets.name}${env.JAVA_LINUX_SEPARATOR}${lib.dir}/${ecosystemguard-domain.name}${env.JAVA_LINUX_SEPARATOR}${lib.dir}/${httpcomponents_dep_codec.name}${env.JAVA_LINUX_SEPARATOR}${lib.dir}/${httpcomponents_dep_logging.name}${env.JAVA_LINUX_SEPARATOR}${lib.dir}/${httpcomponents_core.name}${env.JAVA_LINUX_SEPARATOR}${lib.dir}/${httpcomponents_client.name}${env.JAVA_LINUX_SEPARATOR}${lib.dir}/${phidgets.name} ${executable.class} ./config %1]]></echo>
+		<echo file="${lib.dir}/${executable.name}"><![CDATA[sudo java -classpath ${lib.dir}/${ecosystemguard-hostmanager.name}${env.JAVA_LINUX_SEPARATOR}${lib.dir}/${ecosystemguard-common.name}${env.JAVA_LINUX_SEPARATOR}${lib.dir}/${ecosystemguard-logging.name}${env.JAVA_LINUX_SEPARATOR}${lib.dir}/${ecosystemguard-domain.name}${env.JAVA_LINUX_SEPARATOR}${lib.dir}/${httpcomponents_dep_codec.name}${env.JAVA_LINUX_SEPARATOR}${lib.dir}/${httpcomponents_dep_logging.name}${env.JAVA_LINUX_SEPARATOR}${lib.dir}/${httpcomponents_core.name}${env.JAVA_LINUX_SEPARATOR}${lib.dir}/${httpcomponents_client.name} ${executable.class} ./config %1]]></echo>
 		<zip basedir="${lib.dir}" destfile="${lib.dir}/${ant.project.name}.zip"></zip>
 	</target>
 </project>

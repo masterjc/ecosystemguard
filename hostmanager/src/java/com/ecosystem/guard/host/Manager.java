@@ -2,10 +2,6 @@ package com.ecosystem.guard.host;
 
 import java.util.Scanner;
 
-import com.ecosystem.guard.logging.EcosystemGuardLogger;
-import com.ecosystem.guard.phidgets.SensorManager;
-import com.ecosystem.guard.phidgets.sensors.LcdScreen;
-
 public class Manager {
 	private enum MainOptionFunction {
 		REGISTER, UNREGISTER, GETIP, EXIT;
@@ -33,12 +29,6 @@ public class Manager {
 	 * Main loop
 	 */
 	public void execute() {
-		try {
-			showLcdWelcomeMessage();
-		} catch (Exception e) {
-			printException(e);
-			return;
-		}
 		boolean exit = false;
 		while (!exit) {
 			try {
@@ -47,12 +37,6 @@ public class Manager {
 				printException(e);
 			}
 		}
-		closeLcdScreen();
-	}
-
-	private void showLcdWelcomeMessage() throws Exception {
-		LcdScreen lcd = SensorManager.getInstance().getSensor(LcdScreen.class);
-		lcd.showAsynchronousMessage("EcosystemGuard:", " HostManager started", 10000);
 	}
 
 	private boolean processMainOptions() throws Exception {
@@ -97,15 +81,6 @@ public class Manager {
 		System.out.println(option + ". Exit");
 		selection.add(new OptionSelection<MainOptionFunction>(option++, MainOptionFunction.EXIT));
 		return selection;
-	}
-
-	private void closeLcdScreen() {
-		try {
-			LcdScreen lcd = SensorManager.getInstance().getSensor(LcdScreen.class);
-			lcd.close();
-		} catch (Exception e) {
-			EcosystemGuardLogger.logError(e, Manager.class);
-		}
 	}
 
 	private void printException(Exception e) {
