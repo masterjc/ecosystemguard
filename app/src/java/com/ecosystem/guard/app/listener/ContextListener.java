@@ -20,7 +20,7 @@ public class ContextListener implements ServletContextListener {
 	private static final String STOPPING_MESSAGE = "*** Shutting down...";
 
 	/*
-	 * (non-Javadoc)
+	 * (non-Javadoc) 
 	 * 
 	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)
 	 */
