@@ -16,6 +16,8 @@ import com.ecosystem.guard.domain.exceptions.ServiceException;
 import com.ecosystem.guard.domain.service.app.TakePictureRequest;
 import com.ecosystem.guard.engine.authn.AuthorizationContext;
 import com.ecosystem.guard.engine.servlet.AuthorizedRawPostService;
+import com.ecosystem.guard.phidgets.SensorManager;
+import com.ecosystem.guard.phidgets.sensors.LcdScreen;
 
 /**
  * 
@@ -26,6 +28,12 @@ import com.ecosystem.guard.engine.servlet.AuthorizedRawPostService;
 public class TakePictureService extends AuthorizedRawPostService<TakePictureRequest> {
 	private static final long serialVersionUID = -8943531131351756829L;
 
+	private static final String SERVICE_MESSAGE = "Picture generator:";
+	private static final String TAKING_SNAPSHOT_MESSAGE = "Taking snapshot...";
+	private static final String SENDING_SNAPSHOT_MESSAGE = "Sending snapshot...";
+	private static final String SENT_SNAPSHOT_MESSAGE = "Snapshot sent!";
+	private static final String ERROR_SNAPSHOT_MESSAGE = "*** ERROR ***";
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -44,15 +52,26 @@ public class TakePictureService extends AuthorizedRawPostService<TakePictureRequ
 		PictureConfig pictureConfig = configParser.parsePictureConfig(request.getPictureConfiguration());
 		File picFile = new File(Hex.encodeHexString(RandomGenerator.generateRandom(8))
 				+ pictureConfig.getContainer().getExtension());
+		LcdScreen lcd = SensorManager.getInstance().getSensor(LcdScreen.class);
+		boolean error = false;
 		try {
+			lcd.showMessage(TAKING_SNAPSHOT_MESSAGE, pictureConfig.getResolution().getAbbreviation() + " - " + pictureConfig.getResolution().getResolution());
 			pictureManager.takePicture(pictureConfig, picFile);
+			lcd.showMessage(SENDING_SNAPSHOT_MESSAGE, pictureConfig.getResolution().getAbbreviation() + " - " + pictureConfig.getResolution().getResolution());
 			response.setContentType(pictureConfig.getContainer().getContentType());
 			StreamingUtils.consumeFileStream(picFile, response.getOutputStream());
-		}
-		finally {
+		} catch( Exception e ) {
+			error = true;
+			throw e;
+		} finally {
 			CameraControllerFactory.releaseCameraController();
 			if (picFile.exists()) {
 				picFile.delete();
+			}
+			if( error ) {
+				lcd.showAsynchronousIntermitentMessage(SERVICE_MESSAGE, SENT_SNAPSHOT_MESSAGE, 5);
+			} else {
+				lcd.showAsynchronousMessage(SERVICE_MESSAGE, ERROR_SNAPSHOT_MESSAGE, 5000);
 			}
 		}
 	}

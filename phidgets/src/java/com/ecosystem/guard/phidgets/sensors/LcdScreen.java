@@ -64,7 +64,7 @@ public class LcdScreen extends Sensor<TextLCDPhidget> {
 		this.contrast = contrast;
 		this.brightness = brightness;
 	}
-
+	
 	/**
 	 * Imprime un mensaje de texto en la primera línea de la LCD de máximo 20
 	 * caracteres. Imprime un mensaje de texto en la segunda línea de la LCD de
@@ -74,6 +74,21 @@ public class LcdScreen extends Sensor<TextLCDPhidget> {
 	 * @param line1
 	 * @param line2
 	 * @param seconds
+	 * @throws Exception
+	 */
+	public void showMessage(String line1, String line2) throws Exception {
+		showMessage(line1, line2, 0);
+	}
+
+	/**
+	 * Imprime un mensaje de texto en la primera línea de la LCD de máximo 20
+	 * caracteres. Imprime un mensaje de texto en la segunda línea de la LCD de
+	 * máximo 20 caracteres. El mensaje permanecerá N segundos en la LCD con
+	 * iluminación, después desaparecerá el mensaje y la iluminación.
+	 * 
+	 * @param line1
+	 * @param line2
+	 * @param seconds 0 segundos indica que el mensaje es permanente
 	 * @throws Exception
 	 */
 	public void showMessage(String line1, String line2, int timeMs) throws Exception {
@@ -92,14 +107,14 @@ public class LcdScreen extends Sensor<TextLCDPhidget> {
 		if (line2 != null) {
 			getSensor().setDisplayString(SECOND_LINE, line2);
 		}
-		try {
-			Thread.sleep(timeMs);	
-		} catch(InterruptedException e) {
-			return;
+		if( timeMs > 0 ) {
+			try {
+				Thread.sleep(timeMs);	
+			} catch(InterruptedException e) {
+				return;
+			}
+			turnOff();
 		}
-		getSensor().setBacklight(false);
-		getSensor().setDisplayString(FIRST_LINE, EMPTY_LINE);
-		getSensor().setDisplayString(SECOND_LINE, EMPTY_LINE);
 	}
 
 	/**
@@ -200,15 +215,19 @@ public class LcdScreen extends Sensor<TextLCDPhidget> {
 		asyncThread.start();
 	}
 	
-	@Override
-	public void close() throws Exception {
+	public void turnOff() throws Exception {
 		if(asyncThread != null && asyncThread.isAlive()) {
 			asyncThread.interrupt();
 			asyncThread.join();
 		}
 		getSensor().setBacklight(false);
-		getSensor().setDisplayString(0, "");
-		getSensor().setDisplayString(1, "");
+		getSensor().setDisplayString(FIRST_LINE, EMPTY_LINE);
+		getSensor().setDisplayString(SECOND_LINE, EMPTY_LINE);
+	}
+	
+	@Override
+	public void close() throws Exception {
+		turnOff();
 		super.close();
 	}
 

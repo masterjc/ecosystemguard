@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <appConfig>
-	<updateIpThreshold>60000</updateIpThreshold>
+	<updateIpThreshold>3600000</updateIpThreshold>
 	<registryUrl>http://192.168.1.103:8080/ecosystemguard-registry</registryUrl>
 </appConfig>
