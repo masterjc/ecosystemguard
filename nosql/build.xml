@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<project name="ecosystemguard-nosql" default="all">
+	<property environment="env" />
+
+	<include file="${env.PROJECT_DIR}/build-tools/project-definitions.xml"/>
+	
+	<path id="classpath">
+		<path refid="jodatime.path" />
+    </path>
+	
+	<target name="all" depends="clean, compile, jar"/>
+	
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+		<delete dir="${lib.dir}"/>
+	</target>
+	
+	<target name="clean-all" depends="clean">
+		<delete dir="${bin.dir}"/>
+	</target>
+	
+	<target name="compile">
+	    <mkdir dir="${classes.dir}"/>
+	    <javac srcdir="src" destdir="${classes.dir}" debug="true" includeantruntime="false" classpathref="classpath"/>
+	</target>
+	
+	<target name="jar">
+		<mkdir dir="${lib.dir}"/>
+		<jar destfile="${lib.dir}/${ant.project.name}.jar" basedir="${classes.dir}"/>
+	</target>
+	
+</project>

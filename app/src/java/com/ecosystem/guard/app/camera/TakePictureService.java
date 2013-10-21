@@ -1,6 +1,7 @@
 package com.ecosystem.guard.app.camera;
 
 import java.io.File;
+import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -43,7 +44,7 @@ public class TakePictureService extends AuthorizedRawPostService<TakePictureRequ
 	 * javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	protected void execute(AuthorizationContext authnContext, TakePictureRequest request, HttpServletResponse response)
+	protected void execute(AuthorizationContext authnContext, TakePictureRequest request, HttpServletResponse response, OutputStream outStream)
 			throws Exception {
 		if (request.getPictureConfiguration() == null)
 			throw new ServiceException(new Result(Result.Status.CLIENT_ERROR, "Missing picture config information"));
@@ -59,7 +60,7 @@ public class TakePictureService extends AuthorizedRawPostService<TakePictureRequ
 			pictureManager.takePicture(pictureConfig, picFile);
 			lcd.showMessage(SENDING_SNAPSHOT_MESSAGE, pictureConfig.getResolution().getAbbreviation() + " - " + pictureConfig.getResolution().getResolution());
 			response.setContentType(pictureConfig.getContainer().getContentType());
-			StreamingUtils.consumeFileStream(picFile, response.getOutputStream());
+			StreamingUtils.consumeFileStream(picFile, outStream);
 		} catch( Exception e ) {
 			error = true;
 			throw e;

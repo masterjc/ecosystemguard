@@ -11,6 +11,8 @@
 package com.ecosystem.guard.engine.servlet;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -43,6 +45,7 @@ public abstract class AuthorizedRawPostService<T extends Request> extends HttpSe
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
+		OutputStream outputStream = response.getOutputStream();
 		try {
 			T requestObj = Deserializer.deserialize(getRequestJaxbClass(), request.getReader());
 			if (requestObj.getCredentials() == null || !requestObj.getCredentials().defined())
@@ -53,25 +56,26 @@ public abstract class AuthorizedRawPostService<T extends Request> extends HttpSe
 				throw new ServiceException(new Result(Status.AUTHN_ERROR, "Not authenticated"));
 			if (!authContext.isAuthorized())
 				throw new ServiceException(new Result(Status.AUTHZ_ERROR, "Not authorized"));
-			execute(authContext, requestObj, response);
+			execute(authContext, requestObj, response, outputStream);
 		} catch (DeserializerException dEx) {
 			EcosystemGuardLogger.logError(dEx, this.getClass());
 			writeErrorResponse(new Result(Status.CLIENT_ERROR, dEx.getMessage()), HttpServletResponse.SC_BAD_REQUEST,
-					response);
+					response, outputStream);
 		} catch (ServiceException sEx) {
 			EcosystemGuardLogger.logError(sEx, this.getClass());
-			writeErrorResponse(sEx.getResult(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response);
+			writeErrorResponse(sEx.getResult(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response, outputStream);
 		} catch (Exception e) {
 			EcosystemGuardLogger.logError(e, this.getClass());
 			writeErrorResponse(new Result(Status.SERVER_ERROR, e.getMessage()),
-					HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response);
+					HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response, outputStream);
 		}
 	}
 
-	private void writeErrorResponse(Result result, int httpStatus, HttpServletResponse response) throws IOException {
+	private void writeErrorResponse(Result result, int httpStatus, HttpServletResponse response, OutputStream outStream) throws IOException {
 		try {
 			response.setStatus(httpStatus);
-			Serializer.serialize(result, Result.class, response.getWriter());
+			OutputStreamWriter writer = new OutputStreamWriter(outStream);
+			Serializer.serialize(result, Result.class, writer );
 		} catch (Exception e) {
 			throw new IOException("AuthenticatedRawPostService::writeErrorResponse() error", e);
 		}
@@ -87,7 +91,7 @@ public abstract class AuthorizedRawPostService<T extends Request> extends HttpSe
 	 * @param httpResponse
 	 * @throws Exception
 	 */
-	protected abstract void execute(AuthorizationContext authContext, T request, HttpServletResponse httpResponse)
+	protected abstract void execute(AuthorizationContext authContext, T request, HttpServletResponse httpResponse, OutputStream outStream)
 			throws Exception;
 
 	/**

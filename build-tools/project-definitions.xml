@@ -48,6 +48,14 @@
 		<pathelement location="${ecosystemguard-logging.lib}" />
 	</path>
 	
+	<!-- NoSQL -->
+	<property name="ecosystemguard-nosql.dir" value="${env.PROJECT_DIR}/nosql"/>
+	<property name="ecosystemguard-nosql.name" value="ecosystemguard-nosql.jar"/>
+	<property name="ecosystemguard-nosql.lib" value="${ecosystemguard-nosql.dir}/${lib.dir}/${ecosystemguard-nosql.name}"/>
+	<path id="ecosystemguard-nosql.path">
+		<pathelement location="${ecosystemguard-nosql.lib}" />
+	</path>
+	
 	<!-- Phidgets -->
 	<property name="ecosystemguard-phidgets.dir" value="${env.PROJECT_DIR}/phidgets"/>
 	<property name="ecosystemguard-phidgets.name" value="ecosystemguard-phidgets.jar"/>
@@ -127,6 +135,14 @@
 	<property name="phidgets.lib" value="${phidgets.dir}/${phidgets.name}"/>
 	<path id="phidgets.path">
 		<pathelement location="${phidgets.lib}" />
+	</path>
+	
+	<!-- Joda Time API -->
+	<property name="jodatime.dir" value="${env.PROJECT_DIR}/thirdparty/joda-time"/>
+	<property name="jodatime.name" value="joda-time-2.3.jar"/>
+	<property name="jodatime.lib" value="${jodatime.dir}/${jodatime.name}"/>
+	<path id="jodatime.path">
+		<pathelement location="${jodatime.lib}" />
 	</path>
 	
 	<!-- Apache Commons Codec -->

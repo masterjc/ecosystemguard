@@ -1,6 +1,7 @@
 package com.ecosystem.guard.app.camera;
 
 import java.io.File;
+import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,7 +42,7 @@ public class RecordVideoService extends AuthorizedRawPostService<RecordVideoRequ
 	 * javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	protected void execute(AuthorizationContext authn, RecordVideoRequest request, HttpServletResponse response)
+	protected void execute(AuthorizationContext authn, RecordVideoRequest request, HttpServletResponse response, OutputStream outStream)
 			throws Exception {
 		if (request.getLength() == null || request.getVideoConfiguration() == null)
 			throw new ServiceException(new Result(Result.Status.CLIENT_ERROR, "Missing video config information"));
@@ -57,7 +58,7 @@ public class RecordVideoService extends AuthorizedRawPostService<RecordVideoRequ
 			videoManager.record(videoConfig, request.getLength(), videoFile);
 			lcd.showMessage(SENDING_VIDEO_MESSAGE, videoConfig.getContainer().getContentType() + " - " + request.getLength().intValue() + "s");
 			response.setContentType(videoConfig.getContainer().getContentType());
-			StreamingUtils.consumeFileStream(videoFile, response.getOutputStream());
+			StreamingUtils.consumeFileStream(videoFile, outStream);
 		} catch( Exception e ) {
 			error = true;
 			throw e;

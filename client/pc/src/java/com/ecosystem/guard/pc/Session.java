@@ -19,8 +19,7 @@ public class Session {
 	}
 	
 	public String getAppUrl() {
-		return ClientConstants.ECOSYSTEM_URL_HEAD + getAppIpAddress() + ClientConstants.ECOSYSTEM_URL_ENDING;
-				
+		return ClientConstants.ECOSYSTEM_URL_HEAD + getAppIpAddress() + ClientConstants.ECOSYSTEM_APP_URL_ENDING;			
 	}
 
 	public void setAppIpAddress(String appIpAddress) {

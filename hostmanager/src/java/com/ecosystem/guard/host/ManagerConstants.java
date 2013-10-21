@@ -17,6 +17,7 @@ package com.ecosystem.guard.host;
  */
 public class ManagerConstants {
 	public static String ECOSYSTEM_REGISTRY_SERVER = "registry:8080";
+	public static String EXTERNAL_WEB = "google.com";
 	// public static String ECOSYSTEM_SERVER = "registry-ecosystemguard.rhcloud.com";
 	public static String ECOSYSTEM_BASE_URL = "http://" + ECOSYSTEM_REGISTRY_SERVER + "/ecosystemguard-registry/";
 

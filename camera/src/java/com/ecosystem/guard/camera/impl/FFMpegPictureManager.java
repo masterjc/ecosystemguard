@@ -35,7 +35,10 @@ public class FFMpegPictureManager implements PictureManager {
 		commandLine.addArgument("-f", FFMpegTraits.CAPTURE_DRIVER);
 		commandLine.addArgument("-i", cameraDevice.getAbsolutePath());
 		commandLine.addArgument("-s", pictureConfig.getResolution().getResolution());
+		commandLine.addArgument("-vframes", "1");
+		commandLine.addArgument(pictureFile.getAbsolutePath());
 		commandLine.setExecTimeoutSeconds(TAKE_PHOTO_TIMEOUT);
+		System.out.println("COMMAND LINE: " + commandLine.getCommand());
 		Process ffmpegProcess = commandLine.execute();
 		FFMpegTraits.checkAndThrowFFMpegError(ffmpegProcess.getInputStream(), ffmpegProcess.getErrorStream());
 	}

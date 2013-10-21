@@ -5,11 +5,11 @@
   	</listener>
 	<servlet>
         <servlet-name>TakePictureService</servlet-name>
-        <servlet-class>com.ecosystem.guard.app.TakePictureService</servlet-class>
+        <servlet-class>com.ecosystem.guard.app.camera.TakePictureService</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RecordVideoService</servlet-name>
-        <servlet-class>com.ecosystem.guard.app.RecordVideoService</servlet-class>
+        <servlet-class>com.ecosystem.guard.app.camera.RecordVideoService</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>TakePictureService</servlet-name>

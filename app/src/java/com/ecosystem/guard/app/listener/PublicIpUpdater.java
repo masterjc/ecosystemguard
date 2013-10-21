@@ -1,6 +1,6 @@
 package com.ecosystem.guard.app.listener;
 
-import java.net.Inet4Address;
+import java.net.Socket;
 import java.util.concurrent.Callable;
 
 import com.ecosystem.guard.common.XmlServiceRequestor;
@@ -32,7 +32,7 @@ public class PublicIpUpdater implements Callable<Void> {
 		UpdateIpRequest ipRequest = new UpdateIpRequest();
 		ipRequest.setCredentials(hostConfig.getCredentials());
 		ipRequest.setHostId(hostConfig.getId());
-		String privateIp = Inet4Address.getLocalHost().getHostAddress();
+		String privateIp = getPrivateIp();
 		ipRequest.setPrivateIp(privateIp);
 		UpdateIpResponse ipResponse = XmlServiceRequestor.sendRequest(ipRequest, UpdateIpRequest.class,
 				UpdateIpResponse.class, RegistryServices.getUpdateIpUrl());
@@ -42,6 +42,15 @@ public class PublicIpUpdater implements Callable<Void> {
 		LcdScreen lcd = SensorManager.getInstance().getSensor(LcdScreen.class);
 		lcd.showAsynchronousMessage("PbIP:" + ipResponse.getPublicIp(), "PvIP:" + privateIp, 20000);
 		return null;
+	}
+	
+	private String getPrivateIp() throws Exception {
+		Socket s = new Socket("google.com", 80);
+		try {
+			return s.getLocalAddress().getHostAddress();
+		} finally {
+			s.close();
+		}
 	}
 
 }

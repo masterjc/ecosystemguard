@@ -11,6 +11,7 @@
 package com.ecosystem.guard.host;
 
 import java.net.InetAddress;
+import java.net.Socket;
 import java.util.Scanner;
 
 import com.ecosystem.guard.common.CmdUtils;
@@ -71,7 +72,7 @@ public class HostRegistryManager {
 		UpdateIpRequest ipRequest = new UpdateIpRequest();
 		ipRequest.setCredentials(credentials);
 		ipRequest.setHostId(hostConfigurator.getHostId());
-		ipRequest.setPrivateIp(InetAddress.getLocalHost().getHostAddress());
+		ipRequest.setPrivateIp(getPrivateIp());
 		UpdateIpResponse ipResponse = XmlServiceRequestor.sendRequest(ipRequest, UpdateIpRequest.class, UpdateIpResponse.class,
 				ManagerConstants.UPDATE_IP_SERVICE);
 		if (ipResponse.getResult().getStatus() != Status.OK) {
@@ -102,5 +103,14 @@ public class HostRegistryManager {
 			hostConfigurator.reset();
 		}
 		ManagerOutput.printOperationStatus("Host unregistration status: ", response.getResult());
+	}
+	
+	private String getPrivateIp() throws Exception {
+		Socket s = new Socket(ManagerConstants.EXTERNAL_WEB, 80);
+		try {
+			return s.getLocalAddress().getHostAddress();
+		} finally {
+			s.close();
+		}
 	}
 }
