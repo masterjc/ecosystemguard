@@ -58,6 +58,27 @@ public class RepositoryManagerTest {
 		Double d = repoManager.getLast(TEMPERATURE_ENTRY);
 		Assert.assertEquals(value2, d);
 	}
+	
+	@Test
+	public void testLastDateGet_NotOrdered() throws Exception {
+		String TEMPERATURE_ENTRY = "temperature";
+
+		Repository repository = new DiskRepository("testLastDateGet_NotOrdered");
+		repository.addEntry(TEMPERATURE_ENTRY, Double.class);
+		RepositoryManager repoManager = new RepositoryManagerImpl(repository);
+
+		DateTime date1 = new DateTime(new Date(2013, 10, 22), new Time(11, 12, 13));
+		DateTime date2 = new DateTime(new Date(2013, 10, 22), new Time(12, 12, 13));
+		DateTime date3 = new DateTime(new Date(2011, 10, 22), new Time(12, 12, 13));
+		Double value1 = new Double("1.0");
+		Double value2 = new Double("2.0");
+		Double value3 = new Double("3.0");
+		repoManager.insert(TEMPERATURE_ENTRY, date1, value1);
+		repoManager.insert(TEMPERATURE_ENTRY, date2, value2);
+		repoManager.insert(TEMPERATURE_ENTRY, date3, value3);
+		Double d = repoManager.getLast(TEMPERATURE_ENTRY);
+		Assert.assertEquals(value2, d);
+	}
 
 	@Test
 	public void testFirstDateGet() throws Exception {
@@ -76,25 +97,64 @@ public class RepositoryManagerTest {
 		Double d = repoManager.getFirst(TEMPERATURE_ENTRY);
 		Assert.assertEquals(value1, d);
 	}
-
+	
 	@Test
-	public void testLastDateGet2() throws Exception {
+	public void testDateIntervalGet() throws Exception {
 		String TEMPERATURE_ENTRY = "temperature";
 
-		Repository repository = new DiskRepository("testFirstDateGet2");
+		Repository repository = new DiskRepository("testDateIntervalGet");
 		repository.addEntry(TEMPERATURE_ENTRY, Double.class);
 		RepositoryManager repoManager = new RepositoryManagerImpl(repository);
 
 		DateTime date1 = new DateTime(new Date(2013, 10, 22), new Time(11, 12, 13));
 		DateTime date2 = new DateTime(new Date(2013, 10, 22), new Time(12, 12, 13));
-		DateTime date3 = new DateTime(new Date(2011, 10, 22), new Time(12, 12, 13));
+		DateTime date3 = new DateTime(new Date(2013, 10, 23), new Time(12, 12, 13));
+		DateTime date4 = new DateTime(new Date(2013, 10, 23), new Time(12, 12, 14));
+		DateTime date5 = new DateTime(new Date(2013, 10, 24), new Time(12, 12, 14));
+		DateTime date6 = new DateTime(new Date(2013, 10, 24), new Time(13, 12, 14));
 		Double value1 = new Double("1.0");
 		Double value2 = new Double("2.0");
-		Double value3 = new Double("3.0");
+		Double value3 = new Double("1.0");
+		Double value4 = new Double("2.0");
+		Double value5 = new Double("1.0");
+		Double value6 = new Double("2.0");
 		repoManager.insert(TEMPERATURE_ENTRY, date1, value1);
 		repoManager.insert(TEMPERATURE_ENTRY, date2, value2);
 		repoManager.insert(TEMPERATURE_ENTRY, date3, value3);
-		Double d = repoManager.getLast(TEMPERATURE_ENTRY);
-		Assert.assertEquals(value2, d);
+		repoManager.insert(TEMPERATURE_ENTRY, date4, value4);
+		repoManager.insert(TEMPERATURE_ENTRY, date5, value5);
+		repoManager.insert(TEMPERATURE_ENTRY, date6, value6);
+		
+		DateTime interval1 = new DateTime(new Date(2013, 10, 22), new Time(12, 00, 00));
+		DateTime interval2 = new DateTime(new Date(2013, 10, 24), new Time(13, 00, 00));
+		List<Double> period = repoManager.get(TEMPERATURE_ENTRY, interval1, interval2);
+		Assert.assertEquals(4, period.size());
+		Assert.assertEquals(value2, period.get(0));
+		Assert.assertEquals(value3, period.get(1));
+		Assert.assertEquals(value4, period.get(2));
+		Assert.assertEquals(value5, period.get(3));	
+		
+		interval1 = new DateTime(new Date(2013, 10, 22), new Time(12, 12, 13));
+		interval2 = new DateTime(new Date(2013, 10, 23), new Time(12, 12, 14));
+		period = repoManager.get(TEMPERATURE_ENTRY, interval1, interval2);
+		Assert.assertEquals(3, period.size());
+		Assert.assertEquals(value2, period.get(0));
+		Assert.assertEquals(value3, period.get(1));
+		Assert.assertEquals(value4, period.get(2));
+		
+		interval1 = new DateTime(new Date(2013, 10, 21), new Time(12, 12, 13));
+		interval2 = new DateTime(new Date(2013, 10, 21), new Time(12, 12, 14));
+		period = repoManager.get(TEMPERATURE_ENTRY, interval1, interval2);
+		Assert.assertEquals(0, period.size());
+		
+		interval1 = new DateTime(new Date(2013, 10, 22), new Time(13, 12, 24));
+		interval2 = new DateTime(new Date(2013, 10, 24), new Time(0, 0, 0));
+		period = repoManager.get(TEMPERATURE_ENTRY, interval1, interval2);
+		Assert.assertEquals(2, period.size());
+		Assert.assertEquals(value3, period.get(1));
+		Assert.assertEquals(value4, period.get(2));
 	}
+
+
+	
 }
