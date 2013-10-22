@@ -18,6 +18,7 @@ import com.ecosystem.guard.nosql.Repository;
 import com.ecosystem.guard.nosql.TimeSummary;
 import com.ecosystem.guard.nosql.type.DoubleConverter;
 import com.ecosystem.guard.nosql.type.EntryTypeConverter;
+import com.ecosystem.guard.nosql.type.StringConverter;
 
 /**
  * @version $Revision$
@@ -38,6 +39,7 @@ public class DiskRepository implements Repository {
 		entries = new HashMap<String, Entry>();
 		parserTable = new HashMap<Class<?>, EntryTypeConverter>();
 		parserTable.put(Double.class, new DoubleConverter());
+		parserTable.put(String.class, new StringConverter());
 		this.name = name;
 		createRepositoryDir();
 	}
