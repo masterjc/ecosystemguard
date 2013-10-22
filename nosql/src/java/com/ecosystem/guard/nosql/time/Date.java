@@ -55,6 +55,10 @@ public class Date {
 		if (obj instanceof Date) {
 			Date date = (Date) obj;
 			return date.getYear() == year && date.getMonth() == month && date.getDay() == day;
+		} 
+		else if (obj instanceof DateTime) {
+			Date ddate = ((DateTime) obj).getDate();
+			return equals(ddate);
 		}
 		return false;
 	}

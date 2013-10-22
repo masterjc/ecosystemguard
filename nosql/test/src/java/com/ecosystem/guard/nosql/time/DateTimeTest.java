@@ -40,7 +40,15 @@ public class DateTimeTest {
 		Assert.assertEquals(dateTime, other);
 		Assert.assertEquals("2012-10-11Z8:7:2", dateTime.toString());
 	}
-
+	
+	@Test
+	public void testDateTime_withNull() throws Exception {
+		Date dateTime = new Date(2012, 10, 11);
+		DateTime dateTime2 = new DateTime(new Date(2012, 10, 11), new Time(11, 12, 13));
+		Assert.assertTrue(dateTime2.equals(dateTime));
+		Assert.assertTrue(dateTime.equals(dateTime2));
+	}
+	
 	@Test
 	public void testDateIsGreater_year() throws Exception {
 		Date date1 = new Date(2012, 10, 11);

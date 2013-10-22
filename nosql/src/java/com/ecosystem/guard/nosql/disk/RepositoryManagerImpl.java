@@ -49,42 +49,40 @@ public class RepositoryManagerImpl implements RepositoryManager {
 	 */
 	@Override
 	public <T> void insert(String entry, DateTime date, T value) throws Exception {
-		Entry e = repository.getEntry(entry);
-		if (e == null)
-			throw new Exception("Entry '" + entry + "' does not exist in repository");
-
-		String dir = repository.getName() + "/" + date.getDate().getYear() + "/" + date.getDate().getMonth() + "/" + date.getDate().getDay();
-		createDirectory(dir);
-		File entryFile = new File(dir + "/" + entry);
 		synchronized (entryAccessLock) {
+			Entry e = repository.getEntry(entry);
+			if (e == null)
+				throw new Exception("Entry '" + entry + "' does not exist in repository");
+
+			String dir = repository.getName() + "/" + date.getDate().getYear() + "/" + date.getDate().getMonth() + "/" + date.getDate().getDay();
+			createDirectory(dir);
+			File entryFile = new File(dir + "/" + entry);
 			byte[] serialized = e.getEntryTypeParser().serialize(value);
 			FileEntryDAO.write(new FileEntry(date.getTime(), serialized), entryFile);
+			updateEntryTimeSummary(e, date);
 		}
 
-		updateEntryTimeSummary(e, date);
 	}
 
 	private void updateEntryTimeSummary(Entry entry, DateTime date) throws Exception {
-		synchronized (entry) {
-			boolean write = false;
-			if (entry.getTimeSummary().getFirst() == null) {
-				entry.getTimeSummary().setFirst(date);
-				write = true;
-			}
-			if (entry.getTimeSummary().getLast() == null) {
+		boolean write = false;
+		if (entry.getTimeSummary().getFirst() == null) {
+			entry.getTimeSummary().setFirst(date);
+			write = true;
+		}
+		if (entry.getTimeSummary().getLast() == null) {
+			entry.getTimeSummary().setLast(date);
+			write = true;
+		}
+		else {
+			if (date.isGreater(entry.getTimeSummary().getLast())) {
 				entry.getTimeSummary().setLast(date);
 				write = true;
-			}
-			else {
-				if (date.isGreater(entry.getTimeSummary().getLast())) {
-					entry.getTimeSummary().setLast(date);
-					write = true;
 
-				}
 			}
-			if (write) {
-				TimeSummaryDAO.write(repository.getName(), entry.getName(), entry.getTimeSummary());
-			}
+		}
+		if (write) {
+			TimeSummaryDAO.write(repository.getName(), entry.getName(), entry.getTimeSummary());
 		}
 	}
 
@@ -96,17 +94,17 @@ public class RepositoryManagerImpl implements RepositoryManager {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> List<T> get(String entry, DateTime date) throws Exception {
-		File entryFile = new File(repository.getName() + "/" + date.getDate().getYear() + "/" + date.getDate().getMonth() + "/"
-				+ date.getDate().getDay() + "/" + entry);
-		if (!entryFile.exists())
-			return null;
-
-		Entry e = repository.getEntry(entry);
-		if (e == null)
-			throw new Exception("Entry '" + entry + "' does not exist in repository");
-
-		List<T> result = new ArrayList<T>();
 		synchronized (entryAccessLock) {
+			File entryFile = new File(repository.getName() + "/" + date.getDate().getYear() + "/" + date.getDate().getMonth() + "/"
+					+ date.getDate().getDay() + "/" + entry);
+			if (!entryFile.exists())
+				return null;
+
+			Entry e = repository.getEntry(entry);
+			if (e == null)
+				throw new Exception("Entry '" + entry + "' does not exist in repository");
+
+			List<T> result = new ArrayList<T>();
 			FileInputStream input = new FileInputStream(entryFile);
 			try {
 				FileEntryParser parser = new FileEntryParser(input);
@@ -127,14 +125,16 @@ public class RepositoryManagerImpl implements RepositoryManager {
 			finally {
 				input.close();
 			}
-		}
 
-		return result;
+			return result;
+		}
 	}
 
 	@Override
 	public <T> List<T> get(String entry, DateTime beginDate, DateTime endDate) throws Exception {
-		return null;
+		synchronized (entryAccessLock) {
+			return null;
+		}
 	}
 
 	/*
@@ -144,15 +144,17 @@ public class RepositoryManagerImpl implements RepositoryManager {
 	 */
 	@Override
 	public <T> T getLast(String entry) throws Exception {
-		Entry e = repository.getEntry(entry);
-		if (e == null)
-			throw new Exception("Entry '" + entry + "' does not exist in repository");
+		synchronized (entryAccessLock) {
+			Entry e = repository.getEntry(entry);
+			if (e == null)
+				throw new Exception("Entry '" + entry + "' does not exist in repository");
 
-		List<T> list = get(entry, e.getTimeSummary().getLast());
-		if (list.size() > 0)
-			return list.get(list.size() - 1);
+			List<T> list = get(entry, e.getTimeSummary().getLast());
+			if (list.size() > 0)
+				return list.get(list.size() - 1);
 
-		return null;
+			return null;
+		}
 	}
 
 	/*
@@ -162,15 +164,17 @@ public class RepositoryManagerImpl implements RepositoryManager {
 	 */
 	@Override
 	public <T> T getFirst(String entry) throws Exception {
-		Entry e = repository.getEntry(entry);
-		if (e == null)
-			throw new Exception("Entry '" + entry + "' does not exist in repository");
+		synchronized (entryAccessLock) {
+			Entry e = repository.getEntry(entry);
+			if (e == null)
+				throw new Exception("Entry '" + entry + "' does not exist in repository");
 
-		List<T> list = get(entry, e.getTimeSummary().getFirst());
-		if (list.size() > 0)
-			return list.get(0);
+			List<T> list = get(entry, e.getTimeSummary().getFirst());
+			if (list.size() > 0)
+				return list.get(0);
 
-		return null;
+			return null;
+		}
 	}
 
 	/*
@@ -180,18 +184,20 @@ public class RepositoryManagerImpl implements RepositoryManager {
 	 */
 	@Override
 	public <T> T getMax(String entry) throws Exception {
-		Entry e = repository.getEntry(entry);
-		if (e == null)
-			throw new Exception("Entry '" + entry + "' does not exist in repository");
+		synchronized (entryAccessLock) {
+			Entry e = repository.getEntry(entry);
+			if (e == null)
+				throw new Exception("Entry '" + entry + "' does not exist in repository");
 
-		if (e.getTimeSummary().getMax() == null)
+			if (e.getTimeSummary().getMax() == null)
+				return null;
+
+			List<T> list = get(entry, e.getTimeSummary().getMax());
+			if (list.size() > 0)
+				return list.get(0);
+
 			return null;
-
-		List<T> list = get(entry, e.getTimeSummary().getMax());
-		if (list.size() > 0)
-			return list.get(0);
-
-		return null;
+		}
 	}
 
 	/*
@@ -201,18 +207,20 @@ public class RepositoryManagerImpl implements RepositoryManager {
 	 */
 	@Override
 	public <T> T getMin(String entry) throws Exception {
-		Entry e = repository.getEntry(entry);
-		if (e == null)
-			throw new Exception("Entry '" + entry + "' does not exist in repository");
+		synchronized (entryAccessLock) {
+			Entry e = repository.getEntry(entry);
+			if (e == null)
+				throw new Exception("Entry '" + entry + "' does not exist in repository");
 
-		if (e.getTimeSummary().getMin() == null)
+			if (e.getTimeSummary().getMin() == null)
+				return null;
+
+			List<T> list = get(entry, e.getTimeSummary().getMin());
+			if (list.size() > 0)
+				return list.get(0);
+
 			return null;
-
-		List<T> list = get(entry, e.getTimeSummary().getMin());
-		if (list.size() > 0)
-			return list.get(0);
-
-		return null;
+		}
 	}
 
 	private void createDirectory(String dir) {

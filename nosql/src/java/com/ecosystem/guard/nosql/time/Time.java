@@ -62,6 +62,10 @@ public class Time {
 			Time time = (Time) obj;
 			return time.getHour() == hour && time.getMinute() == minute && time.getSecond() == second;
 		}
+		else if (obj instanceof DateTime) {
+			Time ttime = ((DateTime) obj).getTime();
+			return equals(ttime);
+		}
 		return false;
 	}
 
