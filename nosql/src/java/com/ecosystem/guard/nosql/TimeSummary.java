@@ -10,7 +10,7 @@
 
 package com.ecosystem.guard.nosql;
 
-import org.joda.time.DateTime;
+import com.ecosystem.guard.nosql.time.DateTime;
 
 /**
  * @version $Revision$
@@ -20,49 +20,56 @@ public class TimeSummary {
 	private DateTime first;
 	private DateTime max;
 	private DateTime min;
-	
+
 	/**
 	 * @return the last
 	 */
 	public DateTime getLast() {
 		return last;
 	}
+
 	/**
 	 * @param last the last to set
 	 */
 	public void setLast(DateTime last) {
 		this.last = last;
 	}
+
 	/**
 	 * @return the first
 	 */
 	public DateTime getFirst() {
 		return first;
 	}
+
 	/**
 	 * @param first the first to set
 	 */
 	public void setFirst(DateTime first) {
 		this.first = first;
 	}
+
 	/**
 	 * @return the max
 	 */
 	public DateTime getMax() {
 		return max;
 	}
+
 	/**
 	 * @param max the max to set
 	 */
 	public void setMax(DateTime max) {
 		this.max = max;
 	}
+
 	/**
 	 * @return the min
 	 */
 	public DateTime getMin() {
 		return min;
 	}
+
 	/**
 	 * @param min the min to set
 	 */
@@ -70,4 +77,3 @@ public class TimeSummary {
 		this.min = min;
 	}
 }
-

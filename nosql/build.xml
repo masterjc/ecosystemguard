@@ -5,7 +5,6 @@
 	<include file="${env.PROJECT_DIR}/build-tools/project-definitions.xml"/>
 	
 	<path id="classpath">
-		<path refid="jodatime.path" />
     </path>
 	
 	<target name="all" depends="clean, compile, jar"/>

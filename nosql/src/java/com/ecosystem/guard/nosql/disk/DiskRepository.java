@@ -26,14 +26,14 @@ public class DiskRepository implements Repository {
 	private String name;
 	private HashMap<String, Entry> entries;
 	private HashMap<Class<?>, EntryTypeConverter> parserTable;
-	
+
 	public DiskRepository(String name, HashMap<Class<?>, EntryTypeConverter> typeParsers) {
 		entries = new HashMap<String, Entry>();
 		this.parserTable = typeParsers;
 		this.name = name;
 		createRepositoryDir();
 	}
-	
+
 	public DiskRepository(String name) {
 		entries = new HashMap<String, Entry>();
 		parserTable = new HashMap<Class<?>, EntryTypeConverter>();
@@ -41,36 +41,35 @@ public class DiskRepository implements Repository {
 		this.name = name;
 		createRepositoryDir();
 	}
-	
+
 	private void createRepositoryDir() {
 		File repoDir = new File(name);
-		if( !repoDir.exists() ) {
+		if (!repoDir.exists()) {
 			repoDir.mkdir();
 		}
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	@Override
 	public void addEntry(String entryName, Class<?> entryClass) throws Exception {
-		if( !parserTable.containsKey(entryClass))
-			throw new Exception("'" + entryClass.getName() + "' parser is not configured for entry '" + name + "'" );
-		
+		if (!parserTable.containsKey(entryClass))
+			throw new Exception("'" + entryClass.getName() + "' parser is not configured for entry '" + name + "'");
+
 		File entryInfo = new File(name + "/" + entryName + ".info");
 		TimeSummary timeSummary = null;
-		if( entryInfo.exists() ) {
+		if (entryInfo.exists()) {
 			timeSummary = TimeSummaryDAO.read(entryInfo);
+		}
+		else {
 			timeSummary = new TimeSummary();
-		} else {
-			timeSummary = new TimeSummary();
-			TimeSummaryDAO.write(name, entryName, timeSummary);
 		}
 		Entry entry = new Entry(name, entryClass, parserTable.get(entryClass), timeSummary);
 		entries.put(entryName, entry);
 	}
-	
+
 	@Override
 	public Entry getEntry(String name) {
 		return entries.get(name);

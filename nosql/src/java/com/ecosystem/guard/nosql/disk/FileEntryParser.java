@@ -10,29 +10,21 @@
 
 package com.ecosystem.guard.nosql.disk;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
-
-import org.joda.time.DateTime;
+import java.io.InputStreamReader;
 
 /**
  * @version $Revision$
  */
 public class FileEntryParser {
-	private static final int BUFFER_SIZE = 2048;
-	
-	private InputStream input;
-	private byte[] buffer = new byte[BUFFER_SIZE];
-	
-	int count = 10;
-	
+	private BufferedReader input;
+
 	public FileEntryParser(InputStream stream) {
-		this.input = stream;
+		this.input = new BufferedReader(new InputStreamReader(stream));
 	}
-	
-	public FileEntry next() {
-		while( count-- > 0)
-			return new FileEntry(new DateTime(), "1.0".getBytes());
-		return null;
-		
+
+	public FileEntry next() throws Exception {
+		return FileEntryDAO.read(input);
 	}
 }

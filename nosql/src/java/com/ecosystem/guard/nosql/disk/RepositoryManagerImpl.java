@@ -12,12 +12,13 @@ package com.ecosystem.guard.nosql.disk;
 
 import java.io.File;
 import java.io.FileInputStream;
-
-import org.joda.time.DateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.ecosystem.guard.nosql.Entry;
 import com.ecosystem.guard.nosql.Repository;
 import com.ecosystem.guard.nosql.RepositoryManager;
+import com.ecosystem.guard.nosql.time.DateTime;
 
 /**
  * @version $Revision$
@@ -25,120 +26,200 @@ import com.ecosystem.guard.nosql.RepositoryManager;
 public class RepositoryManagerImpl implements RepositoryManager {
 	private Repository repository;
 	private static Object entryAccessLock = new Object();
-	
+
 	public RepositoryManagerImpl(Repository repository) {
 		this.repository = repository;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see nosqlrepository.RepositoryManager#insert(java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public <T> void insert(String entry, T value) throws Exception {
-		insert( entry, new DateTime(), value);
+		insert(entry, DateTime.getNow(), value);
 	}
 
-	/* (non-Javadoc)
-	 * @see nosqlrepository.RepositoryManager#insert(java.lang.String, java.util.Date, java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see nosqlrepository.RepositoryManager#insert(java.lang.String, java.util.Date,
+	 * java.lang.Object)
 	 */
 	@Override
 	public <T> void insert(String entry, DateTime date, T value) throws Exception {
 		Entry e = repository.getEntry(entry);
-		if( e == null )
+		if (e == null)
 			throw new Exception("Entry '" + entry + "' does not exist in repository");
-		
-		String dir = repository.getName() + "/" + date.year().get() + "/" + date.monthOfYear().get() + "/" + date.dayOfMonth().get();
+
+		String dir = repository.getName() + "/" + date.getDate().getYear() + "/" + date.getDate().getMonth() + "/" + date.getDate().getDay();
 		createDirectory(dir);
-		File entryFile = new File( dir + "/" + entry );
+		File entryFile = new File(dir + "/" + entry);
 		synchronized (entryAccessLock) {
 			byte[] serialized = e.getEntryTypeParser().serialize(value);
-			FileEntryDAO.write(date, serialized, entryFile);
+			FileEntryDAO.write(new FileEntry(date.getTime(), serialized), entryFile);
 		}
-		
-		synchronized (e) {
-			if( e.getTimeSummary().getFirst() == null ) {
-				e.getTimeSummary().setFirst(date);
-			}
-			e.getTimeSummary().setLast(date);
-		}
+
+		updateEntryTimeSummary(e, date);
 	}
-	
-	private void createDirectory(String dir) {
-		File entryDir = new File(dir);
-		if( !entryDir.exists() ) {
-			entryDir.mkdirs();
+
+	private void updateEntryTimeSummary(Entry entry, DateTime date) throws Exception {
+		synchronized (entry) {
+			boolean write = false;
+			if (entry.getTimeSummary().getFirst() == null) {
+				entry.getTimeSummary().setFirst(date);
+				write = true;
+			}
+			if (entry.getTimeSummary().getLast() == null) {
+				entry.getTimeSummary().setLast(date);
+				write = true;
+			}
+			else {
+				if (date.isGreater(entry.getTimeSummary().getLast())) {
+					entry.getTimeSummary().setLast(date);
+					write = true;
+
+				}
+			}
+			if (write) {
+				TimeSummaryDAO.write(repository.getName(), entry.getName(), entry.getTimeSummary());
+			}
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see nosqlrepository.RepositoryManager#get(java.lang.String, java.util.Date, java.lang.Class)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T get(String entry, DateTime date) throws Exception {
-		File entryFile = new File(repository.getName() + "/" + date.year().get() + "/" + date.monthOfYear().get() + "/" + date.dayOfMonth().get() + "/" + entry);
-		if( !entryFile.exists() )
+	public <T> List<T> get(String entry, DateTime date) throws Exception {
+		File entryFile = new File(repository.getName() + "/" + date.getDate().getYear() + "/" + date.getDate().getMonth() + "/"
+				+ date.getDate().getDay() + "/" + entry);
+		if (!entryFile.exists())
 			return null;
-		
-		FileEntry fileEntry = null;
+
+		Entry e = repository.getEntry(entry);
+		if (e == null)
+			throw new Exception("Entry '" + entry + "' does not exist in repository");
+
+		List<T> result = new ArrayList<T>();
 		synchronized (entryAccessLock) {
 			FileInputStream input = new FileInputStream(entryFile);
 			try {
 				FileEntryParser parser = new FileEntryParser(input);
 				FileEntry tmpEntry = null;
-				while((tmpEntry = parser.next()) != null ) {
-					if( tmpEntry.getDate().isEqual(date) ) {
-						fileEntry = tmpEntry;
-						break;
+				boolean inside = false;
+				while ((tmpEntry = parser.next()) != null) {
+					if (date.equals(tmpEntry.getTime())) {
+						inside = true;
+						result.add((T) e.getEntryTypeParser().deserialize(tmpEntry.getRawData()));
+					}
+					else {
+						if (inside) {
+							break;
+						}
 					}
 				}
-			} finally {
+			}
+			finally {
 				input.close();
 			}
 		}
-		
-		if( fileEntry == null )
-			 return null;
-		
-		Entry e = repository.getEntry(entry);
-		if( e == null )
-			return null;
-		return (T)e.getEntryTypeParser().deserialize(fileEntry.getRawData());
+
+		return result;
 	}
 
-	/* (non-Javadoc)
+	@Override
+	public <T> List<T> get(String entry, DateTime beginDate, DateTime endDate) throws Exception {
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see nosqlrepository.RepositoryManager#getLast(java.lang.String, java.lang.Class)
 	 */
 	@Override
-	public <T> T getLast(String entry) {
+	public <T> T getLast(String entry) throws Exception {
+		Entry e = repository.getEntry(entry);
+		if (e == null)
+			throw new Exception("Entry '" + entry + "' does not exist in repository");
+
+		List<T> list = get(entry, e.getTimeSummary().getLast());
+		if (list.size() > 0)
+			return list.get(list.size() - 1);
+
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see nosqlrepository.RepositoryManager#getFirst(java.lang.String, java.lang.Class)
 	 */
 	@Override
-	public <T> T getFirst(String entry) {
-		// TODO Auto-generated method stub
+	public <T> T getFirst(String entry) throws Exception {
+		Entry e = repository.getEntry(entry);
+		if (e == null)
+			throw new Exception("Entry '" + entry + "' does not exist in repository");
+
+		List<T> list = get(entry, e.getTimeSummary().getFirst());
+		if (list.size() > 0)
+			return list.get(0);
+
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see nosqlrepository.RepositoryManager#getMax(java.lang.String, java.lang.Class)
 	 */
 	@Override
-	public <T> T getMax(String entry) {
-		// TODO Auto-generated method stub
+	public <T> T getMax(String entry) throws Exception {
+		Entry e = repository.getEntry(entry);
+		if (e == null)
+			throw new Exception("Entry '" + entry + "' does not exist in repository");
+
+		if (e.getTimeSummary().getMax() == null)
+			return null;
+
+		List<T> list = get(entry, e.getTimeSummary().getMax());
+		if (list.size() > 0)
+			return list.get(0);
+
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see nosqlrepository.RepositoryManager#getMin(java.lang.String, java.lang.Class)
 	 */
 	@Override
-	public <T> T getMin(String entry) {
-		// TODO Auto-generated method stub
+	public <T> T getMin(String entry) throws Exception {
+		Entry e = repository.getEntry(entry);
+		if (e == null)
+			throw new Exception("Entry '" + entry + "' does not exist in repository");
+
+		if (e.getTimeSummary().getMin() == null)
+			return null;
+
+		List<T> list = get(entry, e.getTimeSummary().getMin());
+		if (list.size() > 0)
+			return list.get(0);
+
 		return null;
+	}
+
+	private void createDirectory(String dir) {
+		File entryDir = new File(dir);
+		if (!entryDir.exists()) {
+			entryDir.mkdirs();
+		}
 	}
 
 }

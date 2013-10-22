@@ -10,17 +10,27 @@
 
 package com.ecosystem.guard.nosql;
 
-import org.joda.time.DateTime;
+import java.util.List;
+
+import com.ecosystem.guard.nosql.time.DateTime;
 
 /**
  * @version $Revision$
  */
 public interface RepositoryManager {
-	<T> void insert( String entry, T value ) throws Exception;
-	<T> void insert( String entry, DateTime date, T value) throws Exception;
-	<T> T get( String entry, DateTime date ) throws Exception;
-	<T> T getLast( String entry ) throws Exception;
-	<T> T getFirst( String entry ) throws Exception;
-	<T> T getMax( String entry ) throws Exception;
-	<T> T getMin( String entry ) throws Exception;
+	<T> void insert(String entry, T value) throws Exception;
+
+	<T> void insert(String entry, DateTime date, T value) throws Exception;
+
+	<T> List<T> get(String entry, DateTime date) throws Exception;
+
+	<T> List<T> get(String entry, DateTime beginDate, DateTime endDate) throws Exception;
+
+	<T> T getLast(String entry) throws Exception;
+
+	<T> T getFirst(String entry) throws Exception;
+
+	<T> T getMax(String entry) throws Exception;
+
+	<T> T getMin(String entry) throws Exception;
 }

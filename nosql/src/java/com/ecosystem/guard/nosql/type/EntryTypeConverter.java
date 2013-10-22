@@ -10,11 +10,11 @@
 
 package com.ecosystem.guard.nosql.type;
 
-
 /**
  * @version $Revision$
  */
 public interface EntryTypeConverter {
 	Object deserialize(byte[] input) throws Exception;
+
 	byte[] serialize(Object input) throws Exception;
 }

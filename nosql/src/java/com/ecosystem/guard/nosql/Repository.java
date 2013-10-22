@@ -10,12 +10,13 @@
 
 package com.ecosystem.guard.nosql;
 
-
 /**
  * @version $Revision$
  */
 public interface Repository {
 	void addEntry(String name, Class<?> entryClass) throws Exception;
+
 	Entry getEntry(String name) throws Exception;
+
 	String getName();
 }

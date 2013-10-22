@@ -10,9 +10,9 @@
 
 package com.ecosystem.guard.nosql;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.ecosystem.guard.nosql.disk.FileEntry;
@@ -24,14 +24,33 @@ import com.ecosystem.guard.nosql.disk.FileEntryParser;
 public class FileEntryParserTest {
 	@Test
 	public void parseCorrectFile() throws Exception {
-		FileInputStream stream = new FileInputStream(new File("data.bin"));
+		String content = "[TIME10:11:12]1.0\n[TIME13:14:15]2.0\n";
+		ByteArrayInputStream stream = new ByteArrayInputStream(content.getBytes());
 		try {
 			FileEntryParser parser = new FileEntryParser(stream);
 			FileEntry entry = null;
-			while( (entry = parser.next()) != null ) {
-				System.out.println(entry.getDate() + " - " + new String(entry.getRawData()));
+			while ((entry = parser.next()) != null) {
+				Assert.assertTrue(new String(entry.getRawData()).equals("1.0") || new String(entry.getRawData()).equals("2.0"));
 			}
-		} finally {
+		}
+		finally {
+			stream.close();
+		}
+	}
+
+	@Test
+	public void parseTimeWithOneDigit() throws Exception {
+		String content = "[TIME10:11:1]1.0\n[TIME13:2:15]2.0\n";
+		ByteArrayInputStream stream = new ByteArrayInputStream(content.getBytes());
+		try {
+			FileEntryParser parser = new FileEntryParser(stream);
+			FileEntry entry = null;
+			while ((entry = parser.next()) != null) {
+				Assert.assertTrue(new String(entry.getRawData()).equals("1.0") || new String(entry.getRawData()).equals("2.0"));
+				Assert.assertTrue(entry.getTime().getMinute() == 2 || entry.getTime().getSecond() == 1);
+			}
+		}
+		finally {
 			stream.close();
 		}
 	}

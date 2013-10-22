@@ -16,7 +16,7 @@ import java.io.IOException;
  * @version $Revision$
  */
 public class DoubleConverter implements EntryTypeConverter {
-	
+
 	@Override
 	public Object deserialize(byte[] input) throws IOException {
 		return new Double(new String(input));
@@ -24,7 +24,7 @@ public class DoubleConverter implements EntryTypeConverter {
 
 	@Override
 	public byte[] serialize(Object input) throws Exception {
-		Double d = (Double)input;
+		Double d = (Double) input;
 		return d.toString().getBytes();
 	}
 }

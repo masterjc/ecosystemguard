@@ -10,24 +10,24 @@
 
 package com.ecosystem.guard.nosql.disk;
 
-import org.joda.time.DateTime;
+import com.ecosystem.guard.nosql.time.Time;
 
 /**
  * @version $Revision$
  */
 public class FileEntry {
-	private DateTime time;
+	private Time time;
 	private byte[] rawData;
-	
-	public FileEntry(DateTime time, byte[] data) {
+
+	public FileEntry(Time time, byte[] data) {
 		this.time = time;
 		this.rawData = data;
 	}
-	
-	public DateTime getDate() {
+
+	public Time getTime() {
 		return time;
 	}
-	
+
 	public byte[] getRawData() {
 		return rawData;
 	}

@@ -20,8 +20,8 @@ public class Entry {
 	private Class<?> entryClass;
 	private EntryTypeConverter entryTypeParser;
 	private TimeSummary timeSummary;
-	
-	public Entry(String name, Class<?> entryClass, EntryTypeConverter entryTypeParser, TimeSummary timeSummary ) {
+
+	public Entry(String name, Class<?> entryClass, EntryTypeConverter entryTypeParser, TimeSummary timeSummary) {
 		this.name = name;
 		this.entryClass = entryClass;
 		this.entryTypeParser = entryTypeParser;
@@ -83,9 +83,5 @@ public class Entry {
 	public void setEntryTypeParser(EntryTypeConverter entryTypeParser) {
 		this.entryTypeParser = entryTypeParser;
 	}
-	
-	
 
-	
-	
 }
