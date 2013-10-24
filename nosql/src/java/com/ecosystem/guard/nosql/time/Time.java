@@ -99,7 +99,7 @@ public class Time {
 	}
 
 	public boolean isInsideInterval(Time begin, Time end) throws Exception {
-		return isGreater(begin) && end.isGreater(this);
+		return ( isGreater(begin) || equals(begin) ) && (end.isGreater(this) || equals(end) );
 	}
 
 }

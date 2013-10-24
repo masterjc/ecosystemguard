@@ -18,6 +18,7 @@ import java.util.List;
 import com.ecosystem.guard.nosql.Entry;
 import com.ecosystem.guard.nosql.Repository;
 import com.ecosystem.guard.nosql.RepositoryManager;
+import com.ecosystem.guard.nosql.time.Date;
 import com.ecosystem.guard.nosql.time.DateTime;
 
 /**
@@ -133,10 +134,58 @@ public class RepositoryManagerImpl implements RepositoryManager {
 	@Override
 	public <T> List<T> get(String entry, DateTime beginDate, DateTime endDate) throws Exception {
 		synchronized (entryAccessLock) {
-			return null;
+			List<File> intervalFiles = getIntervalFiles(beginDate, endDate);
+			System.out.println(intervalFiles.size());
 		}
+		return null;
 	}
+	
+	private List<File> getIntervalFiles( DateTime beginDate, DateTime endDate ) throws Exception {
+		File repoDir = new File( repository.getName() );
+		
+		File[] yearFiles = repoDir.listFiles();
+		for( int iYear = 0; iYear < yearFiles.length; iYear++ ) {
+			// Not a directory. Do not process
+			File yearFile = yearFiles[iYear];
+			if( !yearFile.isDirectory() )
+				continue;
 
+			Integer yearInt = Integer.parseInt(yearFile.getName());
+			int year = yearInt.intValue();
+			
+			// Not inside year interval. Do not process
+			if( year < beginDate.getDate().getYear() && year > endDate.getDate().getYear() )
+				continue;
+			
+			// Process year. Some files will be inside query result
+			File[] monthFiles = yearFile.listFiles();
+			for( int iMonth = 0; iMonth < monthFiles.length; iMonth++ ) {
+				// Not a directory. Do not process
+				File monthFile = monthFiles[iMonth];
+				if( !monthFile.isDirectory() )
+					continue;
+				
+				File[] dayFiles = monthFile.listFiles();
+				for( int iDay = 0; iDay < dayFiles.length; iDay++ ) {
+					// Not a directory. Do not process
+					File dayFile = dayFiles[iDay];
+					if( !dayFile.isDirectory() )
+						continue;
+					
+					int month = Integer.parseInt(monthFile.getName());
+					int day = Integer.parseInt(dayFile.getName());
+					Date fileDate = new Date(year, month, day);
+					
+					if( !fileDate.isInsideInterval(beginDate.getDate(), endDate.getDate()) )
+						continue;
+					
+					System.out.println("process " + year + " - " + month + " - " + day);
+				}
+			}
+		}
+		return null;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

@@ -93,7 +93,7 @@ public class Date {
 	}
 
 	public boolean isInsideInterval(Date begin, Date end) throws Exception {
-		return isGreater(begin) && end.isGreater(this);
+		return ( isGreater(begin) || equals(begin)) && (end.isGreater(this) || equals(end) );
 	}
 
 }

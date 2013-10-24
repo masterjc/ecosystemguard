@@ -25,7 +25,7 @@ import com.ecosystem.guard.nosql.time.Time;
  * @version $Revision$
  */
 public class RepositoryManagerTest {
-	@Test
+	/*@Test
 	public void testSingleDateGet() throws Exception {
 		String TEMPERATURE_ENTRY = "temperature";
 
@@ -96,7 +96,7 @@ public class RepositoryManagerTest {
 		repoManager.insert(TEMPERATURE_ENTRY, date2, value2);
 		Double d = repoManager.getFirst(TEMPERATURE_ENTRY);
 		Assert.assertEquals(value1, d);
-	}
+	}*/
 	
 	@Test
 	public void testDateIntervalGet() throws Exception {
@@ -132,7 +132,7 @@ public class RepositoryManagerTest {
 		Assert.assertEquals(value2, period.get(0));
 		Assert.assertEquals(value3, period.get(1));
 		Assert.assertEquals(value4, period.get(2));
-		Assert.assertEquals(value5, period.get(3));	
+		Assert.assertEquals(value5, period.get(3));
 		
 		interval1 = new DateTime(new Date(2013, 10, 22), new Time(12, 12, 13));
 		interval2 = new DateTime(new Date(2013, 10, 23), new Time(12, 12, 14));
