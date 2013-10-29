@@ -22,15 +22,15 @@ public interface RepositoryManager {
 
 	<T> void insert(String entry, DateTime date, T value) throws Exception;
 
-	<T> List<T> get(String entry, DateTime date) throws Exception;
+	<T> List<TimedEntry<T>> get(String entry, DateTime date) throws Exception;
 
-	<T> List<T> get(String entry, DateTime beginDate, DateTime endDate) throws Exception;
+	<T> List<TimedEntry<T>> get(String entry, DateTime beginDate, DateTime endDate) throws Exception;
 
-	<T> T getLast(String entry) throws Exception;
+	<T> TimedEntry<T> getLast(String entry) throws Exception;
 
-	<T> T getFirst(String entry) throws Exception;
+	<T> TimedEntry<T> getFirst(String entry) throws Exception;
 
-	<T> T getMax(String entry) throws Exception;
+	<T> TimedEntry<T> getMax(String entry) throws Exception;
 
-	<T> T getMin(String entry) throws Exception;
+	<T> TimedEntry<T> getMin(String entry) throws Exception;
 }

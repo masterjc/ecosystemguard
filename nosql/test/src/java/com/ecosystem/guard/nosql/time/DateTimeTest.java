@@ -88,7 +88,7 @@ public class DateTimeTest {
 	@Test
 	public void testDateIsGreater_day() throws Exception {
 		Date date1 = new Date(2013, 10, 10);
-		Date date2 = new Date(2013, 10, 11);
+		Date date2 = new Date(2014, 10, 11);
 		Assert.assertTrue(date2.isGreater(date1));
 		Assert.assertFalse(date1.isGreater(date2));
 		Assert.assertFalse(date1.isGreater(date1));
@@ -115,8 +115,8 @@ public class DateTimeTest {
 	@Test
 	public void testTimeInterval_year() throws Exception {
 		Time Time1 = new Time(11, 10, 11);
-		Time Time2 = new Time(12, 10, 11);
-		Time Time3 = new Time(13, 10, 11);
+		Time Time2 = new Time(12, 0, 11);
+		Time Time3 = new Time(13, 0, 11);
 		Assert.assertTrue(Time2.isInsideInterval(Time1, Time3));
 		Assert.assertFalse(Time1.isInsideInterval(Time2, Time3));
 	}
@@ -143,6 +143,15 @@ public class DateTimeTest {
 	public void testTimeIsGreater_day() throws Exception {
 		Time Time1 = new Time(13, 10, 10);
 		Time Time2 = new Time(13, 10, 11);
+		Assert.assertTrue(Time2.isGreater(Time1));
+		Assert.assertFalse(Time1.isGreater(Time2));
+		Assert.assertFalse(Time1.isGreater(Time1));
+	}
+	
+	@Test
+	public void testTimeIsGreater_minute() throws Exception {
+		Time Time1 = new Time(12, 10, 10);
+		Time Time2 = new Time(13, 0, 11);
 		Assert.assertTrue(Time2.isGreater(Time1));
 		Assert.assertFalse(Time1.isGreater(Time2));
 		Assert.assertFalse(Time1.isGreater(Time1));

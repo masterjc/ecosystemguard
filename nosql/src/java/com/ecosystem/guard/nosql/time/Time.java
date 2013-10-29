@@ -89,13 +89,9 @@ public class Time {
 	}
 
 	public boolean isGreater(Time time) {
-		if (hour > time.getHour())
-			return true;
-		if (minute > time.getMinute())
-			return true;
-		if (second > time.getSecond())
-			return true;
-		return false;
+		long timeLong = time.getHour() * 3600 + time.getMinute() * 60 + time.getSecond();
+		long thisLong = getHour() * 3600 + getMinute() * 60 + getSecond();
+		return thisLong > timeLong;
 	}
 
 	public boolean isInsideInterval(Time begin, Time end) throws Exception {

@@ -83,13 +83,9 @@ public class Date {
 	}
 
 	public boolean isGreater(Date date) {
-		if (year > date.getYear())
-			return true;
-		if (month > date.getMonth())
-			return true;
-		if (day > date.getDay())
-			return true;
-		return false;
+		long dateLong = date.getYear() * 365 + date.getMonth() * 30 + date.getDay();
+		long thisLong = getYear() * 365 + getMonth() * 30 + getDay();
+		return thisLong > dateLong;
 	}
 
 	public boolean isInsideInterval(Date begin, Date end) throws Exception {
