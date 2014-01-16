@@ -40,7 +40,7 @@ public class PublicIpUpdater implements Callable<Void> {
 			throw new Exception("PublicIpUpdater error (Status: " + ipResponse.getResult().getStatus() + " - Message: "
 					+ ipResponse.getResult().getMessage());
 		LcdScreen lcd = SensorManager.getInstance().getSensor(LcdScreen.class);
-		lcd.showAsynchronousMessage("PbIP:" + ipResponse.getPublicIp(), "PvIP:" + privateIp, 20000);
+		lcd.showAsynchronousMessage("PbIP:" + ipResponse.getPublicIp(), "PvIP:" + privateIp, 25000);
 		return null;
 	}
 	

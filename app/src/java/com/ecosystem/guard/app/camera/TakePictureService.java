@@ -70,9 +70,9 @@ public class TakePictureService extends AuthorizedRawPostService<TakePictureRequ
 				picFile.delete();
 			}
 			if( error ) {
-				lcd.showAsynchronousIntermitentMessage(SERVICE_MESSAGE, SENT_SNAPSHOT_MESSAGE, 5);
+				lcd.showAsynchronousIntermitentMessage(SERVICE_MESSAGE, ERROR_SNAPSHOT_MESSAGE, 5);
 			} else {
-				lcd.showAsynchronousMessage(SERVICE_MESSAGE, ERROR_SNAPSHOT_MESSAGE, 5000);
+				lcd.showAsynchronousMessage(SERVICE_MESSAGE, SENT_SNAPSHOT_MESSAGE, 10000);
 			}
 		}
 	}

@@ -216,10 +216,6 @@ public class LcdScreen extends Sensor<TextLCDPhidget> {
 	}
 	
 	public void turnOff() throws Exception {
-		if(asyncThread != null && asyncThread.isAlive()) {
-			asyncThread.interrupt();
-			asyncThread.join();
-		}
 		getSensor().setBacklight(false);
 		getSensor().setDisplayString(FIRST_LINE, EMPTY_LINE);
 		getSensor().setDisplayString(SECOND_LINE, EMPTY_LINE);
